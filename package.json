@@ -9,6 +9,7 @@
     "vite-node": "^0.25.3"
   },
   "scripts": {
+    "scaffold": "vite-node src/scripts/scaffold.ts",
     "solve": "vite-node"
   }
 }
