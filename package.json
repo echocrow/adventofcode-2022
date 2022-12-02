@@ -1,0 +1,13 @@
+{
+  "name": "advent-of-code",
+  "version": "1.0.0",
+  "dependencies": {
+    "@types/node": "^18.11.10",
+    "prettier": "^2.8.0",
+    "typescript": "^4.9.3",
+    "vite-node": "^0.25.3"
+  },
+  "scripts": {
+    "solve": "vite-node"
+  }
+}
