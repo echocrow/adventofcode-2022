@@ -1,2 +1,3 @@
-# adventofcode-2022
-Advent of Code 2022 challenges
+# Advent of Code Challenges
+
+Contains challenges and personal solutions from the [Advent of Code](https://adventofcode.com/).
