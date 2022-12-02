@@ -1,4 +1,4 @@
-import readLines from '../../lib/readLines.mjs'
+import readLines from '../../lib/readLines.js'
 
 const batches = []
 let acc = 0

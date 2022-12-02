@@ -1,5 +1,5 @@
-import readLines from '../../lib/readLines.mjs'
-import sum from '../../lib/sum.mjs'
+import readLines from '../../lib/readLines.js'
+import sum from '../../lib/sum.js'
 
 const batches = []
 let acc = 0
