@@ -33,7 +33,7 @@ for await (const line of io.readLines()) {
   // todo
 }
 
-await io.write(result)
+io.write(result)
 `.trimStart()
 
 await Promise.all(

@@ -18,4 +18,4 @@ for await (const line of io.readLines()) {
   if (!areDistinct(r1, r2)) total++
 }
 
-await io.write(total)
+io.write(total)
