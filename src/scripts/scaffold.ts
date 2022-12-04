@@ -1,20 +1,27 @@
 import {mkdir, readdir, writeFile} from 'node:fs/promises'
 import path from 'node:path'
 import padNum from 'lib/padNum.js'
+import {parseArgs} from 'node:util'
+
+const args = parseArgs({allowPositionals: true})
+let [yearDir = `${new Date().getFullYear()}`, dayDir = ''] = args.positionals
 
 const srcDir = path.resolve('./src')
 
-const year = new Date().getFullYear()
-const yearDir = path.join(srcDir, `${year}`)
+const yearPath = path.join(srcDir, yearDir)
+await mkdir(yearPath, {recursive: true})
 
-const latestDay = (await readdir(yearDir, {withFileTypes: true}))
-  .filter((e) => e.isDirectory())
-  .map((e) => parseInt(e.name, 10))
-  .reduce((m, n) => Math.max(m, n), 0)
-const nextDay = latestDay + 1
-const nextDayDir = path.join(yearDir, padNum(nextDay, 2))
+if (!dayDir) {
+  const latestDay = (await readdir(yearPath, {withFileTypes: true}))
+    .filter((e) => e.isDirectory())
+    .map((e) => parseInt(e.name, 10))
+    .reduce((m, n) => Math.max(m, n), 0)
+  const nextDay = latestDay + 1
+  dayDir = padNum(nextDay, 2)
+}
 
-await mkdir(nextDayDir)
+const dir = path.join(yearPath, dayDir)
+await mkdir(dir, {recursive: true})
 
 const tpl = `
 import IO from 'lib/io.js'
@@ -30,5 +37,5 @@ await io.write(result)
 `.trimStart()
 
 await Promise.all(
-  ['1.ts', '2.ts'].map((name) => writeFile(path.join(nextDayDir, name), tpl)),
+  ['1.ts', '2.ts'].map((name) => writeFile(path.join(dir, name), tpl)),
 )
