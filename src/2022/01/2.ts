@@ -1,10 +1,12 @@
-import readLines from '../../lib/readLines.js'
-import sum from '../../lib/sum.js'
+import IO from 'lib/io.js'
+import sum from 'lib/sum.js'
+
+const io = new IO()
 
 const batches = []
 let acc = 0
 
-for await (const line of readLines(__dirname)) {
+for await (const line of io.readLines()) {
   if (line) {
     acc += parseInt(line, 10)
   } else if (acc) {
@@ -15,4 +17,4 @@ for await (const line of readLines(__dirname)) {
 
 const topBatches = batches.sort().slice(-3)
 
-console.log(sum(topBatches))
+io.write(sum(topBatches))

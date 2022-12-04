@@ -1,4 +1,6 @@
-import readLines from '../../lib/readLines.js'
+import IO from 'lib/io.js'
+
+const io = new IO()
 
 const scores = {
   win: 6,
@@ -39,7 +41,7 @@ const itemScores: Record<Item, number> = {
 }
 
 let score = 0
-for await (const line of readLines(__dirname)) {
+for await (const line of io.readLines()) {
   const [oppItmKey, myItmKey] = line.split(' ') as [ItemKey, ItemKey]
   const oppItm = items[oppItmKey]
   const myItm = items[myItmKey]
@@ -48,4 +50,4 @@ for await (const line of readLines(__dirname)) {
   score += itemScores[myItm] ?? 0
 }
 
-console.log(score)
+io.write(score)

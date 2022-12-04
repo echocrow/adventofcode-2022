@@ -1,4 +1,6 @@
-import readLines from '../../lib/readLines.js'
+import IO from 'lib/io.js'
+
+const io = new IO()
 
 type Range = [number, number]
 
@@ -11,9 +13,9 @@ function areDistinct(a: Range, b: Range): boolean {
 }
 
 let total = 0
-for await (const line of readLines(__dirname)) {
+for await (const line of io.readLines()) {
   const [r1, r2] = line.split(',').map(parseRange) as [Range, Range]
   if (!areDistinct(r1, r2)) total++
 }
 
-console.log(total)
+await io.write(total)
