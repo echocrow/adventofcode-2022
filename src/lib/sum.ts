@@ -1,9 +1,4 @@
-interface Reducible<R, T> {
-  reduce(
-    callbackfn: (previousValue: R, currentValue: T, currentIndex: number) => R,
-    initialValue: R,
-  ): R
-}
+import type {Reducible} from './types.js'
 
 export default function sum(nums: Reducible<any, number>): number {
   return nums.reduce((a, b) => a + b, 0)
