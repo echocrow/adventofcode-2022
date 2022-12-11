@@ -14,10 +14,23 @@ export default class IO {
     this.#outPath = path.join(dir, output)
   }
 
-  async *readLines() {
-    yield* createInterface({
+  async *readLines(rows = 1): AsyncGenerator<string, void, undefined> {
+    const reader = createInterface({
       input: createReadStream(this.#inPath),
     })
+    let r = 0
+    let buff = ''
+    for await (const row of reader) {
+      if (buff) buff += '\n'
+      buff += row
+      r++
+      if (r === rows) {
+        yield buff
+        r = 0
+        buff = ''
+      }
+    }
+    if (r) yield buff
   }
 
   write(data: WriteData | number) {

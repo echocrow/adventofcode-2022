@@ -39,14 +39,13 @@ function runRound(monkeys: Monkey[], maxWorry: number) {
 }
 
 const monkeys: Monkey[] = []
-const reader = io.readLines()
-for await (const line of reader) {
-  if (!line) continue
-  let items = (await reader.next()).value ?? ''
-  let ops = (await reader.next()).value ?? ''
-  let test = (await reader.next()).value ?? ''
-  let pal0 = (await reader.next()).value ?? ''
-  let pal1 = (await reader.next()).value ?? ''
+for await (const lines of io.readLines(7)) {
+  const rows = lines.split('\n')
+  let items = rows[1] ?? ''
+  let ops = rows[2] ?? ''
+  let test = rows[3] ?? ''
+  let pal0 = rows[4] ?? ''
+  let pal1 = rows[5] ?? ''
   monkeys.push(
     new Monkey(
       items.slice(18).split(', ').map(Number),
