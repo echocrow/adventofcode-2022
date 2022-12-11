@@ -1,5 +1,6 @@
 import IO from 'lib/io.js'
 import product from 'lib/product.js'
+import {joinRegExp} from 'lib/regexp.js'
 import sort from 'lib/sort.js'
 
 const io = new IO()
@@ -39,20 +40,22 @@ function runRound(monkeys: Monkey[], maxWorry: number) {
 }
 
 const monkeys: Monkey[] = []
-for await (const lines of io.readLines(7)) {
-  const rows = lines.split('\n')
-  let items = rows[1] ?? ''
-  let ops = rows[2] ?? ''
-  let test = rows[3] ?? ''
-  let pal0 = rows[4] ?? ''
-  let pal1 = rows[5] ?? ''
+const monkeyRe = joinRegExp([
+  /Monkey \d+:/,
+  /  Starting items: (?<items>\d+[, \d]+)/,
+  /  Operation: new = old (?<op>[+*]) (?<opDelta>\d+|old)/,
+  /  Test: divisible by (?<div>\d+)/,
+  /    If true: throw to monkey (?<pal0>\d+)/,
+  /    If false: throw to monkey (?<pal1>\d+)/,
+])
+for await (const {groups = {}} of io.readRegExp(monkeyRe)) {
   monkeys.push(
     new Monkey(
-      items.slice(18).split(', ').map(Number),
-      ops[23] === '*',
-      Number(ops.slice(25)),
-      Number(test.slice(21)),
-      [Number(pal0.slice(29)), Number(pal1.slice(30))],
+      groups.items?.split(', ').map(Number) ?? [],
+      groups.op === '*',
+      Number(groups.opDelta),
+      Number(groups.div),
+      [Number(groups.pal0), Number(groups.pal1)],
     ),
   )
 }

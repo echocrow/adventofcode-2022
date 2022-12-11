@@ -33,6 +33,23 @@ export default class IO {
     if (r) yield buff
   }
 
+  async *readRegExp(
+    pattern: RegExp,
+  ): AsyncGenerator<RegExpExecArray, void, undefined> {
+    const reader = createInterface({
+      input: createReadStream(this.#inPath),
+    })
+    let buff = ''
+    for await (const row of reader) {
+      buff += (buff ? '\n' : '') + row
+      const res = pattern.exec(buff)
+      if (res) {
+        yield res
+        buff = ''
+      }
+    }
+  }
+
   write(data: WriteData | number) {
     this.#outFileDesc ??= openSync(this.#outPath, 'w+')
     if (typeof data === 'number') data = String(data)
