@@ -32,4 +32,21 @@ export class Uint8Matrix extends Uint8Array implements Matrix {
     ab.set(row, this.length)
     return ab
   }
+
+  transpose(): Uint8Matrix {
+    const out = new Uint8Matrix(this.length, this.height)
+    for (let from = 0; from < this.length; from++) {
+      const x = from % this.width
+      const y = (from - x) / this.width
+      const to = x * out.width + y
+      out[to] = this[from] ?? 0
+    }
+    return out
+  }
+
+  *rows() {
+    for (let i = 0; i < this.length; i += this.width) {
+      yield this.slice(i, i + this.width)
+    }
+  }
 }
