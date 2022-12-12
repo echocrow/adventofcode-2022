@@ -1,4 +1,4 @@
-import posMod from './math.js'
+import {posMod} from './math.js'
 import range from './range.js'
 import type {Lengthened, Sliceable} from './types.js'
 
