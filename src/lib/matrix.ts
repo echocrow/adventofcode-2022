@@ -3,7 +3,6 @@ import range from './range.js'
 import type {Lengthened} from './types.js'
 
 export interface Matrix extends Lengthened {
-  length: number
   width: number
   height: number
 }
