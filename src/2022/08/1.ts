@@ -1,35 +1,25 @@
 import IO from 'lib/io.js'
-import range from 'lib/range.js'
-import rotate from 'lib/rotate.js'
+import {Uint8Matrix} from 'lib/matrix.js'
 
 const io = new IO()
 
-class Tree {
-  constructor(public id: number, public height: number) {}
-}
-
-let size = 0
-let r = 0
-const trees: Tree[] = []
+let forest = new Uint8Matrix()
 for await (const line of io.readLines()) {
-  const row = [...line].map((h, i) => new Tree(i + size * r, Number(h)))
-  trees.push(...row)
-  size = row.length
-  r++
+  forest = forest.concatRow([...line].map(Number))
 }
 
 const visibleIds = new Set<number>()
-let forest = trees
-for (let t = 0; t < 4; t++) {
-  if (t) forest = rotate(forest, size)
+for (let r = 0; r < 4; r++) {
   let tallest = -1
-  for (const [i, tree] of forest.entries()) {
-    if (i % size === 0) tallest = -1
-    if (tree.height > tallest) {
-      visibleIds.add(tree.id)
-      tallest = tree.height
+  let i = 0
+  for (const t of forest.rotatedKeys(r)) {
+    if (i % forest.width === 0) tallest = -1
+    const tree = forest[t]!
+    if (tree > tallest) {
+      visibleIds.add(t)
+      tallest = tree
     }
+    i++
   }
 }
-
 io.write(visibleIds.size)

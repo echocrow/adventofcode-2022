@@ -1,32 +1,26 @@
 import IO from 'lib/io.js'
-import rotate from 'lib/rotate.js'
+import {Uint8Matrix} from 'lib/matrix.js'
 
 const io = new IO()
 
-class Tree {
-  constructor(public id: number, public height: number) {}
-}
-
-let size = 0
-let r = 0
-const trees: Tree[] = []
+let forest = new Uint8Matrix()
 for await (const line of io.readLines()) {
-  const row = [...line].map((h, i) => new Tree(i + size * r, Number(h)))
-  trees.push(...row)
-  size = row.length
-  r++
+  forest = forest.concatRow([...line].map(Number))
 }
 
-const seenCounts = new Uint32Array(size ** 2).fill(1)
-let forest = trees
-for (let t = 0; t < 4; t++) {
-  if (t) forest = rotate(forest, size)
-  for (const [i, tree] of forest.entries()) {
-    const y = i % size
-    const rightTrees = forest.slice(i + 1, i + size - y)
-    const blockingIdx = rightTrees.findIndex((t) => t.height >= tree.height)
+const seenCounts = new Uint32Array(forest.length).fill(1)
+for (let r = 0; r < 4; r++) {
+  const scene = forest.rotate(r)
+  let w = scene.width
+  let i = 0
+  for (const t of forest.rotatedKeys(r)) {
+    const tree = forest[t]!
+    const y = i % w
+    const rightTrees = scene.slice(i + 1, i + w - y)
+    const blockingIdx = rightTrees.findIndex((t) => t >= tree)
     const visibleCount = blockingIdx >= 0 ? blockingIdx + 1 : rightTrees.length
-    seenCounts[tree.id] *= visibleCount
+    seenCounts[t] *= visibleCount
+    i++
   }
 }
 

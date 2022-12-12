@@ -1,4 +1,4 @@
-import type {Matrix} from './types.js'
+import type {Matrix} from './matrix.js'
 
 export function* neighbors(
   m: Matrix,

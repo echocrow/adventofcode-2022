@@ -1,4 +1,11 @@
-import type {Lengthened, Matrix} from './types.js'
+import posMod from './math.js'
+import type {Lengthened} from './types.js'
+
+export interface Matrix extends Lengthened {
+  length: number
+  width: number
+  height: number
+}
 
 export class Uint8Matrix extends Uint8Array implements Matrix {
   #width: number
@@ -33,14 +40,44 @@ export class Uint8Matrix extends Uint8Array implements Matrix {
     return ab
   }
 
+  *transposedKeys() {
+    const w = this.width
+    const newW = this.height
+    for (let i = 0; i < this.length; i++) {
+      const y = i % newW
+      const x = (i - y) / newW
+      yield y * w + x
+    }
+  }
   transpose(): Uint8Matrix {
     const out = new Uint8Matrix(this.length, this.height)
-    for (let from = 0; from < this.length; from++) {
-      const x = from % this.width
-      const y = (from - x) / this.width
-      const to = x * out.width + y
-      out[to] = this[from] ?? 0
+    let i = 0
+    for (const from of this.transposedKeys()) out[i++] = this[from]!
+    return out
+  }
+
+  *rotatedKeys(times = 1) {
+    times = posMod(times + 1, 4) - 1
+    if (!times) return yield* this.keys()
+    const double = times === 2
+    const pos = times > 0
+    const [w, h] = [this.width, this.height]
+    const newW = double ? w : h
+    for (let i = 0; i < this.length; i++) {
+      const newX = i % newW
+      const newY = (i - newX) / newW
+      const x = double ? w - newX - 1 : pos ? newY : w - newY - 1
+      const y = double ? h - newY - 1 : pos ? h - newX - 1 : newX
+      yield y * w + x
     }
+  }
+  rotate(times = 1): Uint8Matrix {
+    times = posMod(times, 4)
+    if (!times) return this
+    const newW = times % 2 ? this.height : this.width
+    const out = new Uint8Matrix(this.length, newW)
+    let i = 0
+    for (const from of this.rotatedKeys(times)) out[i++] = this[from]!
     return out
   }
 
