@@ -1,13 +1,8 @@
+import Counter from 'lib/counter.js'
 import IO from 'lib/io.js'
 import range from 'lib/range.js'
 
 const io = new IO()
-
-class Counter<T> extends Map<T, number> {
-  inc(key: T) {
-    this.set(key, (this.get(key) ?? 0) + 1)
-  }
-}
 
 const re = /^(\d+),(\d+) -> (\d+),(\d+)$/
 

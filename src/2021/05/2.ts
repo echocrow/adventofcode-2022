@@ -1,12 +1,7 @@
+import Counter from 'lib/counter.js'
 import IO from 'lib/io.js'
 
 const io = new IO()
-
-class Counter<T> extends Map<T, number> {
-  inc(key: T) {
-    this.set(key, (this.get(key) ?? 0) + 1)
-  }
-}
 
 function* range2d(x1: number, y1: number, x2: number, y2: number) {
   const dx = x1 > x2 ? -1 : +(x1 < x2)
