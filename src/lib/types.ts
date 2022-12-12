@@ -1,3 +1,9 @@
+export type ArrayItem<T> = T extends Array<infer V>
+  ? V
+  : T extends RelativeIndexable<infer V>
+  ? V
+  : never
+
 export interface Lengthened {
   length: number
 }
@@ -10,4 +16,8 @@ export interface Reducible<R, T> extends Lengthened {
     callbackfn: (previousValue: R, currentValue: T, currentIndex: number) => R,
     initialValue: R,
   ): R
+}
+
+export interface Sliceable<A> extends Lengthened {
+  slice(start?: number, end?: number): A
 }

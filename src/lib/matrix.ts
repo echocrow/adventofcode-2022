@@ -1,6 +1,6 @@
 import posMod from './math.js'
 import range from './range.js'
-import type {Lengthened} from './types.js'
+import type {Lengthened, Sliceable} from './types.js'
 
 export interface Matrix extends Lengthened {
   width: number
@@ -64,9 +64,15 @@ export class Uint8Matrix extends Uint8Array implements Matrix {
   }
 
   *rows() {
-    for (let i = 0; i < this.length; i += this.width) {
-      yield this.slice(i, i + this.width)
-    }
+    yield* rows<Uint8Array>(this)
+  }
+}
+
+export function* rows<T>(
+  m: Matrix & Sliceable<T>,
+): Generator<T, void, undefined> {
+  for (let i = 0; i < m.length; i += m.width) {
+    yield m.slice(i, i + m.width)
   }
 }
 
@@ -107,10 +113,10 @@ export function* neighbors(
   const h = m.height
   const x = i % w
   const y = (i - x) / w
-  if (x) yield -1 + i
-  if (x < w - 1) yield +1 + i
-  if (y) yield -w + i
-  if (y < h - 1) yield w + i
+  if (x) yield i - 1
+  if (x < w - 1) yield i + 1
+  if (y) yield i - w
+  if (y < h - 1) yield i + w
 }
 
 export function* squareNeighbors(
