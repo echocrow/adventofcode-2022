@@ -1,6 +1,5 @@
 import IO from 'lib/io.js'
-import {Uint8Matrix} from 'lib/matrix.js'
-import {neighbors} from 'lib/neighbors.js'
+import {neighbors, Uint8Matrix} from 'lib/matrix.js'
 import sum from 'lib/sum.js'
 
 const io = new IO()

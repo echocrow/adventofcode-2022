@@ -1,6 +1,5 @@
 import IO from 'lib/io.js'
-import {Uint8Matrix} from 'lib/matrix.js'
-import {neighbors} from 'lib/neighbors.js'
+import {neighbors, Uint8Matrix} from 'lib/matrix.js'
 import product from 'lib/product.js'
 import sort from 'lib/sort.js'
 

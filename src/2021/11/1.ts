@@ -1,6 +1,5 @@
 import IO from 'lib/io.js'
-import {Uint8Matrix} from 'lib/matrix.js'
-import {squareNeighbors} from 'lib/neighbors.js'
+import {squareNeighbors, Uint8Matrix} from 'lib/matrix.js'
 
 const io = new IO()
 
