@@ -1,6 +1,6 @@
 import IO from 'lib/io.js'
 import {neighbors, Uint8Matrix} from 'lib/matrix.js'
-import {enqueue} from 'lib/queue.js'
+import {MemoQueue} from 'lib/queue.js'
 
 const io = new IO()
 
@@ -13,15 +13,11 @@ let start = 0
 let end = map.length - 1
 
 // Dijkstra search.
-const best = new Uint16Array(map.length)
-const queue: number[] = [start]
-let s: number | undefined
-while ((s = queue.shift()) !== undefined) {
-  for (const i of neighbors(map, s)) {
-    if (best[i]) continue
-    best[i] = best[s]! + map[i]!
-    enqueue(queue, (j) => best[j]! > best[i]!, i)
+const queue = new MemoQueue<number>().enqueue(0, start)
+for (const {cost, item: i} of queue) {
+  for (const n of neighbors(map, i)) {
+    queue.enqueue(cost + map[n]!, n)
   }
 }
 
-io.write(best[end]!)
+io.write(queue.getCost(end) ?? -1)
