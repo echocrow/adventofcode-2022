@@ -13,7 +13,10 @@ export class Uint8Matrix extends Uint8Array implements Matrix {
 
   constructor()
   constructor(length: number, width: number)
-  constructor(array: ArrayLike<number> | ArrayBufferLike, width: number)
+  constructor(
+    array: ArrayLike<number> | ArrayBufferLike | Iterable<number>,
+    width: number,
+  )
   constructor(lengthOrArray: any = 0, width = 0) {
     super(lengthOrArray)
     this.#width = width
@@ -32,7 +35,7 @@ export class Uint8Matrix extends Uint8Array implements Matrix {
       this.length + row.length,
       this.#width || row.length,
     )
-    if (row.length !== ab.#width) {
+    if (row.length % ab.#width) {
       throw new RangeError('row length does not match matrix width')
     }
     ab.set(this)
