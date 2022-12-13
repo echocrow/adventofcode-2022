@@ -1,7 +1,7 @@
 import Counter from 'lib/counter.js'
 import IO from 'lib/io.js'
 import range from 'lib/range.js'
-import sort from 'lib/sort.js'
+import {max, min} from 'lib/sort.js'
 
 const io = new IO()
 
@@ -36,9 +36,8 @@ const counts = [...pairs.entries()].reduce(
   (counts, [pair, count]) => counts.inc(pair[1] ?? '', count),
   new Counter().inc(firstLetter, 1),
 )
-const countNums = [...counts.values()]
 
-const leastCommon = Math.min(...countNums)
-const mostCommon = Math.max(...countNums)
+const [leastCommon] = min(counts.values())
+const [mostCommon] = max(counts.values())
 
 io.write(mostCommon - leastCommon)

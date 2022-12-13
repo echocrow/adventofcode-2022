@@ -1,7 +1,7 @@
 import {BigCounter} from 'lib/counter.js'
 import IO from 'lib/io.js'
 import range from 'lib/range.js'
-import sort from 'lib/sort.js'
+import {max, min} from 'lib/sort.js'
 
 const io = new IO()
 
@@ -36,9 +36,8 @@ const counts = [...pairs.entries()].reduce(
   (counts, [pair, count]) => counts.inc(pair[1] ?? '', count),
   new BigCounter().inc(firstLetter, 1n),
 )
-const countNums = sort([...counts.values()])
 
-const leastCommon = countNums[0] ?? 0n
-const mostCommon = countNums[countNums.length - 1] ?? 0n
+const [leastCommon] = min(counts.values())
+const [mostCommon] = max(counts.values())
 
 io.write((mostCommon - leastCommon).toString())
