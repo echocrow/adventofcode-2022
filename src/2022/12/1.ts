@@ -1,5 +1,6 @@
 import IO from 'lib/io.js'
 import {neighbors, Uint8Matrix} from 'lib/matrix.js'
+import {enqueue} from 'lib/queue.js'
 
 const io = new IO()
 
@@ -21,23 +22,21 @@ for await (let line of io.readLines()) {
   map = map.concatRow([...line].map((c) => c.charCodeAt(0) - base))
 }
 
-// Brute-force.
-const minSteps = new Uint16Array(map.length)
-type Option = {pos: number; steps: number}
-const queue: Option[] = [{pos: start, steps: 1}]
-let curr: Option | undefined
-while ((curr = queue.pop())) {
-  minSteps[curr.pos] = curr.steps
-  const h = map[curr.pos]!
-  const steps = curr.steps + 1
-  if (curr.pos === end) continue
-  for (const n of neighbors(map, curr.pos)) {
+// Dijkstra search.
+const queue: number[] = [start]
+const best = new Uint16Array(map.length)
+for (const i of queue) best[i] = 1
+let i: number | undefined
+search: while ((i = queue.shift()) !== undefined) {
+  const h = map[i]!
+  for (const n of neighbors(map, i)) {
+    if (best[n]) continue
     const nh = map[n]!
-    const prevSteps = minSteps[n]!
-    if (nh - h <= 1 && (!prevSteps || prevSteps > steps)) {
-      queue.push({pos: n, steps})
-    }
+    if (nh - h > 1) continue
+    best[n] = best[i]! + 1
+    enqueue(queue, (i) => best[i]! > best[n]!, n)
+    if (n === end) break search
   }
 }
 
-io.write((minSteps[end] ?? 0) - 1)
+io.write(best[end]! - 1)
