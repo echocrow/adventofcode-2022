@@ -1,30 +1,12 @@
 import IO from 'lib/io.js'
+import {joinRegExp} from 'lib/regexp.js'
 
 const io = new IO()
 
 type Packet = Array<number | Packet>
 
 function parse(input: string): Packet {
-  const stack: Packet[] = []
-  let last: Packet | undefined = undefined
-  let n: number | undefined = undefined
-  for (const c of input) {
-    if (c === '[') {
-      stack.push([])
-    } else if (!isNaN(+c)) {
-      n = (n ?? 0) * 10 + +c
-    } else {
-      if (n !== undefined) {
-        stack[stack.length - 1]!.push(n)
-        n = undefined
-      }
-      if (c === ']') {
-        last = stack.pop()!
-        stack[stack.length - 1]?.push(last)
-      }
-    }
-  }
-  return last!
+  return JSON.parse(input)
 }
 
 function compare(left: Packet, right: Packet): boolean | undefined {
@@ -48,12 +30,11 @@ function compare(left: Packet, right: Packet): boolean | undefined {
 
 let correct = 0
 let i = 1
-for await (const line1 of io.readLines()) {
-  if (!line1) continue
-  const line2 = (await io.readLine()) ?? ''
-  const p1 = parse(line1)
-  const p2 = parse(line2)
-  if (compare(p1, p2)) correct += i
+const lineReg = /\[.*\]/
+const pairReg = joinRegExp([lineReg, lineReg], '\n')
+for await (const [pair] of io.readRegExp(pairReg)) {
+  const [p1, p2] = pair.split('\n').map(parse)
+  if (compare(p1!, p2!)) correct += i
   i++
 }
 

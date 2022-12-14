@@ -5,26 +5,7 @@ const io = new IO()
 type Packet = Array<number | Packet>
 
 function parse(input: string): Packet {
-  const stack: Packet[] = []
-  let last: Packet | undefined = undefined
-  let n: number | undefined = undefined
-  for (const c of input) {
-    if (c === '[') {
-      stack.push([])
-    } else if (!isNaN(+c)) {
-      n = (n ?? 0) * 10 + +c
-    } else {
-      if (n !== undefined) {
-        stack[stack.length - 1]!.push(n)
-        n = undefined
-      }
-      if (c === ']') {
-        last = stack.pop()!
-        stack[stack.length - 1]?.push(last)
-      }
-    }
-  }
-  return last!
+  return JSON.parse(input)
 }
 
 const div1 = parse('[[2]]')
@@ -56,8 +37,7 @@ function sortCompare(left: Packet, right: Packet): number {
 
 const packets: Packet[] = []
 for await (const line of io.readLines()) {
-  if (!line) continue
-  packets.push(parse(line))
+  if (line) packets.push(parse(line))
 }
 packets.push(div1)
 packets.push(div2)
