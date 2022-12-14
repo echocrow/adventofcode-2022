@@ -5,7 +5,7 @@ import {max, min} from 'lib/sort.js'
 
 const io = new IO()
 
-const startingPoly = await io.readLine()
+const startingPoly = (await io.readLine()) ?? ''
 const firstLetter = startingPoly[0] ?? ''
 let pairs = Counter.fromValues(
   [...range(0, startingPoly.length - 1)].map((i) =>

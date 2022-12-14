@@ -8,7 +8,7 @@ export default class IO {
   #inPath: string
   #outPath: string
 
-  #inReader: Interface | undefined
+  #inReader: AsyncIterableIterator<string> | undefined
   #outFileDesc: number | undefined
 
   constructor(dir = './io', input = 'in.txt', output = 'out.txt') {
@@ -19,18 +19,20 @@ export default class IO {
   get #reader() {
     return (this.#inReader ??= createInterface({
       input: createReadStream(this.#inPath),
-    }))
+    })[Symbol.asyncIterator]())
   }
 
-  async readLine(): Promise<string> {
+  async readLine(): Promise<string | undefined> {
     const gen = this.#reader[Symbol.asyncIterator]()
-    return (await gen.next()).value ?? ''
+    return (await gen.next()).value
   }
 
   async *readLines(rows = 1): AsyncGenerator<string, void, undefined> {
+    const gen = this.#reader[Symbol.asyncIterator]()
     let r = 0
     let buff = ''
-    for await (const row of this.#reader) {
+    let row: string | undefined
+    while ((row = await this.readLine()) !== undefined) {
       if (buff) buff += '\n'
       buff += row
       r++
@@ -47,7 +49,8 @@ export default class IO {
     pattern: RegExp,
   ): AsyncGenerator<RegExpExecArray, void, undefined> {
     let buff = ''
-    for await (const row of this.#reader) {
+    let row: string | undefined
+    while ((row = await this.readLine()) !== undefined) {
       buff += (buff ? '\n' : '') + row
       const res = pattern.exec(buff)
       if (res) {
