@@ -65,4 +65,8 @@ export default class IO {
     if (typeof data === 'number') data = String(data)
     writeFileSync(this.#outFileDesc, data)
   }
+
+  log(message: any, ...moreMessage: any[]) {
+    console.info(new Date(), ':', message, ...moreMessage)
+  }
 }
