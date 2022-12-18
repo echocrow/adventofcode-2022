@@ -1,6 +1,6 @@
 import {createReadStream, writeFileSync, openSync} from 'node:fs'
 import path from 'node:path'
-import {createInterface, type Interface} from 'node:readline'
+import {createInterface} from 'node:readline'
 
 type WriteData = Parameters<typeof writeFileSync>[1]
 

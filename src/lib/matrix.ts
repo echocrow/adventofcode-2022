@@ -69,6 +69,30 @@ export class Uint8Matrix extends Uint8Array implements Matrix {
   *rows() {
     yield* rows<Uint8Array>(this)
   }
+
+  *row(y: number) {
+    const from = y * this.#width
+    const to = from + this.#width
+    for (let i = from; i < to; i++) yield this[i]!
+  }
+  setRow(y: number, vals: ArrayLike<number>) {
+    if (vals.length !== this.width)
+      throw new RangeError('row length does not match matrix width')
+    this.set(vals, y * this.width)
+    return this
+  }
+
+  *col(x: number) {
+    for (let i = x; i < this.length; i += this.#width) yield this[i]
+  }
+
+  cell(x: number, y: number): number {
+    return this[y * this.width + x] ?? -1
+  }
+  setCell(x: number, y: number, v: number) {
+    this[y * this.width + x] = v
+    return this
+  }
 }
 
 export function* rows<T>(
