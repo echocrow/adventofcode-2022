@@ -69,4 +69,8 @@ export default class IO {
   log(message: any, ...moreMessage: any[]) {
     console.info(new Date(), ':', message, ...moreMessage)
   }
+
+  async sleep(seconds: number) {
+    return new Promise((resolve) => setTimeout(resolve, seconds * 1000))
+  }
 }

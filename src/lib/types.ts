@@ -21,3 +21,7 @@ export interface Reducible<R, T> extends Lengthened {
 export interface Sliceable<A> extends Lengthened {
   slice(start?: number, end?: number): A
 }
+
+export interface Subarrayable extends Lengthened {
+  subarray(start?: number, end?: number): this
+}

@@ -93,6 +93,17 @@ export class Uint8Matrix extends Uint8Array implements Matrix {
     this[y * this.width + x] = v
     return this
   }
+
+  sliceRows(startY?: number, endY?: number): Uint8Matrix {
+    const out = new Uint8Matrix(
+      this.slice(
+        (startY ?? 0) * this.width,
+        (endY ?? this.height) * this.width,
+      ),
+      this.width,
+    )
+    return out
+  }
 }
 
 export function* rows<T>(
