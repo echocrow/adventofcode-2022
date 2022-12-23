@@ -1,6 +1,9 @@
 export function posMod(num: number, mod: number): number {
   return ((num % mod) + mod) % mod
 }
+export function posModBig(num: bigint, mod: bigint): bigint {
+  return ((num % mod) + mod) % mod
+}
 
 export function gcd(a: number, b: number): number {
   return !b ? a : gcd(b, a % b)
