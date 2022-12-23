@@ -39,3 +39,5 @@ io.write(result)
 await Promise.all(
   ['1.ts', '2.ts'].map((name) => writeFile(path.join(dir, name), tpl)),
 )
+
+console.log(`Scaffolded [${path.relative(srcDir, dir)}/].`)
