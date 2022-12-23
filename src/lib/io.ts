@@ -60,10 +60,10 @@ export default class IO {
     }
   }
 
-  write(data: WriteData | number) {
+  write(data: WriteData | number | bigint | undefined | null) {
     this.#outFileDesc ??= openSync(this.#outPath, 'w+')
     if (typeof data === 'number') data = String(data)
-    writeFileSync(this.#outFileDesc, data)
+    writeFileSync(this.#outFileDesc, String(data))
   }
 
   log(message: any, ...moreMessage: any[]) {
