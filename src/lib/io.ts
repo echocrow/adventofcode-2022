@@ -27,8 +27,15 @@ export default class IO {
     return (await gen.next()).value
   }
 
+  async readFile() {
+    let file = ''
+    for await (const chunk of this.#reader) {
+      file += chunk + '\n'
+    }
+    return file.slice(0, -1)
+  }
+
   async *readLines(rows = 1): AsyncGenerator<string, void, undefined> {
-    const gen = this.#reader[Symbol.asyncIterator]()
     let r = 0
     let buff = ''
     let row: string | undefined

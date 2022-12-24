@@ -1,6 +1,7 @@
 import {posMod} from './math.js'
 import range from './range.js'
 import type {Lengthened, Sliceable} from './types.js'
+import {addVec2, vec2} from './vec2.js'
 
 export interface Matrix extends Lengthened {
   width: number
@@ -103,6 +104,23 @@ export class Uint8Matrix extends Uint8Array implements Matrix {
       this.width,
     )
     return out
+  }
+
+  iToVec(i: number): vec2 {
+    const x = i % this.width
+    const y = (i - x) / this.width
+    return [x, y]
+  }
+  vecToI(x: number, y: number): number {
+    return y * this.width + x
+  }
+
+  moveBy(i: number, v: vec2) {
+    const from = this.iToVec(i)
+    const [toX, toY] = addVec2(from, v)
+    if (toX < 0 || toX >= this.width) return -1
+    if (toY < 0 || toY >= this.height) return -1
+    return this.vecToI(toX, toY)
   }
 }
 
