@@ -44,6 +44,10 @@ export function* rangeVec2(from: vec2, to: vec2, inclusive = false) {
 export function fmtVec2(v: Readonly<vec2>) {
   return `${v[0]},${v[1]}`
 }
+export function parseVec2(s: string): Readonly<vec2> {
+  const [x = '', y = ''] = s.split(',')
+  return [Number(x), Number(y)]
+}
 
 export function inAreaVec2(min: vec2, max: vec2, p: vec2): boolean {
   return p[0] >= min[0] && p[1] >= min[1] && p[0] <= max[0] && p[1] <= max[1]

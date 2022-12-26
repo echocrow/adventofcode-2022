@@ -1,0 +1,112 @@
+import IO from 'lib/io.js'
+import {addVec2, fmtVec2, maxVec2, minVec2, parseVec2, vec2} from 'lib/vec2.js'
+
+const io = new IO()
+
+const emptyVec: vec2 = [0, 0]
+
+class CoordsSet {
+  #set = new Set<string>()
+  #coords = new Map<string, vec2>()
+
+  add(v: vec2) {
+    this.#set.add(this.#encode(v))
+  }
+  delete(v: vec2) {
+    this.#set.delete(this.#encode(v))
+  }
+  has(v: vec2) {
+    return this.#set.has(this.#encode(v))
+  }
+  get size() {
+    return this.#set.size
+  }
+  *[Symbol.iterator]() {
+    for (const s of this.#set) yield this.#decode(s)
+  }
+
+  #encode(v: vec2) {
+    const s = fmtVec2(v)
+    if (!this.#coords.has(s)) this.#coords.set(s, v)
+    return s
+  }
+  #decode(s: string) {
+    const storedV = this.#coords.get(s)
+    if (storedV) return storedV
+    const v = parseVec2(s)
+    this.#coords.set(s, v)
+    return v
+  }
+}
+
+// Set up rules.
+const dirs = {
+  N: [0, -1],
+  NW: [-1, -1],
+  NE: [1, -1],
+  W: [-1, 0],
+  E: [1, 0],
+  S: [0, 1],
+  SW: [-1, 1],
+  SE: [1, 1],
+} satisfies Record<string, vec2>
+type Rule = [vec2, vec2[]]
+const rules: Rule[] = [
+  [dirs.N, [dirs.N, dirs.NW, dirs.NE]],
+  [dirs.S, [dirs.S, dirs.SW, dirs.SE]],
+  [dirs.W, [dirs.W, dirs.NW, dirs.SW]],
+  [dirs.E, [dirs.E, dirs.NE, dirs.SE]],
+]
+
+// Parse.
+let elves = new CoordsSet()
+{
+  let y = 0
+  for await (const line of io.readLines()) {
+    for (let x = 0; x < line.length; x++) if (line[x] === '#') elves.add([x, y])
+    y++
+  }
+}
+
+// Helpers to determine rules.
+function* roundRules(roundNum: number) {
+  for (let i = 0; i < rules.length; i++)
+    yield rules[(roundNum + i) % rules.length]!
+}
+function testRule(pos: vec2, [_, checks]: Rule) {
+  return !checks.some((check) => elves.has(addVec2(pos, check)))
+}
+
+// Play rounds.
+const ROUNDS = 10
+for (let r = 0; r < ROUNDS; r++) {
+  const nextElves = new CoordsSet()
+  for (const pos of elves) {
+    // Eval rules for elf.
+    const okRules = [...roundRules(r)].filter((rule) => testRule(pos, rule))
+    let move: vec2 =
+      okRules.length > 0 && okRules.length < rules.length
+        ? okRules[0]![0]
+        : emptyVec
+    let goto = addVec2(pos, move)
+
+    // Check if preferred spot is taken.
+    if (nextElves.has(goto)) {
+      nextElves.delete(goto)
+      nextElves.add(addVec2(goto, move))
+      goto = pos
+      move = emptyVec
+    }
+
+    nextElves.add(goto)
+  }
+  elves = nextElves
+}
+
+const elfCoors = [...elves]
+const [minX, minY] = elfCoors.reduce(minVec2)
+const [maxX, maxY] = elfCoors.reduce(maxVec2)
+const mapSize = (maxX - minX + 1) * (maxY - minY + 1)
+const emptySpots = mapSize - elfCoors.length
+
+io.write(emptySpots)
