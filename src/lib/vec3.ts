@@ -1,5 +1,7 @@
 export type vec3 = Readonly<[number, number, number]>
 
+export const zeroVec3: vec3 = [0, 0, 0]
+
 export function addVec3(a: vec3, b: vec3): vec3 {
   return [a[0] + b[0], a[1] + b[1], a[2] + b[2]]
 }
@@ -27,6 +29,10 @@ export function maxVec3(a: vec3, b: vec3): vec3 {
 export function fmtVec3(v: vec3) {
   return `${v[0]},${v[1]},${v[2]}`
 }
+export function parseVec3(s: string): Readonly<vec3> {
+  const [x = '', y = '', z = ''] = s.split(',')
+  return [Number(x), Number(y), Number(z)]
+}
 
 export function inSpaceVec3(min: vec3, max: vec3, p: vec3): boolean {
   return (
@@ -52,7 +58,7 @@ export function* neighborsVec3(v: vec3) {
 }
 
 export function* validNeighborsVec3(v: vec3, dims: vec3) {
-  const min: vec3 = [0, 0, 0]
+  const min = zeroVec3
   for (const n of neighborsVec3(v)) {
     if (inSpaceVec3(min, dims, n)) yield n
   }
@@ -103,5 +109,36 @@ export function* zColsMatrix3(dims: vec3) {
         yield i
       }
     })()
+  }
+}
+
+export class Vec3Set {
+  #set = new Set<string>()
+
+  constructor(vecs?: Iterable<vec3>) {
+    for (const v of vecs ?? []) this.add(v)
+  }
+
+  add(v: vec3) {
+    this.#set.add(this.#encode(v))
+  }
+  delete(v: vec3) {
+    this.#set.delete(this.#encode(v))
+  }
+  has(v: vec3) {
+    return this.#set.has(this.#encode(v))
+  }
+  get size() {
+    return this.#set.size
+  }
+  *[Symbol.iterator]() {
+    for (const s of this.#set) yield this.#decode(s)
+  }
+
+  #encode(v: vec3) {
+    return fmtVec3(v)
+  }
+  #decode(s: string) {
+    return parseVec3(s)
   }
 }

@@ -1,43 +1,7 @@
 import IO from 'lib/io.js'
-import {addVec2, fmtVec2, maxVec2, minVec2, parseVec2, vec2} from 'lib/vec2.js'
+import {addVec2, maxVec2, minVec2, vec2, Vec2Set, zeroVec2} from 'lib/vec2.js'
 
 const io = new IO()
-
-const emptyVec: vec2 = [0, 0]
-
-class CoordsSet {
-  #set = new Set<string>()
-  #coords = new Map<string, vec2>()
-
-  add(v: vec2) {
-    this.#set.add(this.#encode(v))
-  }
-  delete(v: vec2) {
-    this.#set.delete(this.#encode(v))
-  }
-  has(v: vec2) {
-    return this.#set.has(this.#encode(v))
-  }
-  get size() {
-    return this.#set.size
-  }
-  *[Symbol.iterator]() {
-    for (const s of this.#set) yield this.#decode(s)
-  }
-
-  #encode(v: vec2) {
-    const s = fmtVec2(v)
-    if (!this.#coords.has(s)) this.#coords.set(s, v)
-    return s
-  }
-  #decode(s: string) {
-    const storedV = this.#coords.get(s)
-    if (storedV) return storedV
-    const v = parseVec2(s)
-    this.#coords.set(s, v)
-    return v
-  }
-}
 
 // Set up rules.
 const dirs = {
@@ -59,7 +23,7 @@ const rules: Rule[] = [
 ]
 
 // Parse.
-let elves = new CoordsSet()
+let elves = new Vec2Set()
 {
   let y = 0
   for await (const line of io.readLines()) {
@@ -80,14 +44,14 @@ function testRule(pos: vec2, [_, checks]: Rule) {
 // Play rounds.
 const ROUNDS = 10
 for (let r = 0; r < ROUNDS; r++) {
-  const nextElves = new CoordsSet()
+  const nextElves = new Vec2Set()
   for (const pos of elves) {
     // Eval rules for elf.
     const okRules = [...roundRules(r)].filter((rule) => testRule(pos, rule))
     let move: vec2 =
       okRules.length > 0 && okRules.length < rules.length
         ? okRules[0]![0]
-        : emptyVec
+        : zeroVec2
     let goto = addVec2(pos, move)
 
     // Check if preferred spot is taken.
@@ -95,7 +59,7 @@ for (let r = 0; r < ROUNDS; r++) {
       nextElves.delete(goto)
       nextElves.add(addVec2(goto, move))
       goto = pos
-      move = emptyVec
+      move = zeroVec2
     }
 
     nextElves.add(goto)
