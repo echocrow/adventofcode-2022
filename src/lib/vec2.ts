@@ -1,3 +1,5 @@
+import {posMod} from './math.js'
+
 export type vec2 = Readonly<[number, number]>
 
 export const zeroVec2: vec2 = [0, 0]
@@ -12,6 +14,10 @@ export function subtractVec2(a: Readonly<vec2>, b: Readonly<vec2>): vec2 {
 
 export function scaleVec2(a: Readonly<vec2>, f: number): vec2 {
   return [a[0] * f, a[1] * f]
+}
+
+export function modVec2(v: Readonly<vec2>, mod: Readonly<vec2>): vec2 {
+  return [posMod(v[0], mod[0]), posMod(v[1], mod[1])]
 }
 
 export function equalsVec(a: Readonly<vec2>, b: Readonly<vec2>): boolean {
