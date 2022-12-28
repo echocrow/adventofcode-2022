@@ -38,6 +38,7 @@ for await (const line of io.readLines()) {
     maxV = maxVec2(maxV, corner)
   }
 }
+maxV = addVec2(maxV, [1, 1])
 
 // Pour.
 let grains = 0

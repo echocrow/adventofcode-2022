@@ -50,5 +50,5 @@ export function parseVec2(s: string): Readonly<vec2> {
 }
 
 export function inAreaVec2(min: vec2, max: vec2, p: vec2): boolean {
-  return p[0] >= min[0] && p[1] >= min[1] && p[0] <= max[0] && p[1] <= max[1]
+  return p[0] >= min[0] && p[1] >= min[1] && p[0] < max[0] && p[1] < max[1]
 }

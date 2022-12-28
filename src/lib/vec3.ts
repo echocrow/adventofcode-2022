@@ -31,10 +31,10 @@ export function fmtVec3(v: vec3) {
 export function inSpaceVec3(min: vec3, max: vec3, p: vec3): boolean {
   return (
     p[0] >= min[0] &&
-    p[0] < max[0] &&
     p[1] >= min[1] &&
-    p[1] < max[1] &&
     p[2] >= min[2] &&
+    p[0] < max[0] &&
+    p[1] < max[1] &&
     p[2] < max[2]
   )
 }
