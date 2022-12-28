@@ -34,6 +34,10 @@ export function maxVec2(a: Readonly<vec2>, b: Readonly<vec2>): vec2 {
   return [Math.max(a[0], b[0]), Math.max(a[1], b[1])]
 }
 
+export function lenVec2(v: Readonly<vec2>): number {
+  return Math.sqrt(v[0] ** 2 + v[1] ** 2)
+}
+
 export function* rangeVec2(from: vec2, to: vec2, inclusive = false) {
   const d = subtractVec2(to, from)
   const steps = Math.max(Math.abs(d[0]), Math.abs(d[1]))

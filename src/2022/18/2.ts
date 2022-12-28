@@ -9,6 +9,7 @@ import {
   xColsMatrix3,
   yColsMatrix3,
   zColsMatrix3,
+  zeroVec3,
 } from 'lib/vec3.js'
 
 const io = new IO()
@@ -34,7 +35,7 @@ function bucketFill(at: vec3, to: number) {
 
 // Parse.
 const rocks: vec3[] = []
-let dims: vec3 = [0, 0, 0]
+let dims = zeroVec3
 for await (const line of io.readLines()) {
   const [x = 0, y = 0, z = 0] = line.split(',').map(Number)
   const p: vec3 = [x + 1, y + 1, z + 1] /* Add padding. */
@@ -57,7 +58,7 @@ for (const [x, y, z] of rocks) {
 
 // Fill surrounding air.
 // (First cell is guaranteed air due to added padding).
-bucketFill([0, 0, 0], AIR)
+bucketFill(zeroVec3, AIR)
 
 // Count changes between outside air (aka exposed surfaces).
 const exposedSides = [
