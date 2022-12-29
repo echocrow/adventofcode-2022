@@ -1,7 +1,7 @@
 import IO from 'lib/io.js'
 import {posMod} from 'lib/math.js'
 import {Uint8Matrix} from 'lib/matrix.js'
-import type {vec2} from 'lib/vec2.js'
+import {addVec2, inAreaVec2, scaleVec2, vec2, zeroVec2} from 'lib/vec2.js'
 
 const io = new IO()
 
@@ -12,6 +12,16 @@ enum Dir {
   D,
   L,
 }
+const dirVec2s = [
+  [0, -1],
+  [1, 0],
+  [0, 1],
+  [-1, 0],
+] as const satisfies Record<Dir, vec2>
+function capDir(dir: Dir): Dir {
+  return posMod(dir, dirVec2s.length)
+}
+
 // Faces of a cube, no particular order.
 enum Face {
   U,
@@ -21,51 +31,6 @@ enum Face {
   L,
   R,
 }
-
-// Shape and orientation of the input mesh is static. Could add more code to
-// auto-detect, but this'll do just fine.
-type AngledSide = readonly [Face, Dir]
-type IAS = Readonly<AngledSide | undefined>
-type InputMesh = Readonly<{
-  faces: [IAS, IAS, IAS, IAS, IAS, IAS, IAS, IAS, IAS, IAS, IAS, IAS]
-  width: 2 | 3 | 4 | 6
-}>
-const meshes = {
-  sample: {
-    faces: [
-      undefined,
-      undefined,
-      [Face.U, Dir.U],
-      undefined,
-      [Face.B, Dir.D],
-      [Face.L, Dir.U],
-      [Face.F, Dir.U],
-      undefined,
-      undefined,
-      undefined,
-      [Face.D, Dir.U],
-      [Face.R, Dir.R],
-    ],
-    width: 4,
-  },
-  input: {
-    faces: [
-      undefined,
-      [Face.U, Dir.U],
-      [Face.R, Dir.L],
-      undefined,
-      [Face.F, Dir.U],
-      undefined,
-      [Face.L, Dir.L],
-      [Face.D, Dir.U],
-      undefined,
-      [Face.B, Dir.R],
-      undefined,
-      undefined,
-    ],
-    width: 3,
-  },
-} satisfies Record<string, InputMesh>
 
 /**
  * Map of cube mesh face connections on a standard "t" mesh.
@@ -147,23 +112,53 @@ const [mapContents = '', instContents = ''] = (await io.readFile()).split(
   '\n\n',
 )
 const mapLines = mapContents.split('\n')
-const mapWidth = Math.max(...mapLines.map((l) => l.length))
-
-// Determine sample vs input mesh.
-const mesh = mapWidth <= 16 ? meshes.sample : meshes.input
-const meshHeight = mesh.faces.length / mesh.width
-const mapTileLen = mapWidth / mesh.width
 
 // Fill map.
+const _mapWidth = Math.max(...mapLines.map((l) => l.length))
 const map = new Uint8Matrix(
   mapLines.flatMap((line) =>
     line
-      .padEnd(mapWidth, ' ')
+      .padEnd(_mapWidth, ' ')
       .split('')
       .map((c) => (c === '#' ? Cell.Wall : c === '.' ? Cell.Free : 0)),
   ),
-  mapWidth,
+  _mapWidth,
 )
+
+// Parse map layout.
+const mapTileLen = Math.sqrt((map.width * map.height) / 12)
+const meshWidth = map.width / mapTileLen
+const meshHeight = map.height / mapTileLen
+const meshFaces = (() => {
+  type AngledSide = readonly [Face, Dir]
+  type IAS = Readonly<AngledSide | undefined>
+  type MeshFaces = [IAS, IAS, IAS, IAS, IAS, IAS, IAS, IAS, IAS, IAS, IAS, IAS]
+  const meshFaces = Array(12).fill(undefined) as MeshFaces
+
+  const upFacePos: vec2 = [
+    map.findIndex((c) => c !== Cell.Void) / mapTileLen,
+    0,
+  ]
+
+  const meshQueue: [vec2, AngledSide][] = [[upFacePos, [Face.U, Dir.U]]]
+  let meshQueueItem: [vec2, AngledSide] | undefined
+  while ((meshQueueItem = meshQueue.pop())) {
+    const [pos, [face, dir]] = meshQueueItem
+    const meshI = pos[1] * meshWidth + pos[0]
+    if (meshFaces[meshI]) continue
+    meshFaces[meshI] = [face, dir]
+    for (const [goDir, goPos] of dirVec2s.entries()) {
+      const toMeshPos = addVec2(pos, goPos)
+      const toMapPos = scaleVec2(toMeshPos, mapTileLen)
+      if (!inAreaVec2(zeroVec2, map.dims, toMapPos)) continue
+      if (map.cell(toMapPos[0], toMapPos[1]) === Cell.Void) continue
+      const exitDir = capDir(goDir - dir)
+      const [toFace, dDir] = faceConnections[face][exitDir]
+      meshQueue.push([toMeshPos, [toFace, capDir(dir - dDir)]])
+    }
+  }
+  return meshFaces
+})()
 
 // Parse actions.
 type Turn = 'R' | 'L'
@@ -176,25 +171,16 @@ const actions: Action[] = [...instContents.matchAll(/(?:[\d]+|R|L)/g)].map(
 )
 
 // Handle movement.
-const dirVec2s: Readonly<Record<Dir, vec2>> = {
-  [Dir.R]: [1, 0],
-  [Dir.L]: [-1, 0],
-  [Dir.U]: [0, -1],
-  [Dir.D]: [0, 1],
-}
-function capDir(dir: Dir): Dir {
-  return posMod(dir, 4)
-}
 function mapToMesh(i: number): number {
   let [x, y] = map.iToVec(i)
-  const meshX = Math.floor((x / map.width) * mesh.width)
+  const meshX = Math.floor((x / map.width) * meshWidth)
   const meshY = Math.floor((y / map.height) * meshHeight)
-  return meshY * mesh.width + meshX
+  return meshY * meshWidth + meshX
 }
 function meshToMap(i: number): number {
-  const meshX = i % mesh.width
-  const meshY = (i - meshX) / mesh.width
-  const x = (meshX / mesh.width) * map.width
+  const meshX = i % meshWidth
+  const meshY = (i - meshX) / meshWidth
+  const x = (meshX / meshWidth) * map.width
   const y = (meshY / meshHeight) * map.height
   return y * map.width + x
 }
@@ -210,13 +196,13 @@ function crossEdge(from: number, angle: Dir): readonly [number, Dir] {
   let [x, y] = map.iToVec(from)
   // Find current mesh.
   const fromMesh = mapToMesh(from)
-  const [fromFace, fromFaceAngle] = mesh.faces[fromMesh]!
+  const [fromFace, fromFaceAngle] = meshFaces[fromMesh]!
   // Find next face.
   const normalAngle: Dir = capDir(angle - fromFaceAngle)
   const [toFace, toFaceAngle] = faceConnections[fromFace][normalAngle]
   // Map next face to mesh.
-  const toMesh = mesh.faces.findIndex((s) => s && s[0] === toFace)!
-  const toMeshAngle = mesh.faces[toMesh]![1]
+  const toMeshI = meshFaces.findIndex((s) => s && s[0] === toFace)!
+  const toMeshAngle = meshFaces[toMeshI]![1]
   const dAngle = capDir(-fromFaceAngle + toMeshAngle + toFaceAngle)
   // Map next mesh to map.
   const exitTileVec: vec2 = [x % mapTileLen, y % mapTileLen]
@@ -224,7 +210,7 @@ function crossEdge(from: number, angle: Dir): readonly [number, Dir] {
     flipTileVec(exitTileVec, angle),
     dAngle,
   )
-  const to = meshToMap(toMesh) + enterTileY * map.width + enterTileX
+  const to = meshToMap(toMeshI) + enterTileY * map.width + enterTileX
   const toAngle: Dir = capDir(angle + dAngle)
   return [to, toAngle]
 }

@@ -11,6 +11,7 @@ export interface Matrix extends Lengthened {
 export class Uint8Matrix extends Uint8Array implements Matrix {
   #width: number
   #height: number
+  #dims: vec2
 
   constructor()
   constructor(length: number, width: number)
@@ -22,6 +23,7 @@ export class Uint8Matrix extends Uint8Array implements Matrix {
     super(lengthOrArray)
     this.#width = width
     this.#height = this.length / width
+    this.#dims = [this.#width, this.#height]
   }
 
   get width() {
@@ -29,6 +31,9 @@ export class Uint8Matrix extends Uint8Array implements Matrix {
   }
   get height() {
     return this.#height
+  }
+  get dims() {
+    return this.#dims
   }
 
   concatRow(row: ArrayLike<number> & Lengthened) {
