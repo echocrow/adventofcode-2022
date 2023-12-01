@@ -11,6 +11,7 @@
   },
   "scripts": {
     "scaffold": "vite-node src/scripts/scaffold.ts",
+    "watch": "vite-node --watch",
     "solve": "vite-node"
   }
 }
