@@ -4,7 +4,7 @@ import {createInterface} from 'node:readline'
 
 type WriteData = Parameters<typeof writeFileSync>[1]
 
-export default class IO {
+export class IO {
   #inPath: string
   #outPath: string
 
@@ -81,3 +81,6 @@ export default class IO {
     return new Promise((resolve) => setTimeout(resolve, seconds * 1000))
   }
 }
+
+const io = new IO()
+export default io

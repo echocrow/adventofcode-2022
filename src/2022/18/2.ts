@@ -1,4 +1,4 @@
-import IO from 'lib/io.js'
+import io from 'lib/io.js'
 import {
   addVec3,
   iToVec3,
@@ -11,8 +11,6 @@ import {
   zColsMatrix3,
   zeroVec3,
 } from 'lib/vec3.js'
-
-const io = new IO()
 
 // Helper to bucket-fill
 function bucketFill(at: vec3, to: number) {

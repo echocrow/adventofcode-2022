@@ -1,6 +1,4 @@
-import IO from 'lib/io.js'
-
-const io = new IO()
+import io from 'lib/io.js'
 
 const PAIRS: Record<string, string> = {
   '(': ')',

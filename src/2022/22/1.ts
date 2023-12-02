@@ -1,8 +1,6 @@
-import IO from 'lib/io.js'
+import io from 'lib/io.js'
 import {posMod} from 'lib/math.js'
 import {Uint8Matrix} from 'lib/matrix.js'
-
-const io = new IO()
 
 enum Cell {
   Void,

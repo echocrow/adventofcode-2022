@@ -1,7 +1,5 @@
 import intersect from 'lib/intersect.js'
-import IO from 'lib/io.js'
-
-const io = new IO()
+import io from 'lib/io.js'
 
 const LOWER_A_CODE = 'a'.charCodeAt(0)
 const UPPER_A_CODE = 'A'.charCodeAt(0)

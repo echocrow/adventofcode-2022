@@ -1,7 +1,5 @@
-import IO from 'lib/io.js'
+import io from 'lib/io.js'
 import {joinRegExp} from 'lib/regexp.js'
-
-const io = new IO()
 
 type Packet = Array<number | Packet>
 

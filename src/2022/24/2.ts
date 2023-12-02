@@ -1,4 +1,4 @@
-import IO from 'lib/io.js'
+import io from 'lib/io.js'
 import memoize from 'lib/memo.js'
 import Queue from 'lib/queue.js'
 import {
@@ -13,8 +13,6 @@ import {
   zeroVec2,
 } from 'lib/vec2.js'
 import {vec3, Vec3Set} from 'lib/vec3.js'
-
-const io = new IO()
 
 // Parse.
 let mapW = 0

@@ -1,9 +1,7 @@
-import IO from 'lib/io.js'
+import io from 'lib/io.js'
 import {posMod} from 'lib/math.js'
 import {Uint8Matrix} from 'lib/matrix.js'
 import {addVec2, inAreaVec2, scaleVec2, vec2, zeroVec2} from 'lib/vec2.js'
-
-const io = new IO()
 
 // Directions, going clockwise.
 enum Dir {

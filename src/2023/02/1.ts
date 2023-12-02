@@ -1,6 +1,4 @@
-import IO from 'lib/io.js'
-
-const io = new IO()
+import io from 'lib/io.js'
 
 const maxBalls = new Map([
   ['red', 12],

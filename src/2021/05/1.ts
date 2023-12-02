@@ -1,8 +1,6 @@
 import Counter from 'lib/counter.js'
-import IO from 'lib/io.js'
+import io from 'lib/io.js'
 import range from 'lib/range.js'
-
-const io = new IO()
 
 const re = /^(\d+),(\d+) -> (\d+),(\d+)$/
 

@@ -1,8 +1,6 @@
-import IO from 'lib/io.js'
+import io from 'lib/io.js'
 import {neighbors, Uint8Matrix} from 'lib/matrix.js'
 import sum from 'lib/sum.js'
-
-const io = new IO()
 
 let cave = new Uint8Matrix()
 for await (const line of io.readLines()) {

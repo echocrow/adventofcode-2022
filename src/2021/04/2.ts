@@ -1,7 +1,5 @@
-import IO from 'lib/io.js'
+import io from 'lib/io.js'
 import sum from 'lib/sum.js'
-
-const io = new IO()
 
 class Board {
   #rows: number[][]

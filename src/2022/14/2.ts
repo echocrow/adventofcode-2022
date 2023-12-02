@@ -6,9 +6,7 @@ import {
   rangeVec2,
   vec2,
 } from 'lib/vec2.js'
-import IO from 'lib/io.js'
-
-const io = new IO()
+import io from 'lib/io.js'
 
 const SAND_SRC: vec2 = [500, 0]
 const SAND_MOVES: vec2[] = [

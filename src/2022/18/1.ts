@@ -1,8 +1,6 @@
 import {entries} from 'lib/array.js'
-import IO from 'lib/io.js'
+import io from 'lib/io.js'
 import {fmtVec3, neighborsVec3, vec3} from 'lib/vec3.js'
-
-const io = new IO()
 
 type Cube = {
   p: vec3

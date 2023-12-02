@@ -1,8 +1,6 @@
-import IO from 'lib/io.js'
+import io from 'lib/io.js'
 import memoize from 'lib/memo.js'
 import {MemoQueue} from 'lib/queue.js'
-
-const io = new IO()
 
 type Valve = {
   id: number

@@ -24,9 +24,7 @@ const dir = path.join(yearPath, dayDir)
 await mkdir(dir, {recursive: true})
 
 const tpl = `
-import IO from 'lib/io.js'
-
-const io = new IO()
+import io from 'lib/io.js'
 
 let result = 0
 for await (const line of io.readLines()) {

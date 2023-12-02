@@ -1,7 +1,5 @@
-import IO from 'lib/io.js'
+import io from 'lib/io.js'
 import {fmtVec2, vec2} from 'lib/vec2.js'
-
-const io = new IO()
 
 // const TARGET_Y = 10
 const TARGET_Y = 2000000

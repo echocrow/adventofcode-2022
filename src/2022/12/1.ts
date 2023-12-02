@@ -1,8 +1,6 @@
-import IO from 'lib/io.js'
+import io from 'lib/io.js'
 import {neighbors, Uint8Matrix} from 'lib/matrix.js'
 import {MemoQueue} from 'lib/queue.js'
-
-const io = new IO()
 
 // Parse.
 let map = new Uint8Matrix()

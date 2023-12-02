@@ -1,7 +1,5 @@
-import IO from 'lib/io.js'
+import io from 'lib/io.js'
 import range from 'lib/range.js'
-
-const io = new IO()
 
 let acc = 0
 

@@ -1,6 +1,4 @@
-import IO from 'lib/io.js'
-
-const io = new IO()
+import io from 'lib/io.js'
 
 let result = 0
 const UNIQUE_LENS = new Set([2, 3, 4, 7])

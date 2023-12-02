@@ -1,7 +1,5 @@
-import IO from 'lib/io.js'
+import io from 'lib/io.js'
 import {squareNeighbors, Uint8Matrix} from 'lib/matrix.js'
-
-const io = new IO()
 
 function tick(wales: Uint8Matrix) {
   for (const w in wales) wales[w]++

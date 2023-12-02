@@ -1,6 +1,4 @@
-import IO from 'lib/io.js'
-
-const io = new IO()
+import io from 'lib/io.js'
 
 function isSubset<T>(sub: Set<T>, sup: Set<T>): boolean {
   if (sub.size > sup.size) return false

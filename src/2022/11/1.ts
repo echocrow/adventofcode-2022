@@ -1,9 +1,7 @@
-import IO from 'lib/io.js'
+import io from 'lib/io.js'
 import product from 'lib/product.js'
 import {joinRegExp} from 'lib/regexp.js'
 import sort from 'lib/sort.js'
-
-const io = new IO()
 
 class Monkey {
   constructor(

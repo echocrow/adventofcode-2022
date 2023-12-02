@@ -1,7 +1,5 @@
-import IO from 'lib/io.js'
+import io from 'lib/io.js'
 import {bigSum} from 'lib/sum.js'
-
-const io = new IO()
 
 const DAYS = 256
 const REFRESH = 6

@@ -1,4 +1,4 @@
-import IO from 'lib/io.js'
+import io from 'lib/io.js'
 import product from 'lib/product.js'
 import sum from 'lib/sum.js'
 
@@ -25,7 +25,6 @@ enum BlueprintKeys {
 
 const MAX_BLUEPRINTS = 3
 
-const io = new IO()
 type Blueprint = Uint8Array & [number, number, number, number, number, number]
 const blueprints: Blueprint[] = []
 for await (const line of io.readLines()) {

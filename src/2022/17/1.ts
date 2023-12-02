@@ -1,8 +1,6 @@
-import IO from 'lib/io.js'
+import io from 'lib/io.js'
 import {Uint8Matrix} from 'lib/matrix.js'
 import type {vec2} from 'lib/vec2.js'
-
-const io = new IO()
 
 const nextRockShape = (() => {
   const shapes = [
@@ -20,7 +18,11 @@ const nextRockShape = (() => {
 })()
 
 class Rock {
-  constructor(public shape: Uint8Matrix, public x: number, public y: number) {}
+  constructor(
+    public shape: Uint8Matrix,
+    public x: number,
+    public y: number,
+  ) {}
 
   *rockBits() {
     for (let r = 0; r < this.shape.length; r++) {

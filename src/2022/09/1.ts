@@ -1,4 +1,4 @@
-import IO from 'lib/io.js'
+import io from 'lib/io.js'
 import {
   addVec2,
   lenVec2,
@@ -7,8 +7,6 @@ import {
   Vec2Set,
   zeroVec2,
 } from 'lib/vec2.js'
-
-const io = new IO()
 
 const DIRS = {
   U: [0, 1],

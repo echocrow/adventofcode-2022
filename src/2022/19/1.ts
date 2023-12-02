@@ -1,4 +1,4 @@
-import IO from 'lib/io.js'
+import io from 'lib/io.js'
 import sum from 'lib/sum.js'
 
 enum Rocks {
@@ -22,7 +22,6 @@ enum BlueprintKeys {
   geoObs,
 }
 
-const io = new IO()
 type Blueprint = Uint8Array & [number, number, number, number, number, number]
 const blueprints: Blueprint[] = []
 for await (const line of io.readLines()) {

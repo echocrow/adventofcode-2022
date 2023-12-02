@@ -1,8 +1,6 @@
 import Counter from 'lib/counter.js'
-import IO from 'lib/io.js'
+import io from 'lib/io.js'
 import {rangeVec2} from 'lib/vec2.js'
-
-const io = new IO()
 
 const re = /^(\d+),(\d+) -> (\d+),(\d+)$/
 

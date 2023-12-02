@@ -1,8 +1,6 @@
-import IO from 'lib/io.js'
+import io from 'lib/io.js'
 import range from 'lib/range.js'
 import sum from 'lib/sum.js'
-
-const io = new IO()
 
 function calcNSum(num: number): number {
   return (num * (num + 1)) / 2
