@@ -73,7 +73,9 @@ export class IO {
     writeFileSync(this.#outFileDesc, String(data))
   }
 
+  #logged = false
   log(message: any, ...moreMessage: any[]) {
+    this.#logged ||= (console.info(''), true)
     console.info(new Date(), ':', message, ...moreMessage)
   }
 
