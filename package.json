@@ -10,6 +10,7 @@
     "vite-tsconfig-paths": "^4.2.1"
   },
   "scripts": {
+    "init": "mkdir -p ./io && touch ./io/in.txt ./io/out.txt",
     "scaffold": "vite-node src/scripts/scaffold.ts",
     "watch": "vite-node --watch",
     "solve": "vite-node"
