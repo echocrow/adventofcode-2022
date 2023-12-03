@@ -13,5 +13,10 @@
     "scaffold": "vite-node src/scripts/scaffold.ts",
     "watch": "vite-node --watch",
     "solve": "vite-node"
-  }
+  },
+  "engines": {
+    "node": ">=18",
+    "pnpm": ">=8"
+  },
+  "packageManager": "pnpm@8.11.0"
 }
