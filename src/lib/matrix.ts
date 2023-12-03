@@ -1,123 +1,142 @@
+import {copyArr, copyEmptyArr, type AnyArray, setArr} from './array.js'
 import {posMod} from './math.js'
 import range from './range.js'
 import type {Lengthened, Sliceable} from './types.js'
 import {addVec2, type vec2} from './vec2.js'
 
-export interface Matrix extends Lengthened {
+interface MatrixLike extends Lengthened {
   width: number
   height: number
 }
 
-export class Uint8Matrix extends Uint8Array implements Matrix {
+export class Matrix<T extends AnyArray = Uint8Array>
+  implements MatrixLike, Sliceable<T>, Iterable<T[number]>
+{
   #width: number
   #height: number
-  #dims: vec2
 
-  constructor()
-  constructor(length: number, width: number)
   constructor(
-    array: ArrayLike<number> | ArrayBufferLike | Iterable<number>,
-    width: number,
-  )
-  constructor(lengthOrArray: any = 0, width = 0) {
-    super(lengthOrArray)
+    private data: T = new Uint8Array() as T,
+    width: number = 0,
+  ) {
+    if (data.length % width)
+      throw new RangeError('data length does not match matrix width')
     this.#width = width
     this.#height = width ? this.length / width : 0
-    this.#dims = [this.#width, this.#height]
   }
 
-  get width() {
+  get $(): T {
+    return this.data
+  }
+
+  get length(): number {
+    return this.data.length
+  }
+
+  [Symbol.iterator](): Iterator<T[number]> {
+    return this.data[Symbol.iterator]()
+  }
+
+  slice(start?: number | undefined, end?: number | undefined): T {
+    return this.data.slice(start, end) as T
+  }
+
+  #setData(data: T): void {
+    this.data = data
+    this.#height = this.#width ? this.length / this.#width : 0
+  }
+
+  get width(): number {
     return this.#width
   }
-  get height() {
+  get height(): number {
     return this.#height
   }
-  get dims() {
-    return this.#dims
+  get dims(): vec2 {
+    return [this.#width, this.#height]
   }
 
-  concatRow(row: ArrayLike<number> & Lengthened) {
-    const ab = new Uint8Matrix(
-      this.length + row.length,
-      this.#width || row.length,
-    )
-    if (row.length % ab.#width) {
+  pushRow(row: ArrayLike<T[number]> & Lengthened) {
+    if (this.#width && row.length % this.#width)
       throw new RangeError('row length does not match matrix width')
-    }
-    ab.set(this)
-    ab.set(row, this.length)
-    return ab
+    const data = copyEmptyArr(this.data, this.length + row.length)
+    setArr(data, this.data)
+    setArr(data, row, this.length)
+    this.#width ||= row.length
+    this.#setData(data)
+    return this
+  }
+  clear() {
+    this.#setData(copyEmptyArr(this.data, 0))
+    this.#width = 0
   }
 
   *transposedKeys() {
     yield* transposedKeys(this)
   }
-  transpose(): Uint8Matrix {
-    const out = new Uint8Matrix(this.length, this.height)
+  transpose(): Matrix<T> {
+    const out = new Matrix(copyArr(this.data), this.height)
     let i = 0
-    for (const from of this.transposedKeys()) out[i++] = this[from]!
+    for (const from of this.transposedKeys()) out.data[i++] = this.data[from]!
     return out
   }
 
   *rotatedKeys(times = 1) {
     yield* rotatedKeys(this, times)
   }
-  rotate(times = 1): Uint8Matrix {
+  rotate(times = 1): Matrix<T> {
     times = posMod(times, 4)
     if (!times) return this
     const newW = times % 2 ? this.height : this.width
-    const out = new Uint8Matrix(this.length, newW)
+    const out = new Matrix(copyArr(this.data), newW)
     let i = 0
-    for (const from of this.rotatedKeys(times)) out[i++] = this[from]!
+    for (const from of this.rotatedKeys(times)) out.data[i++] = this.data[from]!
     return out
   }
 
-  *rows() {
-    yield* rows<Uint8Array>(this)
+  *rows(): Generator<T, void, undefined> {
+    yield* rows<T>(this)
   }
 
-  *row(y: number) {
+  *row(y: number): Generator<T[number], void, undefined> {
     const from = y * this.#width
     const to = from + this.#width
-    for (let i = from; i < to; i++) yield this[i]!
+    for (let i = from; i < to; i++) yield this.data[i]!
   }
-  setRow(y: number, vals: ArrayLike<number>) {
+  setRow(y: number, vals: ArrayLike<number>): this {
     if (vals.length !== this.width)
       throw new RangeError('row length does not match matrix width')
-    this.set(vals, y * this.width)
+    setArr(this.data, vals, y * this.width)
     return this
   }
 
-  *col(x: number) {
-    for (let i = x; i < this.length; i += this.#width) yield this[i]
+  *col(x: number): Generator<T[number], void, undefined> {
+    for (let i = x; i < this.length; i += this.#width) yield this.data[i]
   }
-  *cols() {
+  *cols(): Generator<T, void, undefined> {
     for (let x = 0; x < this.width; x++) {
-      const col = new Uint8Array(this.height)
-      for (let y = 0; y < this.height; y++) {
-        col[y] = this.cell(x, y)!
-      }
+      const col = copyEmptyArr(this.data, this.height)
+      for (let y = 0; y < this.height; y++) col[y] = this.cell(x, y)!
       yield col
     }
   }
 
-  cell(x: number, y: number): number | undefined {
-    return this[y * this.width + x]
+  cell(x: number, y: number): number {
+    return this.data[y * this.width + x] ?? -1
   }
   setCell(x: number, y: number, v: number) {
-    this[y * this.width + x] = v
+    this.data[y * this.width + x] = v
     return this
   }
 
-  sliceRows(startY?: number, endY?: number): Uint8Matrix {
-    const out = new Uint8Matrix(
+  sliceRows(startY?: number, endY?: number): Matrix<T> {
+    return new Matrix(
       this.slice(
         (startY ?? 0) * this.width,
         (endY ?? this.height) * this.width,
       ),
       this.width,
     )
-    return out
   }
 
   iToVec(i: number): vec2 {
@@ -147,15 +166,29 @@ export class Uint8Matrix extends Uint8Array implements Matrix {
   }
 }
 
+export class Uint8Matrix extends Matrix<Uint8Array> {
+  constructor()
+  constructor(length: number, width: number)
+  constructor(
+    array: ArrayLike<number> | ArrayBufferLike | Iterable<number>,
+    width: number,
+  )
+  constructor(lengthOrArray: any = 0, width = 0) {
+    super(new Uint8Array(lengthOrArray), width)
+  }
+}
+
 export function* rows<T>(
-  m: Matrix & Sliceable<T>,
+  m: MatrixLike & Sliceable<T>,
 ): Generator<T, void, undefined> {
   for (let i = 0; i < m.length; i += m.width) {
     yield m.slice(i, i + m.width)
   }
 }
 
-export function* transposedKeys(m: Matrix): Generator<number, void, undefined> {
+export function* transposedKeys(
+  m: MatrixLike,
+): Generator<number, void, undefined> {
   const w = m.width
   const newW = m.height
   for (let i = 0; i < m.length; i++) {
@@ -166,7 +199,7 @@ export function* transposedKeys(m: Matrix): Generator<number, void, undefined> {
 }
 
 export function* rotatedKeys(
-  m: Matrix,
+  m: MatrixLike,
   times = 1,
 ): Generator<number, void, undefined> {
   times = posMod(times + 1, 4) - 1
@@ -191,7 +224,7 @@ export function* rotatedKeys(
 }
 
 export function* neighbors(
-  m: Matrix,
+  m: MatrixLike,
   i: number,
 ): Generator<number, void, undefined> {
   const w = m.width
@@ -205,7 +238,7 @@ export function* neighbors(
 }
 
 export function* squareNeighbors(
-  m: Matrix,
+  m: MatrixLike,
   i: number,
 ): Generator<number, void, undefined> {
   const ns = [...neighbors(m, i)]
