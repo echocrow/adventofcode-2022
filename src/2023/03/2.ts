@@ -1,48 +1,33 @@
 import io from 'lib/io.js'
-import product from 'lib/product.js'
-import sliceByLen from 'lib/sliceByLen.js'
 import sum from 'lib/sum.js'
 
-// Pad input.
-const srcInput = await io.readFile()
-const srcRowLen = srcInput.indexOf('\n') + 1
-const input =
-  [
-    '.'.repeat(srcRowLen + 1),
-    `.${srcInput.replaceAll('\n', '.\n.')}.`,
-    '.'.repeat(srcRowLen + 1),
-  ].join('\n') + '\n'
-const rowLen = srcRowLen + 2
-
-const numRe = /\d+/g
-const gearRe = /\*/g
-
-// Collect gears.
-const allGears = new Map<number, number[]>()
-let match: RegExpExecArray | null
-while ((match = numRe.exec(input))) {
-  const num = match[0]
-  const matchLen = num.length
-  const pos = match.index
-  const border = [
-    sliceByLen(input, pos - rowLen - 1, matchLen + 2),
-    input[pos - 1]! + '.'.repeat(matchLen) + input[pos + matchLen]!,
-    sliceByLen(input, pos + rowLen - 1, matchLen + 2),
-  ].join(' '.repeat(rowLen - matchLen - 2))
-
-  // Find surrounding gears.
-  for (const gear of border.matchAll(gearRe)) {
-    const gearPos = pos + gear.index!
-    let gearNums = allGears.get(gearPos)
-    if (!gearNums) allGears.set(gearPos, (gearNums = []))
-    gearNums.push(Number(num))
+const symbolsRe = /[^\d.]/g
+const numsRe = /\d+/g
+export function parseRow(str: string) {
+  return {
+    symbolsAt: [...str.matchAll(symbolsRe)].map((match) => match.index ?? 0),
+    nums: [...str.matchAll(numsRe)].map((match) => ({
+      start: (match.index ?? 0) - 1,
+      end: (match.index ?? 0) + match[0].length,
+      val: Number(match[0]),
+    })),
   }
 }
 
-const result = sum(
-  [...allGears.values()]
+let result = 0
+const rows = [parseRow(''), parseRow(''), parseRow('')]
+let nextRow = ''
+do {
+  nextRow = (await io.readLine()) ?? ''
+  rows[0] = rows[1]!
+  rows[1] = rows[2]!
+  rows[2] = parseRow(nextRow)
+  const nums = rows.flatMap((row) => row.nums)
+  const gearRatios = rows[1].symbolsAt
+    .map((pos) => nums.filter((n) => n.start <= pos && pos <= n.end))
     .filter((nums) => nums.length === 2)
-    .map((nums) => product(nums)),
-)
+    .map((nums) => nums[0]!.val * nums[1]!.val)
+  result += sum(gearRatios)
+} while (nextRow)
 
 io.write(result)
