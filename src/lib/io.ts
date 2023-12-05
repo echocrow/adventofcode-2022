@@ -54,10 +54,15 @@ export class IO {
 
   async *readRegExp(
     pattern: RegExp,
+    opts: {suffix?: string} = {},
   ): AsyncGenerator<RegExpExecArray, void, undefined> {
     let buff = ''
     let row: string | undefined
-    while ((row = await this.readLine()) !== undefined) {
+    let {suffix} = opts
+    function consumeSuffix(s = suffix) {
+      return (suffix = undefined), s
+    }
+    while ((row = (await this.readLine()) ?? consumeSuffix()) !== undefined) {
       buff += (buff ? '\n' : '') + row
       const res = pattern.exec(buff)
       if (res) {
