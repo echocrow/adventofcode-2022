@@ -20,3 +20,33 @@ export function* entries<T>(values: Iterable<T>) {
   let i = 0
   for (const val of values) yield [i++, val] as const
 }
+
+export type TypedArrayConstructor =
+  | Int8ArrayConstructor
+  | Uint8ArrayConstructor
+  | Uint8ClampedArrayConstructor
+  | Int16ArrayConstructor
+  | Uint16ArrayConstructor
+  | Int32ArrayConstructor
+  | Uint32ArrayConstructor
+  | Float32ArrayConstructor
+  | Float64ArrayConstructor
+export type TypedArray = InstanceType<TypedArrayConstructor>
+
+/**
+ * Ensure array `arr` is at least `minLen` long.
+ *
+ * When `arr` is insufficiently long, a new, larger array will be returned. The
+ * new array will contain a copy of the original values, and its new length may
+ * exceed `minLen`.
+ */
+export function allocArrLen<T extends TypedArray & {constructor: Function}>(
+  arr: T,
+  minLen: number,
+): T {
+  if (arr.length >= minLen) return arr
+  const Constructor = arr.constructor as new (len: number) => T
+  const newArr = new Constructor(Math.max(arr.length * 2, minLen))
+  newArr.set(arr)
+  return newArr
+}
