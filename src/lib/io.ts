@@ -72,10 +72,17 @@ export class IO {
     }
   }
 
-  write(data: WriteData | number | bigint | undefined | null) {
+  write(
+    data: WriteData | number | bigint | undefined | null,
+    opts: {silent?: boolean} = {},
+  ) {
     this.#outFileDesc ??= openSync(this.#outPath, 'w+')
-    if (typeof data === 'number') data = String(data)
-    writeFileSync(this.#outFileDesc, String(data))
+    const str = String(data)
+    writeFileSync(this.#outFileDesc, str)
+    if (!opts.silent) {
+      const msg = str.length < 100 ? str : `wrote ${str.length} characters`
+      this.log(`[io] Output: ${msg}`)
+    }
   }
 
   #logged = false
