@@ -1,5 +1,12 @@
 import io from 'lib/io.js'
-import {addVec2, maxVec2, minVec2, vec2, Vec2Set, zeroVec2} from 'lib/vec2.js'
+import {
+  addVec2,
+  maxVec2,
+  minVec2,
+  type vec2,
+  Vec2Set,
+  zeroVec2,
+} from 'lib/vec2.js'
 
 // Set up rules.
 const dirs = {

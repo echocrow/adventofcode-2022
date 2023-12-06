@@ -1,5 +1,5 @@
 import io from 'lib/io.js'
-import {addVec2, vec2, Vec2Set, zeroVec2} from 'lib/vec2.js'
+import {addVec2, type vec2, Vec2Set, zeroVec2} from 'lib/vec2.js'
 
 const DIRS = {
   U: [0, 1],

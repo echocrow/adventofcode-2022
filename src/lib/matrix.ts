@@ -1,7 +1,7 @@
 import {posMod} from './math.js'
 import range from './range.js'
 import type {Lengthened, Sliceable} from './types.js'
-import {addVec2, vec2} from './vec2.js'
+import {addVec2, type vec2} from './vec2.js'
 
 export interface Matrix extends Lengthened {
   width: number

@@ -4,7 +4,7 @@ import {
   iToVec3,
   maxVec3,
   validNeighborsVec3,
-  vec3,
+  type vec3,
   vec3ToI,
   xColsMatrix3,
   yColsMatrix3,

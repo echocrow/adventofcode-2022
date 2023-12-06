@@ -4,7 +4,7 @@ import {
   fmtVec2,
   maxVec2,
   rangeVec2,
-  vec2,
+  type vec2,
 } from 'lib/vec2.js'
 import io from 'lib/io.js'
 

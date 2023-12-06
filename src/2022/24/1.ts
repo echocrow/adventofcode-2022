@@ -8,11 +8,11 @@ import {
   modVec2,
   scaleVec2,
   subtractVec2,
-  vec2,
+  type vec2,
   Vec2Set,
   zeroVec2,
 } from 'lib/vec2.js'
-import {vec3, Vec3Set} from 'lib/vec3.js'
+import {type vec3, Vec3Set} from 'lib/vec3.js'
 
 // Parse.
 let mapW = 0
