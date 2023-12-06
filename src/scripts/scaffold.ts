@@ -6,7 +6,7 @@ import {parseArgs} from 'node:util'
 const args = parseArgs({allowPositionals: true})
 let [yearDir = `${new Date().getFullYear()}`, dayDir = ''] = args.positionals
 
-const srcDir = path.resolve('./src')
+const srcDir = path.resolve('./src/events')
 
 const yearPath = path.join(srcDir, yearDir)
 await mkdir(yearPath, {recursive: true})
