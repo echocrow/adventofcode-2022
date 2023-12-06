@@ -21,6 +21,14 @@ export function* entries<T>(values: Iterable<T>) {
   for (const val of values) yield [i++, val] as const
 }
 
+export async function arrFromAsync<T>(
+  iterator: AsyncIterable<T>,
+): Promise<T[]> {
+  const vals: T[] = []
+  for await (const val of iterator) vals.push(val)
+  return vals
+}
+
 export type TypedArrayConstructor =
   | Int8ArrayConstructor
   | Uint8ArrayConstructor
