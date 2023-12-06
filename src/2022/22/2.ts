@@ -118,7 +118,11 @@ const map = new Uint8Matrix(
     line
       .padEnd(_mapWidth, ' ')
       .split('')
-      .map((c) => (c === '#' ? Cell.Wall : c === '.' ? Cell.Free : 0)),
+      .map((c) =>
+        c === '#' ? Cell.Wall
+        : c === '.' ? Cell.Free
+        : 0,
+      ),
   ),
   _mapWidth,
 )

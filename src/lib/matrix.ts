@@ -160,8 +160,14 @@ export function* rotatedKeys(
   for (let i = 0; i < m.length; i++) {
     const newX = i % newW
     const newY = (i - newX) / newW
-    const x = double ? w - newX - 1 : pos ? newY : w - newY - 1
-    const y = double ? h - newY - 1 : pos ? h - newX - 1 : newX
+    const x =
+      double ? w - newX - 1
+      : pos ? newY
+      : w - newY - 1
+    const y =
+      double ? h - newY - 1
+      : pos ? h - newX - 1
+      : newX
     yield y * w + x
   }
 }

@@ -1,7 +1,6 @@
-export type ArrayItem<T> = T extends Array<infer V>
-  ? V
-  : T extends RelativeIndexable<infer V>
-  ? V
+export type ArrayItem<T> =
+  T extends Array<infer V> ? V
+  : T extends RelativeIndexable<infer V> ? V
   : never
 
 export interface Lengthened {

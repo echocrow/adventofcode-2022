@@ -30,7 +30,11 @@ function compare(left: Packet, right: Packet): boolean | undefined {
 
 function sortCompare(left: Packet, right: Packet): number {
   const res = compare(left, right)
-  return res === undefined ? 0 : res ? -1 : 1
+  return (
+    res === undefined ? 0
+    : res ? -1
+    : 1
+  )
 }
 
 const packets: Packet[] = []

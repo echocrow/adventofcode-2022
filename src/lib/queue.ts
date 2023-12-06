@@ -1,5 +1,8 @@
 class QueueItem<V, C extends number | bigint = number> {
-  constructor(public cost: C, public item: V) {}
+  constructor(
+    public cost: C,
+    public item: V,
+  ) {}
 }
 
 export default class Queue<T> {
