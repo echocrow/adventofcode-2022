@@ -1,16 +1,19 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
+    "allowJs": true,
     "baseUrl": "./src",
     "composite": false,
     "declaration": true,
     "declarationMap": true,
     "esModuleInterop": true,
+    "exactOptionalPropertyTypes": true,
     "forceConsistentCasingInFileNames": true,
-    "importsNotUsedAsValues": "error",
     "inlineSources": false,
     "isolatedModules": true,
-    "module": "ESNext",
+    "lib": ["ESNext"],
+    "module": "NodeNext",
+    "moduleDetection": "force",
     "moduleResolution": "NodeNext",
     "noUncheckedIndexedAccess": true,
     "noUnusedLocals": false,
@@ -19,7 +22,8 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
-    "target": "ESNext"
+    "target": "ESNext",
+    "verbatimModuleSyntax": true
   },
   "exclude": ["node_modules"]
 }
