@@ -15,7 +15,9 @@
     "format": "prettier . --write",
     "check": "prettier . --check && tsc --noEmit",
     "start": "vite-node",
-    "watch": "vite-node --watch"
+    "watch": "vite-node --watch",
+    "start:latest": "[ -z ${PART} ] && echo 'Missing $PART var.' && exit 1 || pnpm start $(ls -1r ./src/events/*/*/${PART}.ts | head -1)",
+    "watch:latest": "[ -z ${PART} ] && echo 'Missing $PART var.' && exit 1 || pnpm watch $(ls -1r ./src/events/*/*/${PART}.ts | head -1)"
   },
   "engines": {
     "node": ">=18",
