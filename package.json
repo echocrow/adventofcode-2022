@@ -11,11 +11,11 @@
   },
   "scripts": {
     "init": "mkdir -p ./io && touch ./io/in.txt ./io/out.txt",
-    "scaffold": "vite-node src/scripts/scaffold.ts",
+    "gen": "vite-node src/scripts/scaffold.ts",
     "format": "prettier . --write",
     "check": "prettier . --check && tsc --noEmit",
-    "watch": "vite-node --watch",
-    "solve": "vite-node"
+    "start": "vite-node",
+    "watch": "vite-node --watch"
   },
   "engines": {
     "node": ">=18",
