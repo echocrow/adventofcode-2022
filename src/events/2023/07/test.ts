@@ -1,4 +1,4 @@
-import {dedent, testDay} from '#lib/testing.js'
+import {dedent, testPart} from '#lib/testing.js'
 
 const input = dedent`
   32T3K 765
@@ -8,7 +8,5 @@ const input = dedent`
   QQQJA 483
 `
 
-testDay(__dirname, [
-  {part: 1, input, expect: 6440},
-  {part: 2, input, expect: 5905},
-])
+await testPart(import('./1.js?url'), [input, 6440])
+await testPart(import('./2.js?url'), [input, 5905])

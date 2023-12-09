@@ -1,4 +1,4 @@
-import {dedent, testDay} from '#lib/testing.js'
+import {dedent, testPart} from '#lib/testing.js'
 
 const input = dedent`
   Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green
@@ -8,7 +8,5 @@ const input = dedent`
   Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green
 `
 
-testDay(__dirname, [
-  {part: 1, input, expect: 8},
-  {part: 2, input, expect: 2286},
-])
+await testPart(import('./1.js?url'), [input, 8])
+await testPart(import('./2.js?url'), [input, 2286])

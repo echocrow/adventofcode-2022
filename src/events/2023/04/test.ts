@@ -1,4 +1,4 @@
-import {dedent, testDay} from '#lib/testing.js'
+import {dedent, testPart} from '#lib/testing.js'
 
 const input = dedent`
   Card 1: 41 48 83 86 17 | 83 86  6 31 17  9 48 53
@@ -9,7 +9,5 @@ const input = dedent`
   Card 6: 31 18 13 56 72 | 74 77 10 23 35 67 36 11
 `
 
-testDay(__dirname, [
-  {part: 1, input, expect: 13},
-  {part: 2, input, expect: 30},
-])
+await testPart(import('./1.js?url'), [input, 13])
+await testPart(import('./2.js?url'), [input, 30])

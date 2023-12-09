@@ -1,9 +1,8 @@
-import {dedent, testDay} from '#lib/testing.js'
+import {dedent, testPart} from '#lib/testing.js'
 
-testDay(__dirname, [
-  {
-    part: 1,
-    input: dedent`
+await testPart(import('./1.js?url'), [
+  [
+    dedent`
       RL
 
       AAA = (BBB, CCC)
@@ -14,33 +13,31 @@ testDay(__dirname, [
       GGG = (GGG, GGG)
       ZZZ = (ZZZ, ZZZ)
     `,
-    expect: 2,
-  },
-  {
-    part: 1,
-    input: dedent`
+    2,
+  ],
+  [
+    dedent`
       LLR
 
       AAA = (BBB, BBB)
       BBB = (AAA, ZZZ)
       ZZZ = (ZZZ, ZZZ)
     `,
-    expect: 6,
-  },
-  {
-    part: 2,
-    input: dedent`
-      LR
+    6,
+  ],
+])
+await testPart(import('./2.js?url'), [
+  dedent`
+    LR
 
-      11A = (11B, XXX)
-      11B = (XXX, 11Z)
-      11Z = (11B, XXX)
-      22A = (22B, XXX)
-      22B = (22C, 22C)
-      22C = (22Z, 22Z)
-      22Z = (22B, 22B)
-      XXX = (XXX, XXX)
-    `,
-    expect: 6,
-  },
+    11A = (11B, XXX)
+    11B = (XXX, 11Z)
+    11Z = (11B, XXX)
+    22A = (22B, XXX)
+    22B = (22C, 22C)
+    22C = (22Z, 22Z)
+    22Z = (22B, 22B)
+    XXX = (XXX, XXX)
+  `,
+  6,
 ])
