@@ -1,3 +1,4 @@
+import io from '#lib/io.js'
 import {
   addVec2,
   fmtVec2,
@@ -7,7 +8,6 @@ import {
   rangeVec2,
   type vec2,
 } from '#lib/vec2.js'
-import io from '#lib/io.js'
 
 const SAND_SRC: vec2 = [500, 0]
 const SAND_MOVES: vec2[] = [
