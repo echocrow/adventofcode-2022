@@ -17,6 +17,9 @@
     "noUncheckedIndexedAccess": true,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
+    "paths": {
+      "#lib/*": ["./src/lib/*"]
+    },
     "preserveWatchOutput": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
