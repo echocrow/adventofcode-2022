@@ -12,7 +12,8 @@
     "typescript": "^5.3.3",
     "vite": "^5.0.7",
     "vite-node": "^1.0.1",
-    "vite-tsconfig-paths": "^4.2.1"
+    "vite-tsconfig-paths": "^4.2.1",
+    "vitest": "^1.0.1"
   },
   "scripts": {
     "init": "mkdir -p ./io && touch ./io/in.txt ./io/out.txt",
@@ -21,7 +22,9 @@
     "check": "prettier . --check && tsc --noEmit",
     "start": "vite-node",
     "watch": "[ -z ${FILE} ] && echo 'Missing $FILE var.' && exit 1 || vite-node --watch ${FILE} -- --in=./io/in.txt --out=./io/out.txt",
-    "watch:latest": "[ -z ${PART} ] && echo 'Missing $PART var.' && exit 1 || FILE=$(ls -1r ./src/events/*/*/${PART}.ts | head -1) pnpm watch"
+    "watch:latest": "[ -z ${PART} ] && echo 'Missing $PART var.' && exit 1 || FILE=$(ls -1r ./src/events/*/*/${PART}.ts | head -1) pnpm watch",
+    "test": "vitest --changed",
+    "test:all": "vitest --run"
   },
   "engines": {
     "node": ">=18",

@@ -27,6 +27,7 @@ await mkdir(dir, {recursive: true})
 const fileCopies = [
   ['1.ts', path.join(tplDir, 'part.ts.tpl')],
   ['2.ts', path.join(tplDir, 'part.ts.tpl')],
+  ['test.ts', path.join(tplDir, 'partTest.ts.tpl')],
 ] as const
 
 await Promise.all(

@@ -13,4 +13,7 @@ export default defineConfig({
       },
     },
   ],
+  test: {
+    include: ['src/events/*/*/test.ts'],
+  },
 })
