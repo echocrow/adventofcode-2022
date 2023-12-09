@@ -9,6 +9,7 @@ type WriteData = Parameters<typeof writeFileSync>[1]
 class IO {
   #_in: AsyncIterableIterator<string> | undefined = undefined
   #_out: Writable | undefined = undefined
+  logSilent = false
   #logged = false
 
   constructor(
@@ -40,6 +41,7 @@ class IO {
     })
 
     this.#reset()
+    this.logSilent = true
 
     return {
       get out() {
@@ -110,6 +112,7 @@ class IO {
 
   #console = new Console(process.stderr)
   log(message: any, ...moreMessage: any[]) {
+    if (this.logSilent) return
     this.#logged ||= (this.#console.info(''), true)
     this.#console.info(new Date(), ':', message, ...moreMessage)
   }
