@@ -2,22 +2,9 @@ import {Console} from 'node:console'
 import {createReadStream, createWriteStream, writeFileSync} from 'node:fs'
 import {createInterface} from 'node:readline'
 import {Readable, Writable} from 'node:stream'
+import {parseArgs} from 'node:util'
 
 type WriteData = Parameters<typeof writeFileSync>[1]
-
-/**
- * Get argv value by flag name.
- */
-function getArgv(name: string) {
-  const nameEq = `${name}=`
-  for (let i = 2; i < process.argv.length; i++) {
-    const arg = process.argv[i]
-    if (arg === name) return process.argv0[i + 1] ?? ''
-    if (arg?.startsWith(nameEq)) return arg.slice(nameEq.length)
-    if (arg === '--') break
-  }
-  return ''
-}
 
 class IO {
   #_in: AsyncIterableIterator<string> | undefined = undefined
@@ -133,17 +120,31 @@ class IO {
 
   static #createIn(input?: Readable | undefined) {
     if (!input) {
-      const inPath = getArgv('--in')
+      const inPath = String(IO.#parsedArgs.in ?? '')
       input = inPath ? createReadStream(inPath) : process.stdin
     }
     return createInterface({input})[Symbol.asyncIterator]()
   }
   static #createOut(output?: Writable | undefined) {
     if (!output) {
-      const outPath = getArgv('--out')
+      const outPath = String(IO.#parsedArgs.out ?? '')
       output = outPath ? createWriteStream(outPath) : process.stdout
     }
     return output
+  }
+
+  private static _parseArgs() {
+    return parseArgs({
+      options: {
+        in: {type: 'string', default: ''},
+        out: {type: 'string', default: ''},
+      },
+    }).values
+  }
+  static #_parsedArgs: ReturnType<(typeof IO)['_parseArgs']> | undefined =
+    undefined
+  static get #parsedArgs() {
+    return (IO.#_parsedArgs ??= IO._parseArgs())
   }
 }
 
