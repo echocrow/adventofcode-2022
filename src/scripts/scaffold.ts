@@ -1,4 +1,4 @@
-import {mkdir, readdir, writeFile} from 'node:fs/promises'
+import {copyFile, mkdir, readdir} from 'node:fs/promises'
 import path from 'node:path'
 import {parseArgs} from 'node:util'
 import padNum from '#lib/padNum.js'
@@ -7,6 +7,7 @@ const args = parseArgs({allowPositionals: true})
 let [yearDir = `${new Date().getFullYear()}`, dayDir = ''] = args.positionals
 
 const srcDir = path.resolve('./src/events')
+const tplDir = path.join(__dirname, 'templates')
 
 const yearPath = path.join(srcDir, yearDir)
 await mkdir(yearPath, {recursive: true})
@@ -23,19 +24,13 @@ if (!dayDir) {
 const dir = path.join(yearPath, dayDir)
 await mkdir(dir, {recursive: true})
 
-const tpl = `
-import io from '#lib/io.js'
-
-let result = 0
-for await (const line of io.readLines()) {
-  // todo
-}
-
-io.write(result)
-`.trimStart()
+const fileCopies = [
+  ['1.ts', path.join(tplDir, 'part.ts.tpl')],
+  ['2.ts', path.join(tplDir, 'part.ts.tpl')],
+] as const
 
 await Promise.all(
-  ['1.ts', '2.ts'].map((name) => writeFile(path.join(dir, name), tpl)),
+  fileCopies.map(([name, tplPath]) => copyFile(tplPath, path.join(dir, name))),
 )
 
 console.log(`Scaffolded [${path.relative(srcDir, dir)}/].`)
