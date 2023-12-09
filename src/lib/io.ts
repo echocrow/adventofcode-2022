@@ -34,27 +34,11 @@ class IO {
     this.#_out = undefined
     this.#logged = false
   }
-  #createIn() {
-    let input = this.input
-    if (!input) {
-      const inPath = getArgv('--in')
-      input = inPath ? createReadStream(inPath) : process.stdin
-    }
-    return createInterface({input})[Symbol.asyncIterator]()
-  }
-  #createOut() {
-    let output = this.output
-    if (!output) {
-      const outPath = getArgv('--out')
-      output = outPath ? createWriteStream(outPath) : process.stdout
-    }
-    return output
-  }
   get #in() {
-    return (this.#_in ??= this.#createIn())
+    return (this.#_in ??= IO.#createIn(this.input))
   }
   get #out() {
-    return (this.#_out ??= this.#createOut())
+    return (this.#_out ??= IO.#createOut(this.output))
   }
 
   mock(input: string | Readable) {
@@ -145,6 +129,21 @@ class IO {
 
   async sleep(seconds: number) {
     return new Promise((resolve) => setTimeout(resolve, seconds * 1000))
+  }
+
+  static #createIn(input?: Readable | undefined) {
+    if (!input) {
+      const inPath = getArgv('--in')
+      input = inPath ? createReadStream(inPath) : process.stdin
+    }
+    return createInterface({input})[Symbol.asyncIterator]()
+  }
+  static #createOut(output?: Writable | undefined) {
+    if (!output) {
+      const outPath = getArgv('--out')
+      output = outPath ? createWriteStream(outPath) : process.stdout
+    }
+    return output
   }
 }
 
