@@ -1,5 +1,5 @@
-import io from 'lib/io.js'
-import sort from 'lib/sort.js'
+import io from '#lib/io.js'
+import sort from '#lib/sort.js'
 
 const PAIRS: Record<string, string> = {
   '(': ')',

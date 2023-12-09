@@ -1,4 +1,4 @@
-import io from 'lib/io.js'
+import io from '#lib/io.js'
 
 let acc = 0
 

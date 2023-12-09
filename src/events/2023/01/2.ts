@@ -1,5 +1,5 @@
-import io from 'lib/io.js'
-import range from 'lib/range.js'
+import io from '#lib/io.js'
+import range from '#lib/range.js'
 
 let acc = 0
 

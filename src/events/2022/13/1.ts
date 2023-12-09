@@ -1,5 +1,5 @@
-import io from 'lib/io.js'
-import {joinRegExp} from 'lib/regexp.js'
+import io from '#lib/io.js'
+import {joinRegExp} from '#lib/regexp.js'
 
 type Packet = Array<number | Packet>
 

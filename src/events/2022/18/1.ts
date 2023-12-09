@@ -1,6 +1,6 @@
-import {entries} from 'lib/array.js'
-import io from 'lib/io.js'
-import {fmtVec3, neighborsVec3, type vec3} from 'lib/vec3.js'
+import {entries} from '#lib/array.js'
+import io from '#lib/io.js'
+import {fmtVec3, neighborsVec3, type vec3} from '#lib/vec3.js'
 
 type Cube = {
   p: vec3

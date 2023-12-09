@@ -1,6 +1,6 @@
-import {allocArrLen as allocMinLen} from 'lib/array.js'
-import io from 'lib/io.js'
-import range from 'lib/range.js'
+import {allocArrLen as allocMinLen} from '#lib/array.js'
+import io from '#lib/io.js'
+import range from '#lib/range.js'
 
 const numsRe = /\d+/g
 function findNums(str: string) {

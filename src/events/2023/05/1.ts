@@ -1,4 +1,4 @@
-import io from 'lib/io.js'
+import io from '#lib/io.js'
 
 let seeds = [...(await io.readLine())?.matchAll(/\d+/g)!].map(Number)
 let mapped = new Uint8Array(seeds.length)

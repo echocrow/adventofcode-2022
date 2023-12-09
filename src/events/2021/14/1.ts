@@ -1,7 +1,7 @@
-import Counter from 'lib/counter.js'
-import io from 'lib/io.js'
-import range from 'lib/range.js'
-import {max, min} from 'lib/sort.js'
+import Counter from '#lib/counter.js'
+import io from '#lib/io.js'
+import range from '#lib/range.js'
+import {max, min} from '#lib/sort.js'
 
 const startingPoly = (await io.readLine()) ?? ''
 const firstLetter = startingPoly[0] ?? ''

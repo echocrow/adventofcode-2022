@@ -1,6 +1,6 @@
-import io from 'lib/io.js'
-import {posMod} from 'lib/math.js'
-import range from 'lib/range.js'
+import io from '#lib/io.js'
+import {posMod} from '#lib/math.js'
+import range from '#lib/range.js'
 
 // Parse.
 const tmpNums: number[] = []

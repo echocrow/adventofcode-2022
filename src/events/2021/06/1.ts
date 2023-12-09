@@ -1,4 +1,4 @@
-import io from 'lib/io.js'
+import io from '#lib/io.js'
 
 const DAYS = 80
 const REFRESH = 6

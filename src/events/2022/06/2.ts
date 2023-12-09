@@ -1,4 +1,4 @@
-import io from 'lib/io.js'
+import io from '#lib/io.js'
 
 class MapCounter<K> extends Map<K, number> {
   add(key: K, delta: number) {

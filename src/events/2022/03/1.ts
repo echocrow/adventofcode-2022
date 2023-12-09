@@ -1,4 +1,4 @@
-import io from 'lib/io.js'
+import io from '#lib/io.js'
 
 const LOWER_A_CODE = 'a'.charCodeAt(0)
 const UPPER_A_CODE = 'A'.charCodeAt(0)

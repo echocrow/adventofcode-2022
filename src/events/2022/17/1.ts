@@ -1,6 +1,6 @@
-import io from 'lib/io.js'
-import {Uint8Matrix} from 'lib/matrix.js'
-import type {vec2} from 'lib/vec2.js'
+import io from '#lib/io.js'
+import {Uint8Matrix} from '#lib/matrix.js'
+import type {vec2} from '#lib/vec2.js'
 
 const nextRockShape = (() => {
   const shapes = [

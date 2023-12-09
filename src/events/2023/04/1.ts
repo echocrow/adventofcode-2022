@@ -1,4 +1,4 @@
-import io from 'lib/io.js'
+import io from '#lib/io.js'
 
 const numsRe = /\d+/g
 function findNums(str: string) {

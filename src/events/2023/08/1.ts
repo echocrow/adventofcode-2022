@@ -1,4 +1,4 @@
-import io from 'lib/io.js'
+import io from '#lib/io.js'
 
 const dirs = (await io.readLine())!.split('').map((d) => (d === 'R' ? 1 : 0))
 

@@ -1,4 +1,4 @@
-import io from 'lib/io.js'
+import io from '#lib/io.js'
 
 const times = [...(await io.readLine())!.matchAll(/\d+/g)].map(Number)
 const dists = [...(await io.readLine())!.matchAll(/\d+/g)].map(Number)

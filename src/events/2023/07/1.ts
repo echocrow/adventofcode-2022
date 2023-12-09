@@ -1,5 +1,5 @@
-import {arrFromAsync} from 'lib/array.js'
-import io from 'lib/io.js'
+import {arrFromAsync} from '#lib/array.js'
+import io from '#lib/io.js'
 
 const faceVals = new Map(
   ['2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A'].map(

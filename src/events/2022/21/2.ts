@@ -1,4 +1,4 @@
-import io from 'lib/io.js'
+import io from '#lib/io.js'
 
 type OpFn = (a: number, b: number) => number
 const ops = {

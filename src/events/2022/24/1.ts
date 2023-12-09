@@ -1,6 +1,6 @@
-import io from 'lib/io.js'
-import memoize from 'lib/memo.js'
-import Queue from 'lib/queue.js'
+import io from '#lib/io.js'
+import memoize from '#lib/memo.js'
+import Queue from '#lib/queue.js'
 import {
   addVec2,
   equalsVec,
@@ -11,8 +11,8 @@ import {
   type vec2,
   Vec2Set,
   zeroVec2,
-} from 'lib/vec2.js'
-import {type vec3, Vec3Set} from 'lib/vec3.js'
+} from '#lib/vec2.js'
+import {type vec3, Vec3Set} from '#lib/vec3.js'
 
 // Parse.
 let mapW = 0

@@ -1,6 +1,6 @@
 import {mkdir, readdir, writeFile} from 'node:fs/promises'
 import path from 'node:path'
-import padNum from 'lib/padNum.js'
+import padNum from '#lib/padNum.js'
 import {parseArgs} from 'node:util'
 
 const args = parseArgs({allowPositionals: true})
@@ -24,7 +24,7 @@ const dir = path.join(yearPath, dayDir)
 await mkdir(dir, {recursive: true})
 
 const tpl = `
-import io from 'lib/io.js'
+import io from '#lib/io.js'
 
 let result = 0
 for await (const line of io.readLines()) {

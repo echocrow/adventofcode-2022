@@ -1,4 +1,4 @@
-import io from 'lib/io.js'
+import io from '#lib/io.js'
 
 const time = +[...(await io.readLine())!.matchAll(/\d+/g)].join('')
 const dist = +[...(await io.readLine())!.matchAll(/\d+/g)].join('')

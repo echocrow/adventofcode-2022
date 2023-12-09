@@ -1,5 +1,5 @@
-import io from 'lib/io.js'
-import {Uint8Matrix} from 'lib/matrix.js'
+import io from '#lib/io.js'
+import {Uint8Matrix} from '#lib/matrix.js'
 
 function foldUp(before: Uint8Matrix): Uint8Matrix {
   const w = before.width

@@ -1,6 +1,6 @@
-import io from 'lib/io.js'
-import range from 'lib/range.js'
-import sum from 'lib/sum.js'
+import io from '#lib/io.js'
+import range from '#lib/range.js'
+import sum from '#lib/sum.js'
 
 function calcNSum(num: number): number {
   return (num * (num + 1)) / 2

@@ -1,5 +1,5 @@
-import io from 'lib/io.js'
-import sort from 'lib/sort.js'
+import io from '#lib/io.js'
+import sort from '#lib/sort.js'
 
 function calcMedian(nums: number[]): number {
   if (!nums.length) return NaN

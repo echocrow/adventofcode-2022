@@ -1,6 +1,6 @@
-import io from 'lib/io.js'
-import {posMod} from 'lib/math.js'
-import {Uint8Matrix} from 'lib/matrix.js'
+import io from '#lib/io.js'
+import {posMod} from '#lib/math.js'
+import {Uint8Matrix} from '#lib/matrix.js'
 
 enum Cell {
   Void,

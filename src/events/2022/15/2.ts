@@ -1,5 +1,5 @@
-import io from 'lib/io.js'
-import type {vec2} from 'lib/vec2.js'
+import io from '#lib/io.js'
+import type {vec2} from '#lib/vec2.js'
 
 // const MAX_DIST = 20
 const MAX_DIST = 4000000

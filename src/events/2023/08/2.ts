@@ -1,5 +1,5 @@
-import io from 'lib/io.js'
-import {lcm} from 'lib/math.js'
+import io from '#lib/io.js'
+import {lcm} from '#lib/math.js'
 
 const dirs = (await io.readLine())!.split('').map((d) => (d === 'R' ? 1 : 0))
 

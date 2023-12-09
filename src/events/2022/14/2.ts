@@ -5,8 +5,8 @@ import {
   maxVec2,
   rangeVec2,
   type vec2,
-} from 'lib/vec2.js'
-import io from 'lib/io.js'
+} from '#lib/vec2.js'
+import io from '#lib/io.js'
 
 const SAND_SRC: vec2 = [500, 0]
 const SAND_MOVES: vec2[] = [

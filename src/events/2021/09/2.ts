@@ -1,7 +1,7 @@
-import io from 'lib/io.js'
-import {neighbors, Uint8Matrix} from 'lib/matrix.js'
-import product from 'lib/product.js'
-import sort from 'lib/sort.js'
+import io from '#lib/io.js'
+import {neighbors, Uint8Matrix} from '#lib/matrix.js'
+import product from '#lib/product.js'
+import sort from '#lib/sort.js'
 
 let cave = new Uint8Matrix()
 for await (const line of io.readLines()) {

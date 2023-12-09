@@ -1,5 +1,5 @@
-import io from 'lib/io.js'
-import {squareNeighbors, Uint8Matrix} from 'lib/matrix.js'
+import io from '#lib/io.js'
+import {squareNeighbors, Uint8Matrix} from '#lib/matrix.js'
 
 function tick(wales: Uint8Matrix) {
   for (const w in wales) wales[w]++

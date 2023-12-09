@@ -1,5 +1,5 @@
-import io from 'lib/io.js'
-import {Uint8Matrix} from 'lib/matrix.js'
+import io from '#lib/io.js'
+import {Uint8Matrix} from '#lib/matrix.js'
 
 let forest = new Uint8Matrix()
 for await (const line of io.readLines()) {

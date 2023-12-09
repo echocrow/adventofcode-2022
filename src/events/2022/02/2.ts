@@ -1,4 +1,4 @@
-import io from 'lib/io.js'
+import io from '#lib/io.js'
 
 type Item = 'rock' | 'paper' | 'scissors'
 
