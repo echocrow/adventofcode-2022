@@ -1,37 +1,90 @@
-import {createReadStream, writeFileSync, openSync} from 'node:fs'
-import path from 'node:path'
+import {Console} from 'node:console'
+import {createReadStream, createWriteStream, writeFileSync} from 'node:fs'
 import {createInterface} from 'node:readline'
+import {Readable, Writable} from 'node:stream'
 
 type WriteData = Parameters<typeof writeFileSync>[1]
 
-export class IO {
-  #inPath: string
-  #outPath: string
+/**
+ * Get argv value by flag name.
+ */
+function getArgv(name: string) {
+  const nameEq = `${name}=`
+  for (let i = 2; i < process.argv.length; i++) {
+    const arg = process.argv[i]
+    if (arg === name) return process.argv0[i + 1] ?? ''
+    if (arg?.startsWith(nameEq)) return arg.slice(nameEq.length)
+    if (arg === '--') break
+  }
+  return ''
+}
 
-  #inReader: AsyncIterableIterator<string> | undefined
-  #outFileDesc: number | undefined
+class IO {
+  #_in: AsyncIterableIterator<string> | undefined = undefined
+  #_out: Writable | undefined = undefined
+  #logged = false
 
-  constructor(dir = './io', input = 'in.txt', output = 'out.txt') {
-    this.#inPath = path.join(dir, input)
-    this.#outPath = path.join(dir, output)
+  constructor(
+    private input: Readable | undefined = undefined,
+    private output: Writable | undefined = undefined,
+  ) {}
+
+  #reset() {
+    this.#_in = undefined
+    this.#_out = undefined
+    this.#logged = false
+  }
+  #createIn() {
+    let input = this.input
+    if (!input) {
+      const inPath = getArgv('--in')
+      input = inPath ? createReadStream(inPath) : process.stdin
+    }
+    return createInterface({input})[Symbol.asyncIterator]()
+  }
+  #createOut() {
+    let output = this.output
+    if (!output) {
+      const outPath = getArgv('--out')
+      output = outPath ? createWriteStream(outPath) : process.stdout
+    }
+    return output
+  }
+  get #in() {
+    return (this.#_in ??= this.#createIn())
+  }
+  get #out() {
+    return (this.#_out ??= this.#createOut())
   }
 
-  get #reader() {
-    return (this.#inReader ??= createInterface({
-      input: createReadStream(this.#inPath),
-    })[Symbol.asyncIterator]())
+  mock(input: string | Readable) {
+    this.input = typeof input === 'string' ? Readable.from(input) : input
+
+    let out = ''
+    this.output = new Writable({
+      write(chunk, encoding, cb) {
+        out += String(chunk)
+        cb()
+      },
+    })
+
+    this.#reset()
+
+    return {
+      get out() {
+        return out
+      },
+    }
   }
 
   async readLine(): Promise<string | undefined> {
-    const gen = this.#reader[Symbol.asyncIterator]()
+    const gen = this.#in[Symbol.asyncIterator]()
     return (await gen.next()).value
   }
 
   async readFile() {
     let file = ''
-    for await (const chunk of this.#reader) {
-      file += chunk + '\n'
-    }
+    for await (const chunk of this.#in) file += chunk + '\n'
     return file.slice(0, -1)
   }
 
@@ -76,19 +129,18 @@ export class IO {
     data: WriteData | number | bigint | undefined | null,
     opts: {silent?: boolean} = {},
   ) {
-    this.#outFileDesc ??= openSync(this.#outPath, 'w+')
     const str = String(data)
-    writeFileSync(this.#outFileDesc, str)
+    this.#out.write(str)
     if (!opts.silent) {
       const msg = str.length < 100 ? str : `wrote ${str.length} characters`
       this.log(`[io] Output: ${msg}`)
     }
   }
 
-  #logged = false
+  #console = new Console(process.stderr)
   log(message: any, ...moreMessage: any[]) {
-    this.#logged ||= (console.info(''), true)
-    console.info(new Date(), ':', message, ...moreMessage)
+    this.#logged ||= (this.#console.info(''), true)
+    this.#console.info(new Date(), ':', message, ...moreMessage)
   }
 
   async sleep(seconds: number) {
@@ -96,5 +148,4 @@ export class IO {
   }
 }
 
-const io = new IO()
-export default io
+export default new IO()
