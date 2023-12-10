@@ -92,8 +92,8 @@ export class Uint8Matrix extends Uint8Array implements Matrix {
     for (let i = x; i < this.length; i += this.#width) yield this[i]
   }
 
-  cell(x: number, y: number): number {
-    return this[y * this.width + x] ?? -1
+  cell(x: number, y: number): number | undefined {
+    return this[y * this.width + x]
   }
   setCell(x: number, y: number, v: number) {
     this[y * this.width + x] = v
