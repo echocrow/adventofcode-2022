@@ -22,7 +22,7 @@ export class Uint8Matrix extends Uint8Array implements Matrix {
   constructor(lengthOrArray: any = 0, width = 0) {
     super(lengthOrArray)
     this.#width = width
-    this.#height = this.length / width
+    this.#height = width ? this.length / width : 0
     this.#dims = [this.#width, this.#height]
   }
 
