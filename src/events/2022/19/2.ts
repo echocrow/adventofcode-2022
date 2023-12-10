@@ -1,6 +1,5 @@
 import io from '#lib/io.js'
 import product from '#lib/product.js'
-import sum from '#lib/sum.js'
 
 enum Rocks {
   ore = 0,

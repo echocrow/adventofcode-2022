@@ -1,22 +1,24 @@
 import io from '#lib/io.js'
 
-type Registry = {t: number; x: number}
-
 const ADD = 'addx '
 
-function tick(reg: Registry) {
-  const dist = reg.t - reg.x
+let t = 0
+let x = 1
+let y = 0
+
+function tick() {
+  if (!t && y) io.write('\n')
+  const dist = t - x
   const on = -1 <= dist && dist <= 1
   io.write(on ? '█' : ' ')
-  reg.t = (reg.t + 1) % 40
-  if (!reg.t) io.write('\n')
+  t = (t + 1) % 40
+  if (!t) y++
 }
 
-const reg: Registry = {t: 0, x: 1}
 for await (const line of io.readLines()) {
-  tick(reg)
+  tick()
   if (line.startsWith(ADD)) {
-    tick(reg)
-    reg.x += Number(line.slice(ADD.length))
+    tick()
+    x += Number(line.slice(ADD.length))
   }
 }

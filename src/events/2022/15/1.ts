@@ -1,8 +1,7 @@
 import io from '#lib/io.js'
 import {fmtVec2, type vec2} from '#lib/vec2.js'
 
-// const TARGET_Y = 10
-const TARGET_Y = 2000000
+const GET_TARGET_Y = (sensorsLen: number) => (sensorsLen < 15 ? 10 : 2000000)
 
 type Beacon = vec2
 type Sensor = readonly [...vec2, number]
@@ -25,6 +24,7 @@ for await (const line of io.readLines()) {
 const allX = sensors.flatMap(([x, _, r]) => [x - r, x + r])
 const minX = Math.min(...allX)
 const maxX = Math.max(...allX)
+const TARGET_Y = GET_TARGET_Y(sensors.length)
 
 // Scan.
 let covered = 0

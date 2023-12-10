@@ -1,8 +1,8 @@
 import io from '#lib/io.js'
 import type {vec2} from '#lib/vec2.js'
 
-// const MAX_DIST = 20
-const MAX_DIST = 4000000
+const GET_MAX_DIST = (sensorsLen: number) => (sensorsLen < 15 ? 20 : 4000000)
+
 const TUNE_FACTOR = 4000000
 
 type Sensor = readonly [...vec2, number]
@@ -19,6 +19,7 @@ for await (const line of io.readLines()) {
   const pos = [sx, sy] as const
   sensors.push([...pos, manhatDist(pos, [bx, by])])
 }
+const MAX_DIST = GET_MAX_DIST(sensors.length)
 
 // Scan.
 let frequency = 0

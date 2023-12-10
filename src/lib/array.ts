@@ -69,3 +69,7 @@ export function mapFind<T, U>(
   }
   return undefined
 }
+
+export function sortNumeric(arr: number[]): number[] {
+  return arr.sort((a, b) => a - b)
+}
