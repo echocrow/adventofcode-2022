@@ -127,6 +127,15 @@ export class Uint8Matrix extends Uint8Array implements Matrix {
     if (toY < 0 || toY >= this.height) return -1
     return this.vecToI(toX, toY)
   }
+
+  fmt(fmtVal: (val: number) => string | number = (val) => val): string {
+    let out = ''
+    for (const row of this.rows()) {
+      for (const val of row) out += fmtVal(val)
+      out += '\n'
+    }
+    return out
+  }
 }
 
 export function* rows<T>(
