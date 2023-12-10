@@ -58,3 +58,14 @@ export function allocArrLen<T extends TypedArray & {constructor: Function}>(
   newArr.set(arr)
   return newArr
 }
+
+export function mapFind<T, U>(
+  items: Iterable<T>,
+  map: (val: T) => U | undefined,
+): U | undefined {
+  for (const val of items) {
+    const mapped = map(val)
+    if (mapped !== undefined) return mapped
+  }
+  return undefined
+}
