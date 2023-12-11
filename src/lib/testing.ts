@@ -57,7 +57,10 @@ export async function testPart(
 ) {
   const partPath =
     typeof partPath$ === 'string' ? partPath$ : (await partPath$).default
-  const testName = `Part ${basename(partPath, '.ts')}`
+  const partName = basename(partPath)
+    .replace(/\.\w+$/, '')
+    .replace(/(?<=^\d+)(.+)/, ' ($1)')
+  const testName = `Part ${partName}`
   if (isPartSpec(spec)) {
     test(testName, async () => {
       await expectPart(partPath, ...spec)
