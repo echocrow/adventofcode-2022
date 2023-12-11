@@ -26,6 +26,7 @@ await testPart(import('./1.js?url'), [
     6,
   ],
 ])
+
 await testPart(import('./2.js?url'), [
   dedent`
     LR
