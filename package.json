@@ -23,7 +23,8 @@
     "start": "vite-node",
     "watch": "[ -z ${FILE} ] && echo 'Missing $FILE var.' && exit 1 || vite-node --watch ${FILE} -- --in=./io/in.txt --out=./io/out.txt",
     "watch:latest": "[ -z ${PART} ] && echo 'Missing $PART var.' && exit 1 || FILE=$(ls -1r ./src/events/*/*/${PART}.ts | head -1) pnpm watch",
-    "test": "vitest --changed",
+    "test": "vitest --changed=HEAD",
+    "test:watch": "vitest watch",
     "test:all": "vitest --run"
   },
   "engines": {
