@@ -11,6 +11,7 @@ class IO {
   #_out: Writable | undefined = undefined
   logSilent = false
   #logged = false
+  #peekedLine: string | undefined = undefined
 
   constructor(
     private input: Readable | undefined = undefined,
@@ -21,6 +22,7 @@ class IO {
     this.#_in = undefined
     this.#_out = undefined
     this.#logged = false
+    this.#peekedLine = undefined
   }
   get #in() {
     return (this.#_in ??= IO.#createIn(this.input))
@@ -50,7 +52,28 @@ class IO {
     }
   }
 
+  async #readNextLine(): Promise<string | undefined> {
+    const gen = this.#in[Symbol.asyncIterator]()
+    return (await gen.next()).value
+  }
+  async peekLine(): Promise<string | undefined> {
+    return (this.#peekedLine ??= await this.#readNextLine())
+  }
+  async readLineIfMatch(
+    pattern: RegExp,
+  ): Promise<RegExpMatchArray | null | undefined> {
+    const line = await this.peekLine()
+    const match = line !== undefined ? line.match(pattern) : undefined
+    if (match) this.#peekedLine = undefined
+    return match
+  }
+
   async readLine(): Promise<string | undefined> {
+    if (this.#peekedLine !== undefined) {
+      const prev = this.#peekedLine
+      this.#peekedLine = undefined
+      return prev
+    }
     const gen = this.#in[Symbol.asyncIterator]()
     return (await gen.next()).value
   }
