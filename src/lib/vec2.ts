@@ -1,6 +1,7 @@
 import {posMod} from './math.js'
 
-export type vec2 = Readonly<[number, number]>
+export type mutVec2 = [number, number]
+export type vec2 = Readonly<mutVec2>
 
 export const zeroVec2: vec2 = [0, 0]
 
@@ -42,6 +43,11 @@ export function maxVec2(a: Readonly<vec2>, b: Readonly<vec2>): vec2 {
 
 export function lenVec2(v: Readonly<vec2>): number {
   return Math.sqrt(v[0] ** 2 + v[1] ** 2)
+}
+
+/** Calculate taxicab/manhattan length of a vector. */
+export function taxiLenVec2(v: Readonly<vec2>): number {
+  return Math.abs(v[0]) + Math.abs(v[1])
 }
 
 export function* rangeVec2(from: vec2, to: vec2, inclusive = false) {
