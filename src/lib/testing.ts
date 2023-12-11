@@ -23,9 +23,9 @@ export function dedent(str: string | readonly string[]): string {
   return str
 }
 
-type PartSpec = [input: string, expect: string | number | bigint]
+type PartSpec = readonly [input: string, expect: string | number | bigint]
 
-function isPartSpec(spec: PartSpec | PartSpec[]): spec is PartSpec {
+function isPartSpec(spec: PartSpec | readonly PartSpec[]): spec is PartSpec {
   return typeof spec[0] === 'string'
 }
 
@@ -53,7 +53,7 @@ async function expectPart(
  */
 export async function testPart(
   partPath$: string | Promise<{default: string}>,
-  spec: PartSpec | PartSpec[],
+  spec: PartSpec | readonly PartSpec[],
 ) {
   const partPath =
     typeof partPath$ === 'string' ? partPath$ : (await partPath$).default
