@@ -7,13 +7,17 @@ export function dedent(str: string | readonly string[]): string {
 
   // Trim single trailing newline.
   str = str.replace(/^\n/, '')
-  str = str.replace(/\n[\t ]*$/, '')
+  str = str.replace(/\n[^\S\n]*$/, '')
 
-  // Remove indents based on first line.
-  const indents = /^[\t ]+/.exec(str)?.[0].length
+  // Remove indents based on min indent.
+  let indents: number | undefined
+  for (const m of str.matchAll(/^[^\S\n]+/gm)) {
+    const mLen = m[0].length
+    if (mLen < (indents ?? str.length)) indents = mLen
+    if (!indents) break
+  }
   if (indents) {
-    const re = new RegExp(`^[\t ]{${indents}}`, 'gm')
-    str = str.replaceAll(re, '')
+    str = str.replaceAll(new RegExp(`^[^\S\n]{${indents}}`, 'gm'), '')
   }
 
   return str
