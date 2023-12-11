@@ -14,5 +14,3 @@ const input = dedent`
 
 await testPart(import('./1.js?url'), [input, 'CMZ'])
 await testPart(import('./2.js?url'), [input, 'MCD'])
-
-console.log(/a+/g.exec('aabbaabb'))
