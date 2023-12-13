@@ -87,12 +87,13 @@ function findShortestTime(start: vec2, end: vec2, startTime: number) {
   return -1
 }
 
-console.time()
+const startTime = performance.now()
 const start: vec2 = [0, -1]
 const end: vec2 = [mapW - 1, mapH]
 const trip1 = findShortestTime(start, end, 0)
 const trip2 = findShortestTime(end, start, trip1)
 const trip3 = findShortestTime(start, end, trip2)
-console.timeEnd()
+const endTime = performance.now()
+io.log(`Elapsed time: ${Math.round(endTime - startTime)} milliseconds`)
 
 io.write(trip3)
