@@ -178,6 +178,14 @@ class IO {
   static get #parsedArgs() {
     return (IO.#_parsedArgs ??= IO._parseArgs())
   }
+
+  perf() {
+    const start = performance.now()
+    return () => {
+      const end = performance.now()
+      this.log(`Execution Time: ${Math.round(end - start)}ms.`)
+    }
+  }
 }
 
 export default new IO()
