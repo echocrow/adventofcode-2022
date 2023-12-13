@@ -91,6 +91,15 @@ export class Uint8Matrix extends Uint8Array implements Matrix {
   *col(x: number) {
     for (let i = x; i < this.length; i += this.#width) yield this[i]
   }
+  *cols() {
+    for (let x = 0; x < this.width; x++) {
+      const col = new Uint8Array(this.height)
+      for (let y = 0; y < this.height; y++) {
+        col[y] = this.cell(x, y)!
+      }
+      yield col
+    }
+  }
 
   cell(x: number, y: number): number | undefined {
     return this[y * this.width + x]
