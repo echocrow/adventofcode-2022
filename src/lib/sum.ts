@@ -1,9 +1,11 @@
-import type {Reducible} from './types.js'
-
-export default function sum(nums: Reducible<any, number>): number {
-  return nums.reduce((a, b) => a + b, 0)
+export default function sum(nums: Iterable<number>): number {
+  let s = 0
+  for (const v of nums) s += v
+  return s
 }
 
-export function bigSum(nums: Reducible<any, bigint>): bigint {
-  return nums.reduce((a, b) => a + b, BigInt(0))
+export function bigSum(nums: Iterable<bigint>): bigint {
+  let s = 0n
+  for (const v of nums) s += v
+  return s
 }
