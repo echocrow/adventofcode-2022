@@ -84,10 +84,16 @@ class IO {
     return file.slice(0, -1)
   }
 
-  async *readLines(rows = 1): AsyncGenerator<string, void, undefined> {
+  async *readLines(
+    opts: {
+      rows?: number
+      flush?: boolean
+    } = {},
+  ): AsyncGenerator<string, void, undefined> {
     let r = 0
     let buff = ''
     let row: string | undefined
+    const {rows = 1} = opts
     while ((row = await this.readLine()) !== undefined) {
       if (buff) buff += '\n'
       buff += row
@@ -98,7 +104,7 @@ class IO {
         buff = ''
       }
     }
-    if (r) yield buff
+    if (r || opts.flush) yield buff
   }
 
   async *readRegExp(
