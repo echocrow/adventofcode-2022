@@ -46,5 +46,5 @@ folded = folded.transpose()
 // Print.
 for (let i = 0; i < folded.length; i++) {
   if (i && !(i % folded.width)) io.write('\n')
-  io.write(folded.$[i] ? '▮' : ' ')
+  io.write(folded.$[i] ? '█' : ' ')
 }
