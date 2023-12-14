@@ -121,10 +121,10 @@ export class Matrix<T extends AnyArray = Uint8Array>
     }
   }
 
-  cell(x: number, y: number): number {
-    return this.data[y * this.width + x] ?? -1
+  cell(x: number, y: number): T[number] | undefined {
+    return this.data[y * this.width + x]
   }
-  setCell(x: number, y: number, v: number) {
+  setCell(x: number, y: number, v: number): this {
     this.data[y * this.width + x] = v
     return this
   }
