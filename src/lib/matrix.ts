@@ -162,7 +162,7 @@ export class Matrix<T extends AnyArray = Uint8Array>
       for (const val of row) out += fmtVal(val)
       out += '\n'
     }
-    return out
+    return out.slice(0, -1)
   }
 }
 
