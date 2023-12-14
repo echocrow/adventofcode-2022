@@ -1,6 +1,6 @@
 import {dedent, testPart} from '#lib/testing.js'
 
-const input1 = dedent`
+const input0 = dedent`
   #.#####
   #.....#
   #>....#
@@ -9,7 +9,7 @@ const input1 = dedent`
   #.....#
   #####.#
 `
-const input2 = dedent`
+const input1 = dedent`
   #.######
   #>>.<^<#
   #.<..<<#
@@ -19,11 +19,11 @@ const input2 = dedent`
 `
 
 await testPart(import('./1.js?url'), [
-  [input1, 10],
-  [input2, 18],
+  [input0, 10],
+  [input1, 18],
 ])
 
 await testPart(import('./2.js?url'), [
-  [input1, 30],
-  [input2, 54],
+  [input0, 30],
+  [input1, 54],
 ])
