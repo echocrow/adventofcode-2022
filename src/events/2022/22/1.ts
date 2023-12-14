@@ -83,13 +83,13 @@ function teleport(from: number, angle: Dir): number {
 }
 function step(from: number, angle: Dir): number {
   let to = from + dirMoves[angle]
-  if (!map[to]) to = teleport(pos, angle)
-  const nextFlg = map[to]
+  if (!map.$[to]) to = teleport(pos, angle)
+  const nextFlg = map.$[to]
   return nextFlg === Cell.Free ? to : from
 }
 
 // Move.
-let pos = map.findIndex((c) => c === Cell.Free)
+let pos = map.$.findIndex((c) => c === Cell.Free)
 let angle: Dir = Dir.R
 for (const action of actions) {
   // Handle rotation.

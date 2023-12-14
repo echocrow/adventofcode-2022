@@ -31,7 +31,7 @@ for await (const line of io.readLines()) {
   const pieces = (line.split('') as PieceChar[]).map(
     (char, i) => pieceIds[char] ?? ((startPos = [i, maze.height]), 0),
   )
-  maze = maze.concatRow(pieces)
+  maze.pushRow(pieces)
 }
 const startI = maze.vecToI(...startPos)
 
@@ -55,29 +55,29 @@ const startI = maze.vecToI(...startPos)
       linksRight ? 'L'
       : '|'
     : 'F'
-  maze[startI] = pieceIds[startChar]
+  maze.$[startI] = pieceIds[startChar]
 }
 
 // Clean up non-maze pieces.
 {
-  let noisyMaze = new Uint8Array(maze)
-  maze.fill(0)
+  let noisyMaze = new Uint8Array(maze.$)
+  maze.$.fill(0)
   let posI = startI as number | undefined
   while (posI !== undefined) {
-    maze[posI] = noisyMaze[posI]!
+    maze.$[posI] = noisyMaze[posI]!
     const pos = maze.iToVec(posI)
-    const piece = pieces[maze[posI]!]!
+    const piece = pieces[maze.$[posI]!]!
     posI = piece.links
       .map((link) => maze.vecToI(...addVec2(pos, link)))
-      .find((i) => !maze[i])
+      .find((i) => !maze.$[i])
   }
 }
 
 // Scale maze.
-const dblMaze = new Uint8Matrix(maze.length * 4, maze.width * 2).fill(0)
+const dblMaze = new Uint8Matrix(maze.length * 4, maze.width * 2)
 {
   for (let i = 0; i < maze.length; i++) {
-    const id = maze[i]!
+    const id = maze.$[i]!
     const piece = pieces[id]!
     const [x, y] = maze.iToVec(i)
     const scaledX = x * 2
@@ -99,11 +99,12 @@ const dblMaze = new Uint8Matrix(maze.length * 4, maze.width * 2).fill(0)
     dblMaze.vecToI(dblMaze.width - 1, 0),
     dblMaze.vecToI(0, dblMaze.height - 1),
     dblMaze.vecToI(dblMaze.width - 1, dblMaze.height - 1),
-  ].filter((i) => !dblMaze[i])
+  ].filter((i) => !dblMaze.$[i])
   let posI: number | undefined
   while ((posI = queue.pop()) !== undefined) {
-    dblMaze[posI] = outsideId
-    for (const nI of neighbors(dblMaze, posI)) if (!dblMaze[nI]) queue.push(nI)
+    dblMaze.$[posI] = outsideId
+    for (const nI of neighbors(dblMaze, posI))
+      if (!dblMaze.$[nI]) queue.push(nI)
   }
 }
 

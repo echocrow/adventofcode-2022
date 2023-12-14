@@ -3,22 +3,22 @@ import {neighbors, Uint8Matrix} from '#lib/matrix.js'
 import product from '#lib/product.js'
 import sort from '#lib/sort.js'
 
-let cave = new Uint8Matrix()
+const cave = new Uint8Matrix()
 for await (const line of io.readLines()) {
-  cave = cave.concatRow([...line].map(Number))
+  cave.pushRow([...line].map(Number))
 }
 
 const TOP = 9
 
 const basins = []
 let i, j
-while ((i = cave.findIndex((h) => h !== TOP)) >= 0) {
+while ((i = cave.$.findIndex((h) => h !== TOP)) >= 0) {
   let basin = 0
   const next = [i]
   while ((j = next.pop()) !== undefined) {
-    if (cave[j] !== TOP) {
+    if (cave.$[j] !== TOP) {
       basin++
-      cave[j] = TOP
+      cave.$[j] = TOP
       next.push(...neighbors(cave, j))
     }
   }

@@ -22,7 +22,7 @@ let result = 0
 let map = new Uint8Matrix()
 for await (const line of io.readLines({flush: true})) {
   if (line) {
-    map = map.concatRow(line.split('').map((c) => +(c === '#')))
+    map.pushRow(line.split('').map((c) => +(c === '#')))
     continue
   }
 
@@ -31,14 +31,14 @@ for await (const line of io.readLines({flush: true})) {
 
   let corRef = 0
   for (let i = 0; i < map.length; i++) {
-    if (i > 0) map[i - 1] = 1 - map[i - 1]!
-    map[i] = 1 - map[i]!
+    if (i > 0) map.$[i - 1] = 1 - map.$[i - 1]!
+    map.$[i] = 1 - map.$[i]!
     corRef = findV(map.rows(), orgY) * 100 || findV(map.cols(), orgX)
     if (corRef) break
   }
 
   result += corRef
-  map = new Uint8Matrix()
+  map.clear()
 }
 
 io.write(result)

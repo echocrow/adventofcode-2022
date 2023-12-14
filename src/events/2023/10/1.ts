@@ -36,13 +36,13 @@ for await (const line of io.readLines()) {
   const pieces = (line.split('') as PieceChar[]).map(
     (char, i) => pieceIds[char] ?? ((startPos = [i, maze.height]), 0),
   )
-  maze = maze.concatRow(pieces)
+  maze.pushRow(pieces)
 }
 const startI = maze.vecToI(...startPos)
 
 // Get neighbor connected to start.
 const startNeighborI = [...neighbors(maze, startI)].find((i) => {
-  const piece = pieces[maze[i]!]!
+  const piece = pieces[maze.$[i]!]!
   const pos = maze.iToVec(i)
   const posDiff = subtractVec2(startPos, pos)
   return piece.links.some((link) => equalsVec(link, posDiff))
@@ -56,7 +56,7 @@ mazeSteps[startI] = ++mazeLen
 while (posI !== undefined) {
   mazeSteps[posI] = ++mazeLen
   const pos = maze.iToVec(posI)
-  const piece = pieces[maze[posI]!]!
+  const piece = pieces[maze.$[posI]!]!
   posI = piece.links
     .map((link) => maze.vecToI(...addVec2(pos, link)))
     .find((i) => !mazeSteps[i])

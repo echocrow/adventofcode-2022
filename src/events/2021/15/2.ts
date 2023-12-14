@@ -15,7 +15,7 @@ function* expand(nums: Iterable<number>) {
 // Parse.
 let map = new Uint8Matrix()
 for await (let line of io.readLines()) {
-  map = map.concatRow(new Uint8Array(expand([...line].map(Number))))
+  map.pushRow(new Uint8Array(expand([...line].map(Number))))
 }
 map = new Uint8Matrix(expand(map), map.width)
 let start = 0
@@ -25,7 +25,7 @@ let end = map.length - 1
 const queue = new MemoQueue<number>().enqueue(0, start)
 for (const {cost, item: i} of queue) {
   for (const n of neighbors(map, i)) {
-    queue.enqueue(cost + map[n]!, n)
+    queue.enqueue(cost + map.$[n]!, n)
   }
 }
 

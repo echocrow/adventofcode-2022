@@ -138,7 +138,7 @@ const meshFaces = (() => {
   const meshFaces = Array(12).fill(undefined) as MeshFaces
 
   const upFacePos: vec2 = [
-    map.findIndex((c) => c !== Cell.Void) / mapTileLen,
+    map.$.findIndex((c) => c !== Cell.Void) / mapTileLen,
     0,
   ]
 
@@ -219,13 +219,13 @@ function crossEdge(from: number, angle: Dir): readonly [number, Dir] {
 function step(from: number, angle: Dir): readonly [number, Dir] {
   let to = map.moveBy(from, dirVec2s[angle])
   let toAngle = angle
-  if (to < 0 || !map[to]) [to, toAngle] = crossEdge(from, angle)
-  const toCell = map[to]
+  if (to < 0 || !map.$[to]) [to, toAngle] = crossEdge(from, angle)
+  const toCell = map.$[to]
   return toCell === Cell.Free ? [to, toAngle] : [from, angle]
 }
 
 // Move.
-let pos = map.findIndex((c) => c === Cell.Free)
+let pos = map.$.findIndex((c) => c === Cell.Free)
 let angle: Dir = Dir.R
 for (const action of actions) {
   // Handle rotation.

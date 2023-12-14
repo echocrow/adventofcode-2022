@@ -18,14 +18,14 @@ function findV(rows: Iterable<Uint8Array>): number {
 }
 
 let result = 0
-let map = new Uint8Matrix()
+const map = new Uint8Matrix()
 for await (const line of io.readLines({flush: true})) {
   if (line) {
-    map = map.concatRow(line.split('').map((c) => +(c === '#')))
+    map.pushRow(line.split('').map((c) => +(c === '#')))
     continue
   }
   result += findV(map.rows()) * 100 || findV(map.cols())
-  map = new Uint8Matrix()
+  map.clear()
 }
 
 io.write(result)

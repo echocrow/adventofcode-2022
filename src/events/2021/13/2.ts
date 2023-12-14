@@ -9,7 +9,7 @@ function foldUp(before: Uint8Matrix): Uint8Matrix {
     const x = i % w
     const y = (i - x) / w
     const fromY = before.height - y - 1
-    after[i] += before[fromY * w + x] ?? 0
+    after.$[i] += before.$[fromY * w + x] ?? 0
   }
   return after
 }
@@ -33,10 +33,8 @@ for await (const line of io.readLines()) {
 // Fill sheet.
 const width = Math.max(...dots.map((d) => d[0])) + 1
 const height = Math.max(...dots.map((d) => d[1])) + 1
-const sheet = new Uint8Matrix(width * height, width).fill(0)
-for (const [x, y] of dots) {
-  sheet[y * width + x] = 1
-}
+const sheet = new Uint8Matrix(width * height, width)
+for (const [x, y] of dots) sheet.$[y * width + x] = 1
 
 // Fold.
 let folded = sheet
@@ -48,5 +46,5 @@ folded = folded.transpose()
 // Print.
 for (let i = 0; i < folded.length; i++) {
   if (i && !(i % folded.width)) io.write('\n')
-  io.write(folded[i] ? '▮' : ' ')
+  io.write(folded.$[i] ? '▮' : ' ')
 }

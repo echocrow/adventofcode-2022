@@ -2,13 +2,13 @@ import io from '#lib/io.js'
 import {neighbors, Uint8Matrix} from '#lib/matrix.js'
 import sum from '#lib/sum.js'
 
-let cave = new Uint8Matrix()
+const cave = new Uint8Matrix()
 for await (const line of io.readLines()) {
-  cave = cave.concatRow([...line].map(Number))
+  cave.pushRow([...line].map(Number))
 }
 
-const lows = cave.filter((h, i) =>
-  [...neighbors(cave, i)].every((n) => h < cave[n]!),
+const lows = cave.$.filter((h, i) =>
+  [...neighbors(cave, i)].every((n) => h < cave.$[n]!),
 )
 
 const result = sum(lows) + lows.length

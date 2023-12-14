@@ -26,7 +26,7 @@ class Rock {
 
   *rockBits() {
     for (let r = 0; r < this.shape.length; r++) {
-      if (this.shape[r]) {
+      if (this.shape.$[r]) {
         const rx = r % this.shape.width
         const ry = (r - rx) / this.shape.width
         yield [this.x + rx, this.y + ry] as vec2
@@ -57,7 +57,7 @@ class Tower {
   addRock(rock: Rock) {
     const newHeight = rock.y + rock.shape.height
     if (newHeight >= this.data.height)
-      this.data = this.data.concatRow(new Uint8Array(this.data.length))
+      this.data.pushRow(new Uint8Array(this.data.length))
     for (const [x, y] of rock.rockBits()) this.data.setCell(x, y, 1)
     this.top = Math.max(this.top, rock.y + rock.shape.height)
   }

@@ -3,7 +3,7 @@ import {neighbors, Uint8Matrix} from '#lib/matrix.js'
 import {MemoQueue} from '#lib/queue.js'
 
 // Parse.
-let map = new Uint8Matrix()
+const map = new Uint8Matrix()
 let starts: number[] = []
 let end = -1
 let p = -1
@@ -16,15 +16,15 @@ for await (let line of io.readLines()) {
   }
   const row = [...line].map((c) => c.charCodeAt(0) - base)
   for (let x = 0; x < row.length; x++) if (!row[x]) starts.push(map.length + x)
-  map = map.concatRow(row)
+  map.pushRow(row)
 }
 
 // Dijkstra search.
 const queue = new MemoQueue<number>().enqueue(0, ...starts)
 search: for (const {cost, item: i} of queue) {
-  const h = map[i]!
+  const h = map.$[i]!
   for (const n of neighbors(map, i)) {
-    if (map[n]! - h > 1) continue
+    if (map.$[n]! - h > 1) continue
     queue.enqueue(cost + 1, n)
     if (n === end) break search
   }
