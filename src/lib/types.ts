@@ -4,7 +4,7 @@ export type ArrayItem<T> =
   : never
 
 export interface Lengthened {
-  length: number
+  readonly length: number
 }
 
 export interface Reducible<R, T> extends Lengthened {
