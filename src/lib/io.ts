@@ -143,6 +143,12 @@ class IO {
   log(message: any, ...moreMessage: any[]) {
     if (this.logSilent) return
     this.#logged ||= (this.#console.info(''), true)
+    if (
+      typeof message === 'string' &&
+      message[0] !== '\n' &&
+      message.includes('\n')
+    )
+      message = '\n' + message
     this.#console.info(new Date(), ':', message, ...moreMessage)
   }
 
