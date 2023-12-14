@@ -1,52 +1,48 @@
 import {posMod} from './math.js'
 
 export type mutVec2 = [number, number]
-export type vec2 = Readonly<mutVec2>
+export type vec2 = readonly [number, number]
 
 export const zeroVec2: vec2 = [0, 0]
 
-export function addVec2(a: Readonly<vec2>, b: Readonly<vec2>): vec2 {
+export function addVec2(a: vec2, b: vec2): vec2 {
   return [a[0] + b[0], a[1] + b[1]]
 }
 
-export function subtractVec2(a: Readonly<vec2>, b: Readonly<vec2>): vec2 {
+export function subtractVec2(a: vec2, b: vec2): vec2 {
   return [a[0] - b[0], a[1] - b[1]]
 }
 
-export function scaleVec2(a: Readonly<vec2>, f: number): vec2 {
+export function scaleVec2(a: vec2, f: number): vec2 {
   return [a[0] * f, a[1] * f]
 }
 
-export function modVec2(v: Readonly<vec2>, mod: Readonly<vec2>): vec2 {
+export function modVec2(v: vec2, mod: vec2): vec2 {
   return [posMod(v[0], mod[0]), posMod(v[1], mod[1])]
 }
 
-export function equalsVec(a: Readonly<vec2>, b: Readonly<vec2>): boolean {
+export function equalsVec(a: vec2, b: vec2): boolean {
   return a[0] === b[0] && a[1] === b[1]
 }
 
-export function lerpVec2(
-  a: Readonly<vec2>,
-  b: Readonly<vec2>,
-  f: number,
-): vec2 {
+export function lerpVec2(a: vec2, b: vec2, f: number): vec2 {
   return [a[0] + f * (b[0] - a[0]), a[1] + f * (b[1] - a[1])]
 }
 
-export function minVec2(a: Readonly<vec2>, b: Readonly<vec2>): vec2 {
+export function minVec2(a: vec2, b: vec2): vec2 {
   return [Math.min(a[0], b[0]), Math.min(a[1], b[1])]
 }
 
-export function maxVec2(a: Readonly<vec2>, b: Readonly<vec2>): vec2 {
+export function maxVec2(a: vec2, b: vec2): vec2 {
   return [Math.max(a[0], b[0]), Math.max(a[1], b[1])]
 }
 
-export function lenVec2(v: Readonly<vec2>): number {
+export function lenVec2(v: vec2): number {
   return Math.sqrt(v[0] ** 2 + v[1] ** 2)
 }
 
 /** Calculate taxicab/manhattan length of a vector. */
-export function taxiLenVec2(v: Readonly<vec2>): number {
+export function taxiLenVec2(v: vec2): number {
   return Math.abs(v[0]) + Math.abs(v[1])
 }
 
@@ -59,10 +55,10 @@ export function* rangeVec2(from: vec2, to: vec2, inclusive = false) {
   if (inclusive) yield to
 }
 
-export function fmtVec2(v: Readonly<vec2>) {
+export function fmtVec2(v: vec2) {
   return `${v[0]},${v[1]}`
 }
-export function parseVec2(s: string): Readonly<vec2> {
+export function parseVec2(s: string): vec2 {
   const [x = '', y = ''] = s.split(',')
   return [Number(x), Number(y)]
 }
