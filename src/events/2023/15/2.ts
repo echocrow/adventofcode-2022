@@ -3,9 +3,9 @@ import io from '#lib/io.js'
 import range from '#lib/range.js'
 
 const boxes = Array.from(range(0, 256), () => new Map<string, number>())
-for (const step of ((await io.readLine()) ?? '').split(',')) {
-  const [_, label = '', op = '', num = ''] = step.match(/(\w+)([=-])(\d+)?/)!
-
+for await (const [_, label = '', op = '', num = ''] of io.readRegExp(
+  /(\w+)([=-])(\d+)?/,
+)) {
   let hash = 0
   for (let i = 0; i < label.length; i++)
     hash = ((hash + label.charCodeAt(i)) * 17) % 256
