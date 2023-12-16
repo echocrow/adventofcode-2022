@@ -12,6 +12,7 @@ class IO {
   logSilent = false
   #logged = false
   #peekedLine: string | undefined = undefined
+  #appendix: string | undefined = undefined
 
   constructor(
     private input: Readable | undefined = undefined,
@@ -23,6 +24,7 @@ class IO {
     this.#_out = undefined
     this.#logged = false
     this.#peekedLine = undefined
+    this.#appendix = undefined
   }
   get #in() {
     return (this.#_in ??= IO.#createIn(this.input))
@@ -67,13 +69,22 @@ class IO {
     return match
   }
 
+  #readPeekedSuffix(): string | undefined {
+    const suffix = this.#peekedLine
+    this.#peekedLine = undefined
+    return suffix
+  }
+  #readAppendix(): string | undefined {
+    const appendix = this.#appendix
+    this.#appendix = undefined
+    return appendix
+  }
   async readLine(): Promise<string | undefined> {
-    if (this.#peekedLine !== undefined) {
-      const prev = this.#peekedLine
-      this.#peekedLine = undefined
-      return prev
-    }
-    return (await this.#in.next()).value
+    return (
+      this.#readPeekedSuffix() ??
+      (await this.#readNextLine()) ??
+      this.#readAppendix()
+    )
   }
 
   async readFile() {
@@ -107,15 +118,13 @@ class IO {
 
   async *readRegExp(
     pattern: RegExp,
-    opts: {suffix?: string} = {},
+    opts: {appendix?: string} = {},
   ): AsyncGenerator<RegExpExecArray, void, undefined> {
+    this.#appendix = opts.appendix
+
     let buff = ''
-    let row: string | undefined
-    let {suffix} = opts
-    function consumeSuffix(s = suffix) {
-      return (suffix = undefined), s
-    }
-    while ((row = (await this.readLine()) ?? consumeSuffix()) !== undefined) {
+    let line: string | undefined
+    while ((row = await this.readLine()) !== undefined) {
       buff += (buff ? '\n' : '') + row
       const res = pattern.exec(buff)
       if (res) {

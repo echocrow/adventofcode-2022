@@ -16,7 +16,7 @@ let seeds = [...(await io.readLine())?.matchAll(/\d+/g)!].map(Number).reduce(
 ).pairs
 
 await io.readLine()
-for await (const [line] of io.readRegExp(/[\s\d\n]+?\n\n/, {suffix: '\n'})) {
+for await (const [line] of io.readRegExp(/[\s\d\n]+?\n\n/, {appendix: '\n'})) {
   const maps = line
     .trim()
     .split('\n')
