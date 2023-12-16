@@ -1,5 +1,5 @@
 import io from '#lib/io.js'
-import sum from '#lib/sum.js'
+import {sum} from '#lib/iterable.js'
 
 const counts = [] as number[]
 const fixtures = new Uint8Array((await io.peekLine())!.length)

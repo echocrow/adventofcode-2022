@@ -1,6 +1,6 @@
 import {sortNumeric} from '#lib/array.js'
 import io from '#lib/io.js'
-import sum from '#lib/sum.js'
+import {sum} from '#lib/iterable.js'
 
 let acc = 0
 const batches = []

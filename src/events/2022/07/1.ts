@@ -1,5 +1,5 @@
 import io from '#lib/io.js'
-import {bigSum} from '#lib/sum.js'
+import {bigSum} from '#lib/iterable.js'
 
 function* joinPaths(dirs: string[]) {
   yield '/'

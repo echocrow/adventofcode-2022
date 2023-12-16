@@ -1,5 +1,5 @@
 import io from '#lib/io.js'
-import sum from '#lib/sum.js'
+import {sum} from '#lib/iterable.js'
 
 let result = 0
 for await (const line of io.readLines()) {
