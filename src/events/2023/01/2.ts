@@ -1,5 +1,5 @@
 import io from '#lib/io.js'
-import range from '#lib/range.js'
+import {range} from '#lib/iterable.js'
 
 let acc = 0
 

@@ -1,6 +1,6 @@
 import io from '#lib/io.js'
+import {range} from '#lib/iterable.js'
 import {posMod, posModBig} from '#lib/math.js'
-import range from '#lib/range.js'
 
 const DECRYPT_KEY = 811589153n
 

@@ -16,10 +16,6 @@ export function* subarrays<A extends Subarrayable>(array: A, length: number) {
     yield array.subarray(i, i + length)
   }
 }
-export function* entries<T>(values: Iterable<T>) {
-  let i = 0
-  for (const val of values) yield [i++, val] as const
-}
 
 export async function arrFromAsync<T>(
   iterator: AsyncIterable<T>,
@@ -109,17 +105,6 @@ export function setArr<T extends AnyArray>(
     for (let i = 0; i < vals.length; i++) arr[i + offset] = vals[i]
   else arr.set(vals, offset)
   return arr
-}
-
-export function mapFind<T, U>(
-  items: Iterable<T>,
-  map: (val: T) => U | undefined,
-): U | undefined {
-  for (const val of items) {
-    const mapped = map(val)
-    if (mapped !== undefined) return mapped
-  }
-  return undefined
 }
 
 export function sortNumeric(arr: number[]): number[] {

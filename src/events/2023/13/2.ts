@@ -1,6 +1,6 @@
 import io from '#lib/io.js'
+import {range} from '#lib/iterable.js'
 import {Uint8Matrix} from '#lib/matrix.js'
-import range from '#lib/range.js'
 
 function findV(rows: Iterable<Uint8Array>, ignoreIdx = 0): number {
   const ids = [...rows].map((row) => row.reduce((p, v) => p * 2 + v))

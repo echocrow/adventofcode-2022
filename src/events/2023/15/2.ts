@@ -1,6 +1,6 @@
-import {entries} from '#lib/array.js'
 import io from '#lib/io.js'
-import range from '#lib/range.js'
+import {entries} from '#lib/iterable.js'
+import {range} from '#lib/iterable.js'
 
 const boxes = Array.from(range(0, 256), () => new Map<string, number>())
 for await (const [_, label = '', op = '', num = ''] of io.readRegExp(

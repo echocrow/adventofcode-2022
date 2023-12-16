@@ -1,6 +1,5 @@
 import io from '#lib/io.js'
-import {sum} from '#lib/iterable.js'
-import range from '#lib/range.js'
+import {range, sum} from '#lib/iterable.js'
 
 function calcNSum(num: number): number {
   return (num * (num + 1)) / 2

@@ -1,7 +1,6 @@
 import Counter from '#lib/counter.js'
 import io from '#lib/io.js'
-import range from '#lib/range.js'
-import {max, min} from '#lib/sort.js'
+import {max, min, range} from '#lib/iterable.js'
 
 const startingPoly = (await io.readLine()) ?? ''
 const firstLetter = startingPoly[0] ?? ''
@@ -31,7 +30,7 @@ for (let i = 0; i < 10; i++) {
 const counts = Counter.fromEntries(
   [...pairs.entries()].map(([pair, count]) => [pair[1], count]),
 ).inc(firstLetter)
-const [leastCommon] = min(counts.values())
-const [mostCommon] = max(counts.values())
+const leastCommon = min(counts.values())!
+const mostCommon = max(counts.values())!
 
 io.write(mostCommon - leastCommon)

@@ -1,6 +1,6 @@
 import {copyArr, copyEmptyArr, type AnyArray, setArr} from './array.js'
+import {range} from './iterable.js'
 import {posMod} from './math.js'
-import range from './range.js'
 import type {Lengthened, Sliceable} from './types.js'
 import {addVec2, type vec2} from './vec2.js'
 

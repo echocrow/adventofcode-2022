@@ -1,7 +1,6 @@
 import {allocArrLen} from '#lib/array.js'
 import io from '#lib/io.js'
 import {Uint8Matrix} from '#lib/matrix.js'
-import range from '#lib/range.js'
 
 const SPINS = Number(
   (await io.readLineIfMatch(/^__spins=(\d+)$/))?.[1] ?? 1000000000,
