@@ -124,13 +124,21 @@ class IO {
 
     let buff = ''
     let line: string | undefined
-    while ((row = await this.readLine()) !== undefined) {
-      buff += (buff ? '\n' : '') + row
-      const res = regExp.exec(buff)
-      if (res) {
+    while ((line = await this.readLine()) !== undefined) {
+      buff += line
+      let res: RegExpExecArray | null
+      let matched = false
+      while ((res = regExp.exec(buff))) {
+        matched = true
+        buff = buff.slice(res.index + res[0].length || 1)
         yield res
-        buff = ''
+        // Manually break when buffer was fully consumed. This prevents
+        // infinite loops when matching empty lines.
+        if (!buff) break
       }
+      // Skip newline when we matched _and_ fully consumed the buffer for a
+      // cleaner buffer next round (no leading newline after flushed buffer).
+      if (!matched || buff) buff += '\n'
     }
   }
 
