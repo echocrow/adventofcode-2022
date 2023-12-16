@@ -154,11 +154,11 @@ export class Matrix<T extends AnyArray = Uint8Array>
     return y * this.width + x
   }
 
-  moveBy(i: number, v: vec2): number {
+  moveBy(i: number, v: vec2): number | undefined {
     const from = this.iToVec(i)
     const [toX, toY] = addVec2(from, v)
-    if (toX < 0 || toX >= this.width) return -1
-    if (toY < 0 || toY >= this.height) return -1
+    if (toX < 0 || toX >= this.width) return undefined
+    if (toY < 0 || toY >= this.height) return undefined
     return this.vecToI(toX, toY)
   }
 

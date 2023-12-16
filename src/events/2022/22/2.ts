@@ -219,7 +219,7 @@ function crossEdge(from: number, angle: Dir): readonly [number, Dir] {
 function step(from: number, angle: Dir): readonly [number, Dir] {
   let to = map.moveBy(from, dirVec2s[angle])
   let toAngle = angle
-  if (to < 0 || !map.$[to]) [to, toAngle] = crossEdge(from, angle)
+  if (to === undefined || !map.$[to]) [to, toAngle] = crossEdge(from, angle)
   const toCell = map.$[to]
   return toCell === Cell.Free ? [to, toAngle] : [from, angle]
 }
