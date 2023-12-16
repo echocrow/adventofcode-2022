@@ -53,8 +53,7 @@ class IO {
   }
 
   async #readNextLine(): Promise<string | undefined> {
-    const gen = this.#in[Symbol.asyncIterator]()
-    return (await gen.next()).value
+    return (await this.#in.next()).value
   }
   async peekLine(): Promise<string | undefined> {
     return (this.#peekedLine ??= await this.#readNextLine())
@@ -74,8 +73,7 @@ class IO {
       this.#peekedLine = undefined
       return prev
     }
-    const gen = this.#in[Symbol.asyncIterator]()
-    return (await gen.next()).value
+    return (await this.#in.next()).value
   }
 
   async readFile() {
