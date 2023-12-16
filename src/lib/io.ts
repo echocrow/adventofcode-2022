@@ -61,10 +61,10 @@ class IO {
     return (this.#peekedLine ??= await this.#readNextLine())
   }
   async readLineIfMatch(
-    pattern: RegExp,
+    regExp: RegExp,
   ): Promise<RegExpMatchArray | null | undefined> {
     const line = await this.peekLine()
-    const match = line !== undefined ? line.match(pattern) : undefined
+    const match = line !== undefined ? line.match(regExp) : undefined
     if (match) this.#peekedLine = undefined
     return match
   }
@@ -117,7 +117,7 @@ class IO {
   }
 
   async *readRegExp(
-    pattern: RegExp,
+    regExp: RegExp,
     opts: {appendix?: string} = {},
   ): AsyncGenerator<RegExpExecArray, void, undefined> {
     this.#appendix = opts.appendix
@@ -126,7 +126,7 @@ class IO {
     let line: string | undefined
     while ((row = await this.readLine()) !== undefined) {
       buff += (buff ? '\n' : '') + row
-      const res = pattern.exec(buff)
+      const res = regExp.exec(buff)
       if (res) {
         yield res
         buff = ''
