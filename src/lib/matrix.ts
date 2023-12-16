@@ -98,10 +98,13 @@ export class Matrix<T extends AnyArray = Uint8Array>
     yield* rows<T>(this)
   }
 
-  *row(y: number): Generator<T[number], void, undefined> {
+  *rowI(y: number): Generator<number, void, undefined> {
     const from = y * this.#width
     const to = from + this.#width
-    for (let i = from; i < to; i++) yield this.data[i]!
+    for (let i = from; i < to; i++) yield i
+  }
+  *row(y: number): Generator<T[number], void, undefined> {
+    for (const i of this.rowI(y)) yield this.data[i]
   }
   setRow(y: number, vals: ArrayLike<number>): this {
     if (vals.length !== this.width)
@@ -110,8 +113,11 @@ export class Matrix<T extends AnyArray = Uint8Array>
     return this
   }
 
+  *colI(x: number): Generator<number, void, undefined> {
+    for (let i = x; i < this.length; i += this.#width) yield i
+  }
   *col(x: number): Generator<T[number], void, undefined> {
-    for (let i = x; i < this.length; i += this.#width) yield this.data[i]
+    for (const i of this.colI(x)) yield this.data[i]
   }
   *cols(): Generator<T, void, undefined> {
     for (let x = 0; x < this.width; x++) {
@@ -148,7 +154,7 @@ export class Matrix<T extends AnyArray = Uint8Array>
     return y * this.width + x
   }
 
-  moveBy(i: number, v: vec2) {
+  moveBy(i: number, v: vec2): number {
     const from = this.iToVec(i)
     const [toX, toY] = addVec2(from, v)
     if (toX < 0 || toX >= this.width) return -1
