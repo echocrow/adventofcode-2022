@@ -1,5 +1,7 @@
 import io from '#lib/io.js'
+import {combine, map, sum} from '#lib/iterable.js'
 import {Matrix, Uint8Matrix} from '#lib/matrix.js'
+import {FILOQueue} from '#lib/queue.js'
 import type {vec2} from '#lib/vec2.js'
 
 enum Dir {
@@ -31,43 +33,37 @@ const pieces: Record<string, Record<Dir, Dir[]>> = {
 }
 type Piece = (typeof pieces)[string]
 
-// Parse map.
-const map = new Matrix<Piece[]>([])
+// Parse grid.
+const grid = new Matrix<Piece[]>([])
 for await (const line of io.readLines())
-  map.pushRow(line.split('').map((c) => pieces[c]!))
+  grid.pushRow(line.split('').map((c) => pieces[c]!))
 
 // Shoot beams.
 let max = 0
-type Beam = readonly [number, Dir]
-const starts: Beam[] = [
-  ...Array.from(map.rowI(0), (i) => [i, Dir.down] as const),
-  ...Array.from(map.rowI(map.height - 1), (i) => [i, Dir.up] as const),
-  ...Array.from(map.colI(0), (i) => [i, Dir.right] as const),
-  ...Array.from(map.colI(map.width - 1), (i) => [i, Dir.left] as const),
-]
-const seenBeams = new Uint8Matrix(map.length, map.width)
-for (const start of starts) {
-  seenBeams.$.fill(0)
-
-  const queue: Beam[] = [start]
-  let beam: Beam | undefined
-  while ((beam = queue.pop())) {
+const visited = new Uint8Matrix(grid.length, grid.width)
+for (const start of combine(
+  map(grid.rowI(0), (i) => [i, Dir.down] as const),
+  map(grid.rowI(grid.height - 1), (i) => [i, Dir.up] as const),
+  map(grid.colI(0), (i) => [i, Dir.right] as const),
+  map(grid.colI(grid.width - 1), (i) => [i, Dir.left] as const),
+)) {
+  visited.$.fill(0)
+  const queue = new FILOQueue(start)
+  for (const beam of queue) {
     const [i, dir] = beam
-    const piece = map.$[i]!
+    const piece = grid.$[i]!
     const newDirs = piece[dir]
-    seenBeams.$[i] |= idDir(dir)
+    visited.$[i] |= idDir(dir)
     for (const newDir of newDirs) {
-      seenBeams.$[i] |= idDir(revertDir(newDir))
-      const newI = map.moveBy(i, DIR_VEC[newDir])
+      visited.$[i] |= idDir(revertDir(newDir))
+      const newI = grid.moveBy(i, DIR_VEC[newDir])
       if (newI === undefined) continue
-      if (seenBeams.$[newI]! & idDir(newDir)) continue
+      if (visited.$[newI]! & idDir(newDir)) continue
       queue.push([newI, newDir])
     }
   }
 
-  let res = 0
-  for (const v of seenBeams.$) res += +!!v
-  max = Math.max(max, res)
+  max = Math.max(max, sum(map(visited, (v) => +!!v)))
 }
 
 io.write(max)

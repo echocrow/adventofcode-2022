@@ -1,5 +1,7 @@
 import io from '#lib/io.js'
+import {map, sum} from '#lib/iterable.js'
 import {Matrix, Uint8Matrix} from '#lib/matrix.js'
+import {FILOQueue} from '#lib/queue.js'
 import type {vec2} from '#lib/vec2.js'
 
 enum Dir {
@@ -31,31 +33,27 @@ const pieces: Record<string, Record<Dir, Dir[]>> = {
 }
 type Piece = (typeof pieces)[string]
 
-// Parse map.
-const map = new Matrix<Piece[]>([])
+// Parse grid.
+const grid = new Matrix<Piece[]>([])
 for await (const line of io.readLines())
-  map.pushRow(line.split('').map((c) => pieces[c]!))
+  grid.pushRow(line.split('').map((c) => pieces[c]!))
 
 // Shoot beam.
-const seenBeams = new Uint8Matrix(map.length, map.width)
-const queue = [[0, Dir.right] as [number, Dir]]
-let beam: (typeof queue)[number] | undefined
-while ((beam = queue.pop())) {
+const queue = new FILOQueue([0, Dir.right] as readonly [number, Dir])
+const visited = new Uint8Matrix(grid.length, grid.width)
+for (const beam of queue) {
   const [i, dir] = beam
-  const piece = map.$[i]!
+  const piece = grid.$[i]!
   const nextBeams = piece[dir]
-  seenBeams.$[i] |= idDir(dir)
+  visited.$[i] |= idDir(dir)
   for (const newDir of nextBeams) {
-    seenBeams.$[i] |= idDir(revertDir(newDir))
-    const newI = map.moveBy(i, DIR_VEC[newDir])
+    visited.$[i] |= idDir(revertDir(newDir))
+    const newI = grid.moveBy(i, DIR_VEC[newDir])
     if (newI === undefined) continue
-    if (seenBeams.$[newI]! & idDir(newDir)) continue
+    if (visited.$[newI]! & idDir(newDir)) continue
     queue.push([newI, newDir])
   }
 }
 
 // Count visited fields.
-let result = 0
-for (const v of seenBeams.$) result += +!!v
-
-io.write(result)
+io.write(sum(map(visited, (v) => +!!v)))
