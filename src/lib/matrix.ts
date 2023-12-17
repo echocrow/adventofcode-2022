@@ -1,5 +1,5 @@
 import {copyArr, copyEmptyArr, type AnyArray, setArr} from './array.js'
-import {range} from './iterable.js'
+import {entries, range} from './iterable.js'
 import {posMod} from './math.js'
 import type {Lengthened, Sliceable} from './types.js'
 import {addVec2, type vec2} from './vec2.js'
@@ -162,10 +162,12 @@ export class Matrix<T extends AnyArray = Uint8Array>
     return this.vecToI(toX, toY)
   }
 
-  fmt(fmtVal: (val: number) => string | number = (val) => val): string {
+  fmt(
+    fmtVal: (val: number, i: number) => string | number = (val) => val,
+  ): string {
     let out = ''
-    for (const row of this.rows()) {
-      for (const val of row) out += fmtVal(val)
+    for (let y = 0; y < this.#height; y++) {
+      for (const i of this.rowI(y)) out += fmtVal(this.data[i], i)
       out += '\n'
     }
     return out.slice(0, -1)
