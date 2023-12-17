@@ -25,6 +25,6 @@ while ((i = cave.$.findIndex((h) => h !== TOP)) >= 0) {
   basins.push(basin)
 }
 
-const topBasins = sort(basins).reverse().slice(0, 3)
+const topBasins = sort(basins, true).slice(0, 3)
 
 io.write(product(topBasins))
