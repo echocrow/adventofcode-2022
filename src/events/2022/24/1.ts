@@ -1,6 +1,6 @@
 import io from '#lib/io.js'
 import memoize from '#lib/memo.js'
-import Queue from '#lib/queue.js'
+import {PriorityQueue} from '#lib/queue.js'
 import {
   addVec2,
   equalsVec,
@@ -58,7 +58,7 @@ const moves: readonly vec2[] = [
 ]
 const start: vec2 = [0, -1]
 const end: vec2 = [mapW - 1, mapH]
-const queue = new Queue<vec3>().enqueue(0, [0, ...start])
+const queue = new PriorityQueue<vec3>().enqueue(0, [0, ...start])
 let visited = new Vec3Set()
 search: for (const {item} of queue) {
   const [time, ...pos] = item

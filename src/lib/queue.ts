@@ -17,38 +17,40 @@ export class FILOQueue<T> {
   }
 }
 
-class QueueItem<V, C extends number | bigint = number> {
+class PriorityQueueItem<V, C extends number | bigint = number> {
   constructor(
     public cost: C,
     public item: V,
   ) {}
 }
 
-export default class Queue<T> {
-  #queue: QueueItem<T>[] = []
+export class PriorityQueue<T> {
+  #queue: PriorityQueueItem<T>[] = []
 
   enqueue(cost: number, ...items: T[]) {
     for (const item of items)
-      enqueue(this.#queue, Queue.#findNext, new QueueItem(cost, item))
+      enqueue(
+        this.#queue,
+        PriorityQueue.#findNext,
+        new PriorityQueueItem(cost, item),
+      )
     return this
   }
 
-  dequeue(): QueueItem<T> | undefined {
+  dequeue(): PriorityQueueItem<T> | undefined {
     return this.#queue.shift()
   }
 
   *[Symbol.iterator]() {
-    while (this.#queue.length) {
-      yield this.#queue.shift()!
-    }
+    while (this.#queue.length) yield this.#queue.shift()!
   }
 
-  static #findNext<T>(q: QueueItem<T>, qi: QueueItem<T>) {
+  static #findNext<T>(q: PriorityQueueItem<T>, qi: PriorityQueueItem<T>) {
     return q.cost > qi.cost
   }
 }
 
-export class MemoQueue<T> extends Queue<T> {
+export class MemoQueue<T> extends PriorityQueue<T> {
   #memo = new Map<T, number>()
   enqueue(cost: number, ...items: T[]) {
     items = items.filter((item) => !this.#memo.has(item))
