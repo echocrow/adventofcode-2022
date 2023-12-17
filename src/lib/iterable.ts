@@ -1,7 +1,23 @@
+type IteratorValueOf<TIter extends Iterable<any>> =
+  TIter extends Iterable<infer T> ? T : never
+
 export function* range(from: number, to: number, inclusive = false) {
   const d = from <= to ? 1 : -1
   for (let i = from; i !== to; i += d) yield i
   if (inclusive) yield to
+}
+
+export function* combine<T extends readonly Iterable<any>[]>(
+  ...iterables: T
+): Generator<IteratorValueOf<T[number]>, void, undefined> {
+  for (const it of iterables) yield* it
+}
+
+export function* map<T, U>(
+  iterable: Iterable<T>,
+  fn: (value: T) => U,
+): Generator<U, void, undefined> {
+  for (const val of iterable) yield fn(val)
 }
 
 export function mapFind<T, U>(
@@ -13,6 +29,29 @@ export function mapFind<T, U>(
     if (mapped !== undefined) return mapped
   }
   return undefined
+}
+
+export function reduce<T>(
+  values: Iterable<T>,
+  fn: (acc: T, value: T) => T,
+): T | undefined
+export function reduce<T, U>(
+  values: Iterable<T>,
+  fn: (acc: U, value: T) => U,
+  initial: U,
+): U | undefined
+export function reduce<T, U>(
+  values: Iterable<T>,
+  fn: (acc: U, value: T) => U,
+  initial?: U,
+): U | undefined {
+  let acc = initial
+  let accSet = arguments.length > 2
+  for (const val of values) {
+    if (accSet) acc = fn(acc!, val)
+    else (acc = val as unknown as U), (accSet = true)
+  }
+  return acc
 }
 
 export function* entries<T>(values: Iterable<T>) {
@@ -35,14 +74,10 @@ export function bigSum(nums: Iterable<bigint>): bigint {
 export function min<T extends number | bigint>(
   nums: Iterable<T>,
 ): T | undefined {
-  let res: T | undefined = undefined
-  for (const val of nums) if (val <= (res ?? val)) res = val
-  return res
+  return reduce(nums, (acc, num) => (num < acc ? num : acc))
 }
 export function max<T extends number | bigint>(
   nums: Iterable<T>,
 ): T | undefined {
-  let res: T | undefined = undefined
-  for (const val of nums) if (val >= (res ?? val)) res = val
-  return res
+  return reduce(nums, (acc, num) => (num > acc ? num : acc))
 }
