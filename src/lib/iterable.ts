@@ -1,22 +1,29 @@
 type IteratorValueOf<TIter extends Iterable<any>> =
   TIter extends Iterable<infer T> ? T : never
+type ReadGenerator<T> = Generator<T, void, undefined>
 
-export function* range(from: number, to: number, inclusive = false) {
+export function* range(
+  from: number,
+  to: number,
+  inclusive = false,
+): ReadGenerator<number> {
   const d = from <= to ? 1 : -1
-  for (let i = from; i !== to; i += d) yield i
+  const steps = (to - from) * d
+  let val = from
+  for (let i = 0; i < steps; i++) yield val, (val += d)
   if (inclusive) yield to
 }
 
 export function* combine<T extends readonly Iterable<any>[]>(
   ...iterables: T
-): Generator<IteratorValueOf<T[number]>, void, undefined> {
+): ReadGenerator<IteratorValueOf<T[number]>> {
   for (const it of iterables) yield* it
 }
 
 export function* map<T, U>(
   iterable: Iterable<T>,
   fn: (value: T) => U,
-): Generator<U, void, undefined> {
+): ReadGenerator<U> {
   for (const val of iterable) yield fn(val)
 }
 
