@@ -70,8 +70,20 @@ export function enqueue<V>(
   findNext: (queueItem: V, newItem: V) => boolean,
   item: V,
 ): V[] {
-  const q = queue.findIndex((q) => findNext(q, item))
-  if (q >= 0) queue.splice(q, 0, item)
-  else queue.push(item)
+  // Check for first item or new max.
+  if (!queue.length || !findNext(queue.at(-1)!, item)) queue.push(item)
+  // Check for new min.
+  else if (findNext(queue[0]!, item)) queue.unshift(item)
+  // Binary-search insert point.
+  else {
+    let l = 1
+    let r = queue.length - 2
+    while (l <= r) {
+      const q = Math.floor((l + r) / 2)
+      if (findNext(queue[q]!, item)) r = q - 1
+      else l = q + 1
+    }
+    queue.splice(l, 0, item)
+  }
   return queue
 }
