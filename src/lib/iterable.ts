@@ -14,6 +14,16 @@ export function* range(
   if (inclusive) yield to
 }
 
+export function* rangeStep(
+  from: number,
+  to: number,
+  steps: number,
+): ReadGenerator<number> {
+  let val = from
+  const d = (to - from) / steps
+  for (let i = 0; i < steps; i++) yield (val += d)
+}
+
 export function* combine<T extends readonly Iterable<any>[]>(
   ...iterables: T
 ): ReadGenerator<IteratorValueOf<T[number]>> {
