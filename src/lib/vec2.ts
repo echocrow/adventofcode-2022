@@ -45,6 +45,10 @@ export function lenVec2(v: vec2): number {
 export function taxiLenVec2(v: vec2): number {
   return Math.abs(v[0]) + Math.abs(v[1])
 }
+/** Calculate taxicab/manhattan distance between two vectors. */
+export function taxiDistVec2(a: vec2, b: vec2): number {
+  return Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1])
+}
 
 export function* rangeVec2(from: vec2, to: vec2, inclusive = false) {
   const d = subtractVec2(to, from)
