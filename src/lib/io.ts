@@ -13,11 +13,14 @@ class IO {
   #logged = false
   #peekedLine: string | undefined = undefined
   #appendix: string | undefined = undefined
+  #perfStart = 0
 
   constructor(
     private input: Readable | undefined = undefined,
     private output: Writable | undefined = undefined,
-  ) {}
+  ) {
+    this.#reset()
+  }
 
   #reset() {
     this.#_in = undefined
@@ -25,6 +28,7 @@ class IO {
     this.#logged = false
     this.#peekedLine = undefined
     this.#appendix = undefined
+    this.#perfStart = performance.now()
   }
   get #in() {
     return (this.#_in ??= IO.#createIn(this.input))
@@ -149,8 +153,9 @@ class IO {
     const str = String(data)
     this.#out.write(str)
     if (!opts.silent) {
+      this.#logPerf(this.#perfStart)
       const msg = str.length < 100 ? str : `wrote ${str.length} characters`
-      this.log(`[io] Output: ${msg}`)
+      this.log(`[io] 📄 Output: ${msg}`)
     }
   }
 
@@ -200,12 +205,13 @@ class IO {
     return (IO.#_parsedArgs ??= IO._parseArgs())
   }
 
-  perf() {
+  perf(): () => void {
     const start = performance.now()
-    return () => {
-      const end = performance.now()
-      this.log(`Execution Time: ${Math.round(end - start)}ms.`)
-    }
+    return () => this.#logPerf(start)
+  }
+  #logPerf(start: number) {
+    const end = performance.now()
+    this.log(`[io] ⌛️ Time: ${Math.round(end - start)}ms`)
   }
 }
 
