@@ -13,8 +13,11 @@ export function subtractVec2(a: vec2, b: vec2): vec2 {
   return [a[0] - b[0], a[1] - b[1]]
 }
 
-export function scaleVec2(a: vec2, f: number): vec2 {
-  return [a[0] * f, a[1] * f]
+export function scaleVec2(vec: vec2, f: number): vec2 {
+  return [vec[0] * f, vec[1] * f]
+}
+export function invertVec2(vec: vec2): vec2 {
+  return scaleVec2(vec, -1)
 }
 
 export function modVec2(v: vec2, mod: vec2): vec2 {
