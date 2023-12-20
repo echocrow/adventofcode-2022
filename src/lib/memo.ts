@@ -34,3 +34,18 @@ export function memoizeWithStorage<TArgs extends any[], TRes, TKey>(
   memFn[Symbol.dispose] = (() => memo.clear?.()) as DisposeFn
   return memFn
 }
+
+/**
+ * A map that initializes values on first read.
+ */
+export class MemoMap<K, T> extends Map<K, T> {
+  constructor(private gen: (key: K) => T) {
+    super()
+  }
+  get(key: K): T {
+    if (this.has(key)) return super.get(key) as T
+    const val = this.gen(key)
+    this.set(key, val)
+    return val
+  }
+}
