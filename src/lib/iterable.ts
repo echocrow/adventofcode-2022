@@ -56,7 +56,7 @@ export function reduce<T, U>(
   values: Iterable<T>,
   fn: (acc: U, value: T) => U,
   initial: U,
-): U | undefined
+): U
 export function reduce<T, U>(
   values: Iterable<T>,
   fn: (acc: U, value: T) => U,
@@ -77,15 +77,17 @@ export function* entries<T>(values: Iterable<T>) {
 }
 
 export function sum(nums: Iterable<number>): number {
-  let s = 0
-  for (const v of nums) s += v
-  return s
+  return reduce(nums, (a, v) => a + v, 0)
+}
+export function product(nums: Iterable<number>): number {
+  return reduce(nums, (a, v) => a * v) ?? 0
 }
 
 export function bigSum(nums: Iterable<bigint>): bigint {
-  let s = 0n
-  for (const v of nums) s += v
-  return s
+  return reduce(nums, (a, v) => a + v, 0n)
+}
+export function bigProduct(nums: Iterable<bigint>): bigint {
+  return reduce(nums, (a, v) => a * v) ?? 0n
 }
 
 export function min<T extends number | bigint>(

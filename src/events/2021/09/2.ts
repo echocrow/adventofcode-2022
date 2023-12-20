@@ -1,6 +1,6 @@
 import io from '#lib/io.js'
+import {product} from '#lib/iterable.js'
 import {neighbors, Uint8Matrix} from '#lib/matrix.js'
-import product from '#lib/product.js'
 import sort from '#lib/sort.js'
 
 const cave = new Uint8Matrix()

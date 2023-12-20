@@ -1,5 +1,5 @@
 import io from '#lib/io.js'
-import product from '#lib/product.js'
+import {product} from '#lib/iterable.js'
 import {joinRegExp} from '#lib/regexp.js'
 import sort from '#lib/sort.js'
 

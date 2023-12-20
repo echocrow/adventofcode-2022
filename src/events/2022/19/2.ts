@@ -1,5 +1,5 @@
 import io from '#lib/io.js'
-import product from '#lib/product.js'
+import {product} from '#lib/iterable.js'
 
 enum Rocks {
   ore = 0,
