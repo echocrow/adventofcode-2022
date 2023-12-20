@@ -11,7 +11,7 @@ class IO {
   #_out: Writable | undefined = undefined
   logSilent = false
   #logged = false
-  #peekedLine: string | undefined = undefined
+  #buffer: string | undefined = undefined
   #appendix: string | undefined = undefined
   #perfStart = 0
 
@@ -26,7 +26,7 @@ class IO {
     this.#_in = undefined
     this.#_out = undefined
     this.#logged = false
-    this.#peekedLine = undefined
+    this.#buffer = undefined
     this.#appendix = undefined
     this.#perfStart = performance.now()
   }
@@ -62,21 +62,21 @@ class IO {
     return (await this.#in.next()).value
   }
   async peekLine(): Promise<string | undefined> {
-    return (this.#peekedLine ??= await this.#readNextLine())
+    return (this.#buffer ??= await this.#readNextLine())
   }
   async readLineIfMatch(
     regExp: RegExp,
   ): Promise<RegExpMatchArray | null | undefined> {
     const line = await this.peekLine()
     const match = line !== undefined ? line.match(regExp) : undefined
-    if (match) this.#peekedLine = undefined
+    if (match) this.#buffer = undefined
     return match
   }
 
-  #readPeekedSuffix(): string | undefined {
-    const suffix = this.#peekedLine
-    this.#peekedLine = undefined
-    return suffix
+  #readBuffer(): string | undefined {
+    const buffer = this.#buffer
+    this.#buffer = undefined
+    return buffer
   }
   #readAppendix(): string | undefined {
     const appendix = this.#appendix
@@ -85,9 +85,7 @@ class IO {
   }
   async readLine(): Promise<string | undefined> {
     return (
-      this.#readPeekedSuffix() ??
-      (await this.#readNextLine()) ??
-      this.#readAppendix()
+      this.#readBuffer() ?? (await this.#readNextLine()) ?? this.#readAppendix()
     )
   }
 
@@ -144,6 +142,7 @@ class IO {
       // cleaner buffer next round (no leading newline after flushed buffer).
       if (!matched || buff) buff += '\n'
     }
+    if (buff) this.#buffer = (this.#buffer ?? '') + buff
   }
 
   write(
