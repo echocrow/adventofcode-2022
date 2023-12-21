@@ -100,3 +100,23 @@ export function max<T extends number | bigint>(
 ): T | undefined {
   return reduce(nums, (acc, num) => (num > acc ? num : acc))
 }
+
+export function* filter<T>(
+  values: Iterable<T>,
+  fn: (val: T) => boolean = (v) => !!v,
+): ReadGenerator<T> {
+  for (const val of values) if (fn(val)) yield val
+}
+
+export function every<T>(
+  values: Iterable<T>,
+  fn: (val: T) => boolean = (v) => !!v,
+): boolean {
+  for (const val of values) if (!fn(val)) return false
+  return true
+}
+
+export function* fifo<T>(queue: T[]): ReadGenerator<T> {
+  let v: T | undefined
+  while ((v = queue.shift())) yield v
+}
