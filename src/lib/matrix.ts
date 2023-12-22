@@ -176,13 +176,15 @@ export class Matrix<T extends AnyArray = Uint8Array>
 
 export class Uint8Matrix extends Matrix<Uint8Array> {
   constructor()
+  constructor(matrix: Matrix)
   constructor(length: number, width: number)
   constructor(
     array: ArrayLike<number> | ArrayBufferLike | Iterable<number>,
-    width: number,
+    width: number | undefined,
   )
-  constructor(lengthOrArray: any = 0, width = 0) {
-    super(new Uint8Array(lengthOrArray), width)
+  constructor(lengthOrArray: any = 0, width?: number) {
+    if (lengthOrArray instanceof Matrix) width ??= lengthOrArray.width
+    super(new Uint8Array(lengthOrArray), width ?? 0)
   }
 }
 
