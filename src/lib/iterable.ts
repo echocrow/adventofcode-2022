@@ -90,6 +90,15 @@ export function bigProduct(nums: Iterable<bigint>): bigint {
   return reduce(nums, (a, v) => a * v) ?? 0n
 }
 
+export function count<T>(
+  values: Iterable<T>,
+  fn: (val: T) => boolean = (v) => !!v,
+): number {
+  let res = 0
+  for (const val of values) if (fn(val)) res++
+  return res
+}
+
 export function min<T extends number | bigint>(
   nums: Iterable<T>,
 ): T | undefined {
@@ -119,4 +128,8 @@ export function every<T>(
 export function* fifo<T>(queue: T[]): ReadGenerator<T> {
   let v: T | undefined
   while ((v = queue.shift())) yield v
+}
+export function* filo<T>(queue: T[]): ReadGenerator<T> {
+  let v: T | undefined
+  while ((v = queue.pop())) yield v
 }
