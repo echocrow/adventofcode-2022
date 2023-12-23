@@ -1,9 +1,10 @@
 import io from '#lib/io.js'
-import {count, map, range, reduce} from '#lib/iterable.js'
+import {fifo, map, range, reduce} from '#lib/iterable.js'
+import {isSuperSet} from '#lib/set.js'
 
 class Brick {
   readonly supports: Brick[] = []
-  rests = 0
+  readonly restsOn: Brick[] = []
   constructor(
     /** Bitmask of x cubes. */
     public readonly x: number,
@@ -53,8 +54,20 @@ for (const brick of bricks) {
   }
   if (collisions.length) brick.lower(-1)
   for (const b of collisions) b.supports.push(brick)
-  brick.rests += collisions.length
+  brick.restsOn.push(...collisions)
   settled.push(brick)
 }
 
-io.write(count(bricks, (b) => b.supports.every((b2) => b2.rests > 1)))
+// Count cascading bricks for every brick.
+let result = 0
+for (const root of bricks) {
+  const removed = new Set<Brick>()
+  const removing = [root]
+  for (const brick of fifo(removing)) {
+    removed.add(brick)
+    for (const b of brick.supports)
+      if (isSuperSet(removed, b.restsOn)) removing.push(b)
+  }
+  result += removed.size - 1
+}
+io.write(result)
