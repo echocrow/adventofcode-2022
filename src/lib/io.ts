@@ -72,6 +72,10 @@ class IO {
     if (match) this.#buffer = undefined
     return match
   }
+  async readCfgLine(name: string): Promise<string | undefined> {
+    const re = new RegExp(`^${name}=(.*)$`)
+    return (await this.readLineIfMatch(re))?.[1]
+  }
 
   #readBuffer(): string | undefined {
     const buffer = this.#buffer

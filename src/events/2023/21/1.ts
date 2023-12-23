@@ -1,7 +1,7 @@
 import io from '#lib/io.js'
 import {Uint8Matrix, neighbors} from '#lib/matrix.js'
 
-const STEPS = Number((await io.readLineIfMatch(/^__steps=(\d+)$/))?.[1] ?? 64)
+const STEPS = Number((await io.readCfgLine('__steps')) ?? 64)
 
 const garden = new Uint8Matrix()
 let startI = 0

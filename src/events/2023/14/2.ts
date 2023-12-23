@@ -2,9 +2,7 @@ import {allocArrLen} from '#lib/array.js'
 import io from '#lib/io.js'
 import {Uint8Matrix} from '#lib/matrix.js'
 
-const SPINS = Number(
-  (await io.readLineIfMatch(/^__spins=(\d+)$/))?.[1] ?? 1000000000,
-)
+const SPINS = Number((await io.readCfgLine('__spins')) ?? 1000000000)
 
 enum Tile {
   Empty,

@@ -1,9 +1,7 @@
 import io from '#lib/io.js'
 import {subtractVec2, type mutVec2, taxiLenVec2} from '#lib/vec2.js'
 
-const growth = Number(
-  (await io.readLineIfMatch(/^__growth=(\d+)$/))?.[1] ?? 1000000,
-)
+const growth = Number((await io.readCfgLine('__growth')) ?? 1000000)
 const cols = ((await io.peekLine()) ?? '').length
 
 // Parse galaxies & expand vertically.
