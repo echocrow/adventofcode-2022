@@ -133,3 +133,8 @@ export function* filo<T>(queue: T[]): ReadGenerator<T> {
   let v: T | undefined
   while ((v = queue.pop())) yield v
 }
+
+export function first<T>(values: Iterable<T>): T | undefined {
+  for (const val of values) return val
+  return undefined
+}
