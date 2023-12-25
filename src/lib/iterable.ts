@@ -138,3 +138,11 @@ export function first<T>(values: Iterable<T>): T | undefined {
   for (const val of values) return val
   return undefined
 }
+
+export function find<T>(
+  items: Iterable<T>,
+  fn: (val: T) => boolean,
+): T | undefined {
+  for (const val of items) if (fn(val)) return val
+  return undefined
+}

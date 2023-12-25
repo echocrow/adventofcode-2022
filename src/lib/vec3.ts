@@ -1,4 +1,5 @@
-export type vec3 = Readonly<[number, number, number]>
+export type mutVec3 = [number, number, number]
+export type vec3 = readonly [number, number, number]
 
 export const zeroVec3: vec3 = [0, 0, 0]
 
@@ -32,6 +33,92 @@ export function fmtVec3(v: vec3) {
 export function parseVec3(s: string): Readonly<vec3> {
   const [x = '', y = '', z = ''] = s.split(',')
   return [Number(x), Number(y), Number(z)]
+}
+
+export interface Vec3 extends Float64Array, Omit<mutVec3, keyof Float64Array> {
+  [0]: number
+  [1]: number
+  [2]: number
+}
+export class Vec3 extends Float64Array {
+  constructor(
+    public readonly x: number,
+    public readonly y: number,
+    public readonly z: number,
+  ) {
+    super([x, y, z])
+  }
+
+  add(other: Vec3): Vec3 {
+    return new Vec3(this.x + other.x, this.y + other.y, this.z + other.z)
+  }
+
+  subtract(other: Vec3): Vec3 {
+    return new Vec3(this.x - other.x, this.y - other.y, this.z - other.z)
+  }
+
+  scale(scalar: number): Vec3 {
+    return new Vec3(this.x * scalar, this.y * scalar, this.z * scalar)
+  }
+
+  dot(other: Vec3): number {
+    return this.x * other.x + this.y * other.y + this.z * other.z
+  }
+
+  normalize(): Vec3 {
+    const length = this.magnitude
+    return new Vec3(this.x / length, this.y / length, this.z / length)
+  }
+
+  cross(other: Vec3): Vec3 {
+    return new Vec3(
+      this.y * other.z - this.z * other.y,
+      this.z * other.x - this.x * other.z,
+      this.x * other.y - this.y * other.x,
+    )
+  }
+
+  get magnitude(): number {
+    return Math.sqrt(this.x ** 2 + this.y ** 2 + this.z ** 2)
+  }
+
+  signedLength(direction: Vec3): number {
+    const unitDirection = direction.normalize()
+    return this.dot(unitDirection)
+  }
+
+  static intersectPlane(
+    plane: readonly [Vec3, Vec3, Vec3],
+    line: readonly [Vec3, Vec3],
+  ): Vec3 {
+    const [p0, p1, p2] = plane
+    const [l0, l1] = line
+    const n = p1.subtract(p0).cross(p2.subtract(p0))
+    const d = l1.subtract(l0)
+    const t = n.dot(p0.subtract(l0)) / n.dot(d)
+    return l0.add(d.scale(t))
+  }
+
+  static projectPointToLine(point: Vec3, line0: Vec3, line1: Vec3): Vec3 {
+    const ab = line1.subtract(line0)
+    const ac = point.subtract(line0)
+    const t = ac.dot(ab) / ab.dot(ab)
+    return line0.add(ab.scale(t))
+  }
+}
+
+export class StateVec3 extends Float64Array {
+  constructor(
+    public readonly pos: Vec3,
+    public readonly vel: Vec3,
+    public readonly t = 0,
+  ) {
+    super([...pos, ...vel, t])
+  }
+
+  posAt(t: number): Vec3 {
+    return this.pos.add(this.vel.scale(t - this.t))
+  }
 }
 
 export function inSpaceVec3(min: vec3, max: vec3, p: vec3): boolean {

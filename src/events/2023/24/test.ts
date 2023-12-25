@@ -28,4 +28,4 @@ await testPart(import('./1.js?url'), [
   [sampleCfg + `${input0d}\n${input0e}\n`, 0],
 ])
 
-// await testPart(import('./2.js?url'), [input, TODO])
+await testPart(import('./2.js?url'), [input, 47])
