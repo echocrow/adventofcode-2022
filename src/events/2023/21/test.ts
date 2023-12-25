@@ -32,6 +32,10 @@ await testPart(import('./1.js?url'), [
   [input0, 42],
 ])
 
+// Note: Actual input of part 2 has some special properties that make it easier
+// to solve, such as clear paths from the starting point in the center to all
+// four edges. Therefore we use a modified version of the sample input, paired
+// with various solutions generated via the solution to part 1.
 await testPart(import('./2.js?url'), [
   ['__steps=1\n' + input1, 4],
   ['__steps=3\n' + input1, 15],
