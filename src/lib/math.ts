@@ -12,3 +12,11 @@ export function gcd(a: number, b: number): number {
 export function lcm(a: number, b: number): number {
   return (a * b) / gcd(a, b)
 }
+
+export function cmp(a: number, b: number): number {
+  return (
+    a < b ? -1
+    : a > b ? 1
+    : 0
+  )
+}
