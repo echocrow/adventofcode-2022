@@ -41,12 +41,31 @@ export interface Vec3 extends Float64Array, Omit<mutVec3, keyof Float64Array> {
   [2]: number
 }
 export class Vec3 extends Float64Array {
-  constructor(
-    public readonly x: number,
-    public readonly y: number,
-    public readonly z: number,
-  ) {
+  constructor(x: number, y: number, z: number) {
     super([x, y, z])
+  }
+
+  get tuple(): readonly [number, number, number] {
+    return this as unknown as readonly [number, number, number]
+  }
+
+  get x(): number {
+    return this[0]
+  }
+  set x(num: number) {
+    this[0] = num
+  }
+  get y(): number {
+    return this[1]
+  }
+  set y(num: number) {
+    this[1] = num
+  }
+  get z(): number {
+    return this[2]
+  }
+  set z(num: number) {
+    this[2] = num
   }
 
   add(other: Vec3): Vec3 {
