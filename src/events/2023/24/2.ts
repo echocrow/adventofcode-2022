@@ -47,11 +47,10 @@ function evaluate(t: number) {
 
 // Determine lower and upper bounds of the collision time of the angle stone.
 let lowerT = 0
-let upperT = 0
+let upperT = 1
 let scoreAscends = true
 {
-  let lowerScore = evaluate(0)
-  upperT = Math.abs(evaluate(1)) < Math.abs(evaluate(-1)) ? 1 : -1
+  let lowerScore = evaluate(lowerT)
   let upperScore = evaluate(upperT)
   scoreAscends = lowerScore < 0
   while (Math.sign(lowerScore) === Math.sign(upperScore)) {
