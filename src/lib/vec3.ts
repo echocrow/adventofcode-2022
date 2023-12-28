@@ -68,6 +68,10 @@ export class Vec3 extends Float64Array {
     this[2] = num
   }
 
+  get length(): number {
+    return Math.sqrt(this.x ** 2 + this.y ** 2 + this.z ** 2)
+  }
+
   add(other: Vec3): Vec3 {
     return new Vec3(this.x + other.x, this.y + other.y, this.z + other.z)
   }
@@ -85,7 +89,7 @@ export class Vec3 extends Float64Array {
   }
 
   normalize(): Vec3 {
-    const length = this.magnitude
+    const length = this.length
     return new Vec3(this.x / length, this.y / length, this.z / length)
   }
 
@@ -95,10 +99,6 @@ export class Vec3 extends Float64Array {
       this.z * other.x - this.x * other.z,
       this.x * other.y - this.y * other.x,
     )
-  }
-
-  get magnitude(): number {
-    return Math.sqrt(this.x ** 2 + this.y ** 2 + this.z ** 2)
   }
 
   signedLength(direction: Vec3): number {
