@@ -55,7 +55,7 @@ await testPart(import('./2.js?url'), [
   ['__steps=78\n' + input1, 4673],
 ])
 
-await testPart(import('./2visualize.js?url'), [
+await testPart(import('./2-visualize.js?url'), [
   [
     '__steps=13\n' + '__scale=1\n' + input1,
     dedent`
