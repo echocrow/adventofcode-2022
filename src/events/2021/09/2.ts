@@ -1,7 +1,7 @@
+import {sortNums} from '#lib/array.js'
 import io from '#lib/io.js'
 import {product} from '#lib/iterable.js'
 import {neighbors, Uint8Matrix} from '#lib/matrix.js'
-import sort from '#lib/sort.js'
 
 const cave = new Uint8Matrix()
 for await (const line of io.readLines()) {
@@ -25,6 +25,6 @@ while ((i = cave.$.findIndex((h) => h !== TOP)) >= 0) {
   basins.push(basin)
 }
 
-const topBasins = sort(basins, true).slice(0, 3)
+const topBasins = sortNums(basins, true).slice(0, 3)
 
 io.write(product(topBasins))

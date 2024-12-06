@@ -107,6 +107,6 @@ export function setArr<T extends AnyArray>(
   return arr
 }
 
-export function sortNumeric(arr: number[]): number[] {
-  return arr.sort((a, b) => a - b)
+export function sortNums<N extends number | bigint>(nums: N[], dec = false) {
+  return nums.sort((a, b) => (dec ? b - a : a - b))
 }

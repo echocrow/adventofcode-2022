@@ -1,4 +1,4 @@
-import {sortNumeric} from '#lib/array.js'
+import {sortNums} from '#lib/array.js'
 import io from '#lib/io.js'
 import {sum} from '#lib/iterable.js'
 
@@ -14,6 +14,6 @@ for await (const line of io.readLines()) {
 }
 batches.push(acc)
 
-const topBatches = sortNumeric(batches).slice(-3)
+const topBatches = sortNums(batches).slice(-3)
 
 io.write(sum(topBatches))

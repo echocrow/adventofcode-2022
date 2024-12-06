@@ -1,7 +1,7 @@
+import {sortNums} from '#lib/array.js'
 import io from '#lib/io.js'
 import {product} from '#lib/iterable.js'
 import {joinRegExp} from '#lib/regexp.js'
-import sort from '#lib/sort.js'
 
 class Monkey {
   constructor(
@@ -61,7 +61,7 @@ const maxWorry = product(monkeys.map((m) => m.testDiv))
 
 for (let i = 0; i < 10000; i++) runRound(monkeys, maxWorry)
 
-const inspections = sort(monkeys.map((m) => m.inspections))
+const inspections = sortNums(monkeys.map((m) => m.inspections))
   .reverse()
   .slice(0, 2)
 const monkeyBusiness = product(inspections)

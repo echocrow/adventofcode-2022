@@ -1,10 +1,10 @@
+import {sortNums} from '#lib/array.js'
 import io from '#lib/io.js'
-import sort from '#lib/sort.js'
 
 function calcMedian(nums: number[]): number {
   if (!nums.length) return NaN
 
-  sort(nums)
+  sortNums(nums)
 
   const len = nums.length
   const center = len / 2

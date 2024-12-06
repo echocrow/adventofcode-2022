@@ -1,5 +1,5 @@
+import {sortNums} from '#lib/array.js'
 import io from '#lib/io.js'
-import sort from '#lib/sort.js'
 
 const PAIRS: Record<string, string> = {
   '(': ')',
@@ -36,6 +36,6 @@ for await (const line of io.readLines()) {
   if (score) scores.push(score)
 }
 
-sort(scores)
+sortNums(scores)
 const result = scores[(scores.length - 1) / 2] ?? 0
 io.write(result)
