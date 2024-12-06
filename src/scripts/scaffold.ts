@@ -1,7 +1,7 @@
 import {copyFile, mkdir, readdir} from 'node:fs/promises'
 import path from 'node:path'
 import {parseArgs} from 'node:util'
-import padNum from '#lib/padNum.js'
+import {padNum} from '#lib/string.js'
 
 const args = parseArgs({allowPositionals: true})
 let [yearDir = `${new Date().getFullYear()}`, dayDir = ''] = args.positionals
