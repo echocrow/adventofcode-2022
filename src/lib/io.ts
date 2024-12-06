@@ -94,7 +94,9 @@ class IO {
   }
 
   async readFile() {
-    let file = ''
+    let file = this.#readBuffer()
+    if (file) file += '\n'
+    file ??= ''
     for await (const chunk of this.#in) file += chunk + '\n'
     return file.slice(0, -1)
   }
