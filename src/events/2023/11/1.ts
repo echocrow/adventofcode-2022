@@ -1,7 +1,7 @@
 import io from '#lib/io.js'
 import {subtractVec2, type mutVec2, taxiLenVec2} from '#lib/vec2.js'
 
-const cols = ((await io.peekLine()) ?? '').length
+const cols = await io.peekLineLen()
 
 // Parse galaxies & expand vertically.
 const galaxies: mutVec2[] = []

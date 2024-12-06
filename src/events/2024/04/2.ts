@@ -10,7 +10,7 @@ function xMasRegExps(lineLen: number) {
   ].map((pattern) => new RegExp(pattern, 'gs'))
 }
 
-const lineLen = (await io.peekLine())?.length ?? 0
+const lineLen = await io.peekLineLen()
 const text = await io.readFile()
 
 let result = 0

@@ -64,6 +64,9 @@ class IO {
   async peekLine(): Promise<string | undefined> {
     return (this.#buffer ??= await this.#readNextLine())
   }
+  async peekLineLen(): Promise<number> {
+    return (await this.peekLine())?.length ?? 0
+  }
   async readLineIfMatch(
     regExp: RegExp,
   ): Promise<RegExpMatchArray | null | undefined> {

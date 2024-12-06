@@ -2,7 +2,7 @@ import io from '#lib/io.js'
 import {sum} from '#lib/iterable.js'
 
 const counts = [] as number[]
-const fixtures = new Uint8Array((await io.peekLine())!.length)
+const fixtures = new Uint8Array(await io.peekLineLen())
 let y = 0
 for await (const line of io.readLines()) {
   counts.push(0)
