@@ -20,3 +20,11 @@ export function cmp(a: number, b: number): number {
     : 0
   )
 }
+
+export function countDigits(num: number): number {
+  return Math.ceil(Math.log10(num + 1))
+}
+
+export function concatDigits(a: number, b: number): number {
+  return a * 10 ** countDigits(b) + b
+}
