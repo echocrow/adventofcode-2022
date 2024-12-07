@@ -128,6 +128,8 @@ export class Matrix<T extends AnyArray = Uint8Array>
   }
 
   cell(x: number, y: number): T[number] | undefined {
+    if (x < 0 || x >= this.width) return undefined
+    if (y < 0 || y >= this.height) return undefined
     return this.data[y * this.width + x]
   }
   setCell(x: number, y: number, v: number): this {
