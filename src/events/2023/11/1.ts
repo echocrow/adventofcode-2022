@@ -1,4 +1,6 @@
+import {pairs} from '#lib/array.js'
 import io from '#lib/io.js'
+import {map, sum} from '#lib/iterable.js'
 import {subtractVec2, type mutVec2, taxiLenVec2} from '#lib/vec2.js'
 
 const cols = await io.peekLineLen()
@@ -33,8 +35,7 @@ for await (const line of io.readLines()) {
 }
 
 // Sum distances.
-let result = 0
-for (let i = 0; i < galaxies.length; i++)
-  for (let j = i + 1; j < galaxies.length; j++)
-    result += taxiLenVec2(subtractVec2(galaxies[i]!, galaxies[j]!))
+const result = sum(
+  map(pairs(galaxies), ([a, b]) => taxiLenVec2(subtractVec2(a, b))),
+)
 io.write(result)
