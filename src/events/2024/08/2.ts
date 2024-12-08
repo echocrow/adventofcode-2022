@@ -1,40 +1,33 @@
 import {pairs} from '#lib/array.js'
 import io from '#lib/io.js'
-import {
-  addVec2,
-  inAreaVec2,
-  subtractVec2,
-  Vec2Set,
-  type vec2,
-} from '#lib/vec2.v1.js'
+import vec, {VecSet, type Vec2} from '#lib/vec.js'
 
 // Parse map.
 const mapWidth = await io.peekLineLen()
-const antennas: Record<string, vec2[]> = {}
+const antennas: Record<string, Vec2[]> = {}
 let y = 0
 for await (const line of io.readLines()) {
   for (let x = 0; x < line.length; x++) {
     const char = line[x]!
     if (char === '.') continue
-    ;(antennas[char] ??= []).push([x, y])
+    ;(antennas[char] ??= []).push(vec(x, y))
   }
   y++
 }
-const mapStart: vec2 = [0, 0]
-const mapEnd: vec2 = [mapWidth, y]
+const mapEnd = vec(mapWidth, y)
 
 // Find anti-nodes.
-const antiNodes = new Vec2Set()
+const antiNodes = new VecSet()
 for (const locations of Object.values(antennas)) {
   // Iterate over all pairs of antennas.
   for (const [a, b] of pairs(locations)) {
     for (let [pos, diff] of [
-      [a, subtractVec2(a, b)],
-      [b, subtractVec2(b, a)],
+      [a, a.subtract(b)],
+      [b, b.subtract(a)],
     ] as const) {
-      while (inAreaVec2(mapStart, mapEnd, pos)) {
+      while (pos.inArea(mapEnd)) {
         antiNodes.add(pos)
-        pos = addVec2(pos, diff)
+        pos = pos.add(diff)
       }
     }
   }
