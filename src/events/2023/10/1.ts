@@ -6,7 +6,7 @@ import {
   equalsVec,
   subtractVec2,
   zeroVec2,
-} from '#lib/vec2.js'
+} from '#lib/vec2.v1.js'
 
 const DIR = {
   UP: [0, -1],

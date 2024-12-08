@@ -1,7 +1,7 @@
 import {pairs} from '#lib/array.js'
 import io from '#lib/io.js'
 import {filter, map, sum} from '#lib/iterable.js'
-import {subtractVec2, type mutVec2, taxiLenVec2} from '#lib/vec2.js'
+import {subtractVec2, type mutVec2, taxiLenVec2} from '#lib/vec2.v1.js'
 
 const growth = Number((await io.readCfgLine('__growth')) ?? 1000000)
 const cols = await io.peekLineLen()

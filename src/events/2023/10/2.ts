@@ -1,7 +1,13 @@
 import io from '#lib/io.js'
 import {filo} from '#lib/iterable.js'
 import {Uint8Matrix, neighbors} from '#lib/matrix.js'
-import {type vec2, addVec2, equalsVec, zeroVec2, scaleVec2} from '#lib/vec2.js'
+import {
+  type vec2,
+  addVec2,
+  equalsVec,
+  zeroVec2,
+  scaleVec2,
+} from '#lib/vec2.v1.js'
 
 const DIR = {
   UP: [0, -1],

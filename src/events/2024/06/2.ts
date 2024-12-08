@@ -1,6 +1,6 @@
 import io from '#lib/io.js'
 import {Uint8Matrix} from '#lib/matrix.js'
-import {addVec2, zeroVec2, type vec2} from '#lib/vec2.js'
+import {addVec2, zeroVec2, type vec2} from '#lib/vec2.v1.js'
 
 const WALL = 1 << 0
 const UP_BIT = 1 << 1

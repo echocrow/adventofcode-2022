@@ -11,7 +11,7 @@ import {
   type vec2,
   Vec2Set,
   zeroVec2,
-} from '#lib/vec2.js'
+} from '#lib/vec2.v1.js'
 import {type vec3, Vec3Set} from '#lib/vec3.js'
 
 // Parse.

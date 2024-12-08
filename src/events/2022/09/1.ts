@@ -6,7 +6,7 @@ import {
   subtractVec2,
   Vec2Set,
   zeroVec2,
-} from '#lib/vec2.js'
+} from '#lib/vec2.v1.js'
 
 const DIRS = {
   U: [0, 1],

@@ -1,7 +1,7 @@
 import {createInterface} from 'node:readline/promises'
 import io from '#lib/io.js'
 import {Uint8Matrix, neighbors} from '#lib/matrix.js'
-import {addVec2, scaleVec2} from '#lib/vec2.js'
+import {addVec2, scaleVec2} from '#lib/vec2.v1.js'
 
 // Config.
 const MAX_STEPS = Number((await io.readCfgLine('__steps')) ?? Infinity)

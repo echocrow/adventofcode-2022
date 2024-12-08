@@ -6,7 +6,7 @@ import {
   type vec2,
   Vec2Set,
   zeroVec2,
-} from '#lib/vec2.js'
+} from '#lib/vec2.v1.js'
 
 // Set up rules.
 const dirs = {
