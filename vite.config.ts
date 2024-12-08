@@ -22,6 +22,6 @@ export default defineConfig({
   ],
   esbuild: {target: 'es2022'},
   test: {
-    include: ['src/events/*/*/test.ts'],
+    include: ['src/events/*/*/test.ts', 'src/lib/**/*.spec.ts'],
   },
 })
