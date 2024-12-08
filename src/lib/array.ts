@@ -110,3 +110,11 @@ export function setArr<T extends AnyArray>(
 export function sortNums<N extends number | bigint>(nums: N[], dec = false) {
   return nums.sort((a, b) => (dec ? b - a : a - b))
 }
+
+export function* pairs<T>(arr: readonly T[]): Iterable<readonly [T, T]> {
+  for (let i = 0; i < arr.length; i++) {
+    for (let j = i + 1; j < arr.length; j++) {
+      yield [arr[i]!, arr[j]!]
+    }
+  }
+}
