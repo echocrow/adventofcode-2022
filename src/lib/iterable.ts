@@ -146,3 +146,7 @@ export function find<T>(
   for (const val of items) if (fn(val)) return val
   return undefined
 }
+
+export function* reversed<T>(arr: readonly T[]): Iterable<T> {
+  for (let i = arr.length - 1; i >= 0; i--) yield arr[i]!
+}

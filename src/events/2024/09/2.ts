@@ -1,21 +1,20 @@
 import io from '#lib/io.js'
+import {entries, sum, reversed} from '#lib/iterable.js'
 import {sumIntSeries} from '#lib/math.js'
 
 class File {
   constructor(
     public readonly id: number,
-    public readonly len: number,
     public start: number,
-    public prev: File | null = null,
-    public next: File | null = null,
+    public readonly len: number,
   ) {}
 }
 
 class Space {
   constructor(
+    public prev: File,
     public start: number,
     public len: number,
-    public prev: File,
   ) {}
 }
 
@@ -23,36 +22,20 @@ class Space {
 const files: File[] = []
 const spaces: Space[] = []
 {
-  let prevFile: File | null = null
   let blockId = 0
-  let i = 0
-  for (const strLen of (await io.readLine())!) {
-    let len = +strLen
-
+  for (const [i, lenStr] of entries((await io.readLine())!)) {
+    const len = +lenStr
     // Handle file.
-    if (i % 2 === 0) {
-      const file: File = new File(i / 2, len, blockId, prevFile)
-      files.push(file)
-      if (prevFile) prevFile.next = file
-      prevFile = file
-    }
+    if (i % 2 === 0) files.push(new File(files.length, blockId, len))
     // Handle free space.
-    else {
-      const space = new Space(blockId, len, prevFile!)
-      spaces.push(space)
-    }
-
-    i++
+    else spaces.push(new Space(files.at(-1)!, blockId, len))
     blockId += len
   }
 }
 
 // Re-locate files.
-for (let f = files.length - 1; f >= 0; f--) {
-  const file = files[f]!
-  for (let s = 0; s < spaces.length; s++) {
-    const space = spaces[s]!
-
+for (const file of reversed(files)) {
+  for (const [s, space] of spaces.entries()) {
     // Handle exhausted search.
     if (space.start > file.start) {
       spaces.splice(s)
@@ -61,23 +44,14 @@ for (let f = files.length - 1; f >= 0; f--) {
 
     // Handle sufficient free space.
     if (space.len >= file.len) {
-      if (file.prev) file.prev.next = file.next
-      if (file.next) file.next.prev = file.prev
-
-      const nextFile = space.prev.next
-      space.prev.next = file
-      file.prev = space.prev
-      file.next = nextFile
-      if (nextFile) nextFile.prev = file
-
       file.start = space.start
 
       const newSpaceLen = space.len - file.len
       // Handle fragmented space.
       if (newSpaceLen) {
-        space.len = newSpaceLen
-        space.start += file.len
         space.prev = file
+        space.start += file.len
+        space.len = newSpaceLen
       }
       // Handle exhausted space.
       else {
@@ -88,15 +62,9 @@ for (let f = files.length - 1; f >= 0; f--) {
   }
 }
 
-let result = 0
-{
-  let file = files[0] ?? null
-  while (file) {
-    const startId = file.start
-    const endId = startId + file.len - 1
-    result += file.id * sumIntSeries(startId, endId)
-    file = file.next
-  }
-}
-
+const result = sum(
+  files.map(
+    (file) => file.id * sumIntSeries(file.start, file.start + file.len - 1),
+  ),
+)
 io.write(result)
