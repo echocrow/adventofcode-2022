@@ -28,3 +28,7 @@ export function countDigits(num: number): number {
 export function concatDigits(a: number, b: number): number {
   return a * 10 ** countDigits(b) + b
 }
+
+export function sumIntSeries(start: number, end: number) {
+  return ((start + end) * (end - start + 1)) / 2
+}
