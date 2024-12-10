@@ -56,6 +56,6 @@ for (const [cnt, from, to] of instructions) {
   toStack.splice(toStack.length, 0, ...crates)
 }
 
-const tops = [...stacks.values()].map((stack) => stack[stack.length - 1])
+const tops = [...stacks.values()].map((stack) => stack.at(-1))
 
 io.write(tops.join(''))

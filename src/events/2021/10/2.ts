@@ -17,7 +17,7 @@ const SCORES: Record<string, number> = {
 function validate(str: string): string[] {
   const closers: string[] = []
   for (const c of str) {
-    const closer = closers[closers.length - 1] ?? ''
+    const closer = closers.at(-1) ?? ''
     if (c in PAIRS) {
       closers.push(PAIRS[c]!)
     } else if (c === closer) {
