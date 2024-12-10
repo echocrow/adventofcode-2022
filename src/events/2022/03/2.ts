@@ -1,5 +1,5 @@
 import io from '#lib/io.js'
-import {intersect} from '#lib/set.js'
+import {intersection} from '#lib/set.js'
 
 const LOWER_A_CODE = 'a'.charCodeAt(0)
 const UPPER_A_CODE = 'A'.charCodeAt(0)
@@ -14,7 +14,7 @@ let queue: Array<Set<string>> = []
 for await (const line of io.readLines()) {
   queue.push(new Set(line))
   if (queue.length === 3) {
-    const [letter] = queue.reduce(intersect).values()
+    const [letter] = queue.reduce(intersection).values()
     if (letter) total += getPriority(letter)
     queue = []
   }
