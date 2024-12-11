@@ -2,11 +2,21 @@ type IteratorValueOf<TIter extends Iterable<any>> =
   TIter extends Iterable<infer T> ? T : never
 type ReadGenerator<T> = Generator<T, void, undefined>
 
-export function* range(
+export function range(to: number): ReadGenerator<number>
+export function range(
   from: number,
   to: number,
+  inclusive?: boolean,
+): ReadGenerator<number>
+export function* range(
+  from: number,
+  to?: number,
   inclusive = false,
 ): ReadGenerator<number> {
+  if (to === undefined) {
+    to = from
+    from = 0
+  }
   const d = from <= to ? 1 : -1
   const steps = (to - from) * d
   let val = from
