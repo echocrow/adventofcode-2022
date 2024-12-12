@@ -1,5 +1,5 @@
 import io from '#lib/io.js'
-import {map, product} from '#lib/iterable.js'
+import {filo, map, product} from '#lib/iterable.js'
 
 enum Xmas {
   x,
@@ -79,8 +79,7 @@ for await (const [_, name, rulesStr, fallback] of io.readRegExp(
 // Process workflows with ranged parts.
 let result = 0
 const queue = [['in', new Array(4).fill([1, 4000])] as FlowPart]
-let flowPart: FlowPart | void
-while ((flowPart = queue.pop())) {
+for (const flowPart of filo(queue)) {
   const [wf, part] = flowPart
   if (wf in Result) {
     if (wf === Result.A) result += product(map(part, rangeLen))

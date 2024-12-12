@@ -1,6 +1,6 @@
 import {sortNums} from '#lib/array.js'
 import io from '#lib/io.js'
-import {product} from '#lib/iterable.js'
+import {filo, product} from '#lib/iterable.js'
 import {neighbors, Uint8Matrix} from '#lib/matrix.js'
 
 const cave = new Uint8Matrix()
@@ -11,11 +11,11 @@ for await (const line of io.readLines()) {
 const TOP = 9
 
 const basins = []
-let i, j
+let i: number
 while ((i = cave.$.findIndex((h) => h !== TOP)) >= 0) {
   let basin = 0
   const next = [i]
-  while ((j = next.pop()) !== undefined) {
+  for (const j of filo(next)) {
     if (cave.$[j] !== TOP) {
       basin++
       cave.$[j] = TOP

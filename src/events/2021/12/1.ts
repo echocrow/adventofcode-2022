@@ -1,4 +1,5 @@
 import io from '#lib/io.js'
+import {filo} from '#lib/iterable.js'
 
 const START = 'start'
 const END = 'end'
@@ -17,8 +18,7 @@ type Option = {
   checked: Set<string>
 }
 const queue: Option[] = [{cave: START, checked: new Set()}]
-let curr: Option | undefined
-while ((curr = queue.pop())) {
+for (const curr of filo(queue)) {
   const checked = new Set(curr.checked)
   if (isSmall(curr.cave)) checked.add(curr.cave)
   for (const cave of caves.get(curr.cave) ?? []) {

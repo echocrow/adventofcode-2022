@@ -1,4 +1,5 @@
 import io from '#lib/io.js'
+import {filo} from '#lib/iterable.js'
 import {
   addVec3,
   iToVec3,
@@ -19,8 +20,7 @@ function bucketFill(at: vec3, to: number) {
   if (from === to) return
   bits[atI] = to
   const queue = [atI]
-  let i: number | undefined
-  while ((i = queue.pop()) !== undefined) {
+  for (const i of filo(queue)) {
     const p = iToVec3(i, dims)
     for (const np of validNeighborsVec3(p, dims)) {
       const ni = vec3ToI(np, dims)

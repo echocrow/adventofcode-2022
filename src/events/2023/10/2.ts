@@ -1,4 +1,5 @@
 import io from '#lib/io.js'
+import {filo} from '#lib/iterable.js'
 import {Uint8Matrix, neighbors} from '#lib/matrix.js'
 import {type vec2, addVec2, equalsVec, zeroVec2, scaleVec2} from '#lib/vec2.js'
 
@@ -100,8 +101,7 @@ const dblMaze = new Uint8Matrix(maze.length * 4, maze.width * 2)
     dblMaze.vecToI(0, dblMaze.height - 1),
     dblMaze.vecToI(dblMaze.width - 1, dblMaze.height - 1),
   ].filter((i) => !dblMaze.$[i])
-  let posI: number | undefined
-  while ((posI = queue.pop()) !== undefined) {
+  for (const posI of filo(queue)) {
     dblMaze.$[posI] = outsideId
     for (const nI of neighbors(dblMaze, posI))
       if (!dblMaze.$[nI]) queue.push(nI)

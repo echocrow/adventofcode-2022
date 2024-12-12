@@ -1,4 +1,5 @@
 import io from '#lib/io.js'
+import {filo} from '#lib/iterable.js'
 
 type OpFn = (a: number, b: number) => number
 const ops = {
@@ -29,8 +30,7 @@ const ROOT = 'root'
 // Figure out shorted path.
 const steps = new Set<MathMonkey>()
 const queue: string[] = [ROOT]
-let name: string = ''
-while ((name = queue.pop() ?? '')) {
+for (const name of filo(queue)) {
   const math = mathMonkeys.get(name)
   if (!math) continue
   steps.add(math)
