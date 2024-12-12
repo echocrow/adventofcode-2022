@@ -1,6 +1,6 @@
 type IteratorValueOf<TIter extends Iterable<any>> =
   TIter extends Iterable<infer T> ? T : never
-type ReadGenerator<T> = Generator<T, void, undefined>
+export type ReadGenerator<T> = Generator<T, void, undefined>
 
 export function range(to: number): ReadGenerator<number>
 export function range(
@@ -136,12 +136,10 @@ export function every<T>(
 }
 
 export function* fifo<T>(queue: T[]): ReadGenerator<T> {
-  let v: T | undefined
-  while ((v = queue.shift())) yield v
+  while (queue.length) yield queue.shift()!
 }
 export function* filo<T>(queue: T[]): ReadGenerator<T> {
-  let v: T | undefined
-  while ((v = queue.pop())) yield v
+  while (queue.length) yield queue.pop()!
 }
 
 export function first<T>(values: Iterable<T>): T | undefined {

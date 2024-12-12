@@ -1,3 +1,5 @@
+import type {ReadGenerator} from './iterable.js'
+
 /**
  * A basic first-in-last-out queue.
  */
@@ -7,9 +9,8 @@ export class FILOQueue<T> {
     this.#queue = initial
   }
 
-  *[Symbol.iterator](): Generator<T, void, undefined> {
-    let item: T | undefined
-    while ((item = this.#queue.pop())) yield item
+  *[Symbol.iterator](): ReadGenerator<T> {
+    while (this.#queue.length) yield this.#queue.pop()!
   }
 
   push(...items: T[]) {
@@ -41,7 +42,7 @@ export class PriorityQueue<T> {
     return this.#queue.shift()
   }
 
-  *[Symbol.iterator]() {
+  *[Symbol.iterator](): ReadGenerator<PriorityQueueItem<T>> {
     while (this.#queue.length) yield this.#queue.shift()!
   }
 
