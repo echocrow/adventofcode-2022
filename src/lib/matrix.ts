@@ -9,14 +9,14 @@ interface MatrixLike extends Lengthened {
   height: number
 }
 
-export class Matrix<T extends AnyArray = Uint8Array>
+export class Matrix<T extends AnyArray = AnyArray>
   implements MatrixLike, Sliceable<T>, Iterable<T[number]>
 {
   #width: number
   #height: number
 
   constructor(
-    private data: T = new Uint8Array() as T,
+    private data: T,
     width: number = 0,
   ) {
     if (data.length % width)
@@ -187,6 +187,20 @@ export class Uint8Matrix extends Matrix<Uint8Array> {
   constructor(lengthOrArray: any = 0, width?: number) {
     if (lengthOrArray instanceof Matrix) width ??= lengthOrArray.width
     super(new Uint8Array(lengthOrArray), width ?? 0)
+  }
+}
+
+export class Uint16Matrix extends Matrix<Uint16Array> {
+  constructor()
+  constructor(matrix: Matrix)
+  constructor(length: number, width: number)
+  constructor(
+    array: ArrayLike<number> | ArrayBufferLike | Iterable<number>,
+    width: number | undefined,
+  )
+  constructor(lengthOrArray: any = 0, width?: number) {
+    if (lengthOrArray instanceof Matrix) width ??= lengthOrArray.width
+    super(new Uint16Array(lengthOrArray), width ?? 0)
   }
 }
 
