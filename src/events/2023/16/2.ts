@@ -34,7 +34,7 @@ const pieces: Record<string, Record<Dir, Dir[]>> = {
 type Piece = (typeof pieces)[string]
 
 // Parse grid.
-const grid = new Matrix<Piece[]>([])
+const grid = new Matrix([] as Piece[])
 for await (const line of io.readLines())
   grid.pushRow(line.split('').map((c) => pieces[c]!))
 
@@ -53,9 +53,9 @@ for (const start of combine(
     const [i, dir] = beam
     const piece = grid.$[i]!
     const newDirs = piece[dir]
-    visited.$[i] |= idDir(dir)
+    visited.$[i]! |= idDir(dir)
     for (const newDir of newDirs) {
-      visited.$[i] |= idDir(revertDir(newDir))
+      visited.$[i]! |= idDir(revertDir(newDir))
       const newI = grid.moveBy(i, DIR_VEC[newDir])
       if (newI === undefined) continue
       if (visited.$[newI]! & idDir(newDir)) continue
