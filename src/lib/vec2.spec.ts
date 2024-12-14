@@ -11,6 +11,13 @@ describe('Vec2', () => {
     const v = vec2(22, 33)
     expect([...v]).toStrictEqual([22, 33])
   })
+  it('is destructible', () => {
+    const [x, y] = vec2(22, 33)
+    expect(x).toBe(22)
+    expect(y).toBe(33)
+    expectTypeOf(x).toEqualTypeOf<number>()
+    expectTypeOf(y).toEqualTypeOf<number>()
+  })
   it('is re-assignable', () => {
     const v = vec2(22, 33)
     v[0] = 44
