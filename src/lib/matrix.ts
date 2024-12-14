@@ -2,6 +2,7 @@ import {copyArr, copyEmptyArr, type AnyArray, setArr} from './array.js'
 import {range} from './iterable.js'
 import {posMod} from './math.js'
 import type {Lengthened, Sliceable} from './types.js'
+import type {ReadonlyVec2} from './vec2.js'
 import {addVec2, type vec2} from './vec2.v1.js'
 
 interface MatrixLike extends Lengthened {
@@ -179,6 +180,7 @@ export class Matrix<T extends AnyArray = AnyArray>
 export class Uint8Matrix extends Matrix<Uint8Array> {
   constructor()
   constructor(matrix: Matrix)
+  constructor(dims: ReadonlyVec2)
   constructor(length: number, width: number)
   constructor(
     array: ArrayLike<number> | ArrayBufferLike | Iterable<number>,
@@ -186,6 +188,8 @@ export class Uint8Matrix extends Matrix<Uint8Array> {
   )
   constructor(lengthOrArray: any = 0, width?: number) {
     if (lengthOrArray instanceof Matrix) width ??= lengthOrArray.width
+    else if (width === undefined && lengthOrArray.length === 2)
+      lengthOrArray = lengthOrArray[0] * (width = lengthOrArray[1] ?? 0)
     super(new Uint8Array(lengthOrArray), width ?? 0)
   }
 }
@@ -193,6 +197,7 @@ export class Uint8Matrix extends Matrix<Uint8Array> {
 export class Uint16Matrix extends Matrix<Uint16Array> {
   constructor()
   constructor(matrix: Matrix)
+  constructor(dims: ReadonlyVec2)
   constructor(length: number, width: number)
   constructor(
     array: ArrayLike<number> | ArrayBufferLike | Iterable<number>,
@@ -200,6 +205,8 @@ export class Uint16Matrix extends Matrix<Uint16Array> {
   )
   constructor(lengthOrArray: any = 0, width?: number) {
     if (lengthOrArray instanceof Matrix) width ??= lengthOrArray.width
+    else if (width === undefined && lengthOrArray.length === 2)
+      lengthOrArray = lengthOrArray[0] * (width = lengthOrArray[1] ?? 0)
     super(new Uint16Array(lengthOrArray), width ?? 0)
   }
 }

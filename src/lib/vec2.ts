@@ -1,6 +1,11 @@
 import {posMod} from './math.js'
 
-export interface Vec2 {
+export interface ReadonlyVec2 {
+  readonly 0: number
+  readonly 1: number
+}
+
+export interface Vec2 extends ReadonlyVec2 {
   [index: number]: never
   // @ts-expect-error
   [0]: number
