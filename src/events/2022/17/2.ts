@@ -1,7 +1,7 @@
 import io from '#lib/io.js'
 import {lcm} from '#lib/math.js'
 import {Uint8Matrix} from '#lib/matrix.js'
-import type {vec2} from '#lib/vec2.v1.js'
+import vec from '#lib/vec.js'
 
 const rockShapes = (() => {
   const shapes = [
@@ -33,7 +33,7 @@ class Rock {
       if (this.shape.$[r]) {
         const rx = r % this.shape.width
         const ry = (r - rx) / this.shape.width
-        yield [this.x + rx, this.y + ry] as vec2
+        yield vec(this.x + rx, this.y + ry)
       }
     }
   }
@@ -83,7 +83,7 @@ class Tower {
       this.trimmed += BigInt(trimRows)
       this.bufferTop -= trimRows
       this.colTops.map
-      for (let x = 0; x < this.colTops.length; x++) this.colTops[x] -= trimRows
+      for (let x = 0; x < this.colTops.length; x++) this.colTops[x]! -= trimRows
     }
   }
 

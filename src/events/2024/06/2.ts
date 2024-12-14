@@ -1,6 +1,6 @@
 import io from '#lib/io.js'
 import {Uint8Matrix} from '#lib/matrix.js'
-import {addVec2, zeroVec2, type vec2} from '#lib/vec2.v1.js'
+import vec, {type Vec2} from '#lib/vec.js'
 
 const WALL = 1 << 0
 const UP_BIT = 1 << 1
@@ -9,34 +9,34 @@ const LEFT_BIT = 1 << 3
 const RIGHT_BIT = 1 << 4
 
 interface Move {
-  dir: vec2
+  dir: Vec2
   bit: number
   next: Move
 }
 const MOVES = {
   up: {
-    dir: [0, -1],
+    dir: vec(0, -1),
     bit: UP_BIT,
     get next(): Move {
       return MOVES.right
     },
   },
   right: {
-    dir: [1, 0],
+    dir: vec(1, 0),
     bit: RIGHT_BIT,
     get next(): Move {
       return MOVES.down
     },
   },
   down: {
-    dir: [0, 1],
+    dir: vec(0, 1),
     bit: DOWN_BIT,
     get next(): Move {
       return MOVES.left
     },
   },
   left: {
-    dir: [-1, 0],
+    dir: vec(-1, 0),
     bit: LEFT_BIT,
     get next(): Move {
       return MOVES.up
@@ -45,18 +45,18 @@ const MOVES = {
 } as const satisfies Record<string, Move>
 
 // Parse map.
-let pos = zeroVec2
+let pos = vec()
 const map = new Uint8Matrix()
 for await (const line of io.readLines()) {
   const x = line.indexOf('^')
-  if (x >= 0) pos = [x, map.height]
+  if (x >= 0) pos = vec(x, map.height)
   map.pushRow(line.split('').map((c) => +(c === '#')))
 }
 
 // Walk map and try to block.
 function walkAndBlock(
   map: Uint8Matrix,
-  pos: vec2,
+  pos: Vec2,
   move: Move,
   remainWalls: number,
 ): number {
@@ -66,7 +66,7 @@ function walkAndBlock(
   map.setCell(...pos, cell | move.bit)
 
   while (true) {
-    const toPos = addVec2(pos, move.dir)
+    const toPos = pos.add(move.dir)
     const toCell = map.cell(...toPos)
 
     // End of map.

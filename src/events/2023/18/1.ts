@@ -1,15 +1,7 @@
 import io from '#lib/io.js'
 import {posMod} from '#lib/math.js'
 import {Uint8Matrix} from '#lib/matrix.js'
-import {
-  addVec2,
-  maxVec2,
-  minVec2,
-  scaleVec2,
-  zeroVec2,
-  type vec2,
-  invertVec2,
-} from '#lib/vec2.v1.js'
+import vec, {type Vec2} from '#lib/vec.js'
 
 enum Dir {
   left,
@@ -20,11 +12,11 @@ enum Dir {
 function idDir(dir: Dir): Dir {
   return 1 << dir
 }
-const DIR_VEC: Record<Dir, vec2> = [
-  /* left: */ [-1, 0],
-  /* down: */ [0, 1],
-  /* right: */ [1, 0],
-  /* up: */ [0, -1],
+const DIR_VEC: Record<Dir, Vec2> = [
+  /* left: */ vec(-1, 0),
+  /* down: */ vec(0, 1),
+  /* right: */ vec(1, 0),
+  /* up: */ vec(0, -1),
 ]
 function dirIsHor(dir: Dir): boolean {
   return dir === Dir.left || dir === Dir.right
@@ -37,23 +29,23 @@ const dirByChar: Record<string, Dir> = {
 }
 
 // Parse plan.
-let pos = zeroVec2
+let pos = vec()
 const moves: (readonly [Dir, len: number])[] = []
-const corners: vec2[] = []
+const corners: Vec2[] = []
 for await (const match of io.readRegExp(/^(\w) (\d+)/m)) {
   const dir = dirByChar[match[1]!]!
   const len = Number(match[2])
   moves.push([dir, len])
-  pos = addVec2(pos, scaleVec2(DIR_VEC[dir], len))
+  pos = pos.add(DIR_VEC[dir].scale(len))
   corners.push(pos)
 }
 // Determine bounds and top horizontal move.
-const minCorner = corners.reduce(minVec2)
-const maxCorner = corners.reduce(maxVec2)
+const minCorner = corners.reduce(vec.min)
+const maxCorner = corners.reduce(vec.max)
 const topXMoveIdx = moves.findIndex(
   ([dir], i) => dirIsHor(dir) && corners[i]![1] === minCorner[1],
 )
-const startPos = addVec2(corners.at(topXMoveIdx - 1)!, invertVec2(minCorner))
+const startPos = corners.at(topXMoveIdx - 1)!.add(minCorner.invert())
 // Splice top edge move to the top. (Possible because the moves form a loop.)
 moves.push(...moves.splice(0, topXMoveIdx))
 
@@ -68,7 +60,7 @@ const site = new Uint8Matrix(siteWidth * siteHeight, siteWidth)
   for (const [dir, len] of moves) {
     angle = posMod(angle + dir - prevDir, 4)
     const vec = DIR_VEC[dir]
-    site.$[posI] |= idDir(angle)
+    site.$[posI]! |= idDir(angle)
     for (let s = 0; s < len; s++) {
       posI = site.moveBy(posI, vec)!
       site.$[posI] = idDir(angle)

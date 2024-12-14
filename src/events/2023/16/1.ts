@@ -2,7 +2,7 @@ import io from '#lib/io.js'
 import {map, sum} from '#lib/iterable.js'
 import {Matrix, Uint8Matrix} from '#lib/matrix.js'
 import {FILOQueue} from '#lib/queue.js'
-import type {vec2} from '#lib/vec2.v1.js'
+import vec, {type Vec2} from '#lib/vec.js'
 
 enum Dir {
   left,
@@ -16,11 +16,11 @@ function revertDir(dir: Dir): Dir {
 function idDir(dir: Dir): Dir {
   return 1 << dir
 }
-const DIR_VEC: Record<Dir, vec2> = [
-  /* left: */ [-1, 0],
-  /* down: */ [0, 1],
-  /* right: */ [1, 0],
-  /* up: */ [0, -1],
+const DIR_VEC: Record<Dir, Vec2> = [
+  /* left: */ vec(-1, 0),
+  /* down: */ vec(0, 1),
+  /* right: */ vec(1, 0),
+  /* up: */ vec(0, -1),
 ]
 
 // Reflectors & mirrors, and definitions how beams react per direction.

@@ -1,12 +1,13 @@
 import {pairs} from '#lib/array.js'
 import io from '#lib/io.js'
 import {map, sum} from '#lib/iterable.js'
-import {subtractVec2, type mutVec2, taxiLenVec2} from '#lib/vec2.v1.js'
+import type {Vec2} from '#lib/vec.js'
+import vec from '#lib/vec.js'
 
 const cols = await io.peekLineLen()
 
 // Parse galaxies & expand vertically.
-const galaxies: mutVec2[] = []
+const galaxies: Vec2[] = []
 const filledCols = new Uint16Array(cols)
 let y = 0
 for await (const line of io.readLines()) {
@@ -17,7 +18,7 @@ for await (const line of io.readLines()) {
     if (char !== '#') continue
     rowHasGalaxy = true
     filledCols[x] = 1
-    galaxies.push([x, y])
+    galaxies.push(vec(x, y))
   }
   y++
   if (!rowHasGalaxy) y++
@@ -35,7 +36,5 @@ for await (const line of io.readLines()) {
 }
 
 // Sum distances.
-const result = sum(
-  map(pairs(galaxies), ([a, b]) => taxiLenVec2(subtractVec2(a, b))),
-)
+const result = sum(map(pairs(galaxies), ([a, b]) => a.subtract(b).taxiLen))
 io.write(result)

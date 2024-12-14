@@ -2,13 +2,7 @@ import io from '#lib/io.js'
 import {filo} from '#lib/iterable.js'
 import {posMod} from '#lib/math.js'
 import {Uint8Matrix} from '#lib/matrix.js'
-import {
-  addVec2,
-  inAreaVec2,
-  scaleVec2,
-  type vec2,
-  zeroVec2,
-} from '#lib/vec2.v1.js'
+import vec, {type Vec2} from '#lib/vec.js'
 
 // Directions, going clockwise.
 enum Dir {
@@ -17,12 +11,7 @@ enum Dir {
   D,
   L,
 }
-const dirVec2s = [
-  [0, -1],
-  [1, 0],
-  [0, 1],
-  [-1, 0],
-] as const satisfies Record<Dir, vec2>
+const dirVec2s = [vec(0, -1), vec(1, 0), vec(0, 1), vec(-1, 0)] as const
 function capDir(dir: Dir): Dir {
   return posMod(dir, dirVec2s.length)
 }
@@ -144,21 +133,18 @@ const meshFaces = (() => {
   type MeshFaces = [IAS, IAS, IAS, IAS, IAS, IAS, IAS, IAS, IAS, IAS, IAS, IAS]
   const meshFaces = Array(12).fill(undefined) as MeshFaces
 
-  const upFacePos: vec2 = [
-    map.$.findIndex((c) => c !== Cell.Void) / mapTileLen,
-    0,
-  ]
+  const upFacePos = vec(map.$.findIndex((c) => c !== Cell.Void) / mapTileLen, 0)
 
-  const meshQueue: [vec2, AngledSide][] = [[upFacePos, [Face.U, Dir.U]]]
+  const meshQueue: [Vec2, AngledSide][] = [[upFacePos, [Face.U, Dir.U]]]
   for (const meshQueueItem of filo(meshQueue)) {
     const [pos, [face, dir]] = meshQueueItem
     const meshI = pos[1] * meshWidth + pos[0]
     if (meshFaces[meshI]) continue
     meshFaces[meshI] = [face, dir]
     for (const [goDir, goPos] of dirVec2s.entries()) {
-      const toMeshPos = addVec2(pos, goPos)
-      const toMapPos = scaleVec2(toMeshPos, mapTileLen)
-      if (!inAreaVec2(zeroVec2, map.dims, toMapPos)) continue
+      const toMeshPos = pos.add(goPos)
+      const toMapPos = toMeshPos.scale(mapTileLen)
+      if (!toMapPos.inArea(map.dims)) continue
       if (map.cell(toMapPos[0], toMapPos[1]) === Cell.Void) continue
       const exitDir = capDir(goDir - dir)
       const [toFace, dDir] = faceConnections[face][exitDir]
@@ -192,13 +178,15 @@ function meshToMap(i: number): number {
   const y = (meshY / meshHeight) * map.height
   return y * map.width + x
 }
-function flipTileVec([x, y]: vec2, dir: Dir): vec2 {
+function flipTileVec(v: Vec2, dir: Dir): Vec2 {
+  const [x, y] = v
   const horizontal = dir === Dir.L || dir === Dir.R
-  return horizontal ? [mapTileLen - 1 - x, y] : [x, mapTileLen - 1 - y]
+  return horizontal ? vec(mapTileLen - 1 - x, y) : vec(x, mapTileLen - 1 - y)
 }
-function rotateTileVec([x, y]: vec2, angle: Dir): vec2 {
+function rotateTileVec(v: Vec2, angle: Dir): Vec2 {
+  let [x, y] = v
   for (let r = 0; r < angle; r++) [x, y] = [mapTileLen - 1 - y, x]
-  return [x, y]
+  return vec(x, y)
 }
 function crossEdge(from: number, angle: Dir): readonly [number, Dir] {
   let [x, y] = map.iToVec(from)
@@ -213,7 +201,7 @@ function crossEdge(from: number, angle: Dir): readonly [number, Dir] {
   const toMeshAngle = meshFaces[toMeshI]![1]
   const dAngle = capDir(-fromFaceAngle + toMeshAngle + toFaceAngle)
   // Map next mesh to map.
-  const exitTileVec: vec2 = [x % mapTileLen, y % mapTileLen]
+  const exitTileVec = vec(x % mapTileLen, y % mapTileLen)
   const [enterTileX, enterTileY] = rotateTileVec(
     flipTileVec(exitTileVec, angle),
     dAngle,

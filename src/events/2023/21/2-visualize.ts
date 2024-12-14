@@ -1,7 +1,7 @@
 import {createInterface} from 'node:readline/promises'
 import io from '#lib/io.js'
 import {Uint8Matrix, neighbors} from '#lib/matrix.js'
-import {addVec2, scaleVec2} from '#lib/vec2.v1.js'
+import vec from '#lib/vec.js'
 
 // Config.
 const MAX_STEPS = Number((await io.readCfgLine('__steps')) ?? Infinity)
@@ -26,10 +26,9 @@ const garden = new Uint8Matrix(
   srcGarden.width * scale,
 )
 const startI = garden.vecToI(
-  ...addVec2(
-    srcGarden.iToVec(srcStartI),
-    scaleVec2([srcGarden.width, srcGarden.height], SCALE_RADIUS),
-  ),
+  ...srcGarden
+    .iToVec(srcStartI)
+    .add(vec(srcGarden.width, srcGarden.height).scale(SCALE_RADIUS)),
 )
 for (let y = 0; y < srcGarden.height; y++) {
   const row = new Uint8Array(srcGarden.row(y))

@@ -1,28 +1,17 @@
 import io from '#lib/io.js'
 import memoize from '#lib/memo.js'
 import {PriorityQueue} from '#lib/queue.js'
-import {
-  addVec2,
-  equalsVec,
-  inAreaVec2,
-  modVec2,
-  scaleVec2,
-  subtractVec2,
-  type vec2,
-  Vec2Set,
-  zeroVec2,
-} from '#lib/vec2.v1.js'
-import {type vec3, Vec3Set} from '#lib/vec3.js'
+import vec, {VecSet, type Vec2} from '#lib/vec.js'
 
 // Parse.
 let mapW = 0
 let mapH = 0
-const srcBlizzards: Array<[pos: vec2, dir: vec2]> = []
-const inputDirs: Record<string, vec2> = {
-  '^': [0, -1],
-  '>': [1, 0],
-  v: [0, 1],
-  '<': [-1, 0],
+const srcBlizzards: Array<[pos: Vec2, dir: Vec2]> = []
+const inputDirs: Record<string, Vec2> = {
+  '^': vec(0, -1),
+  '>': vec(1, 0),
+  v: vec(0, 1),
+  '<': vec(-1, 0),
 }
 for await (const line of io.readLines()) {
   if (!mapW) {
@@ -31,45 +20,45 @@ for await (const line of io.readLines()) {
     const row = line.slice(1, -1)
     for (let x = 0; x < row.length; x++) {
       const dir = inputDirs[row[x]!]
-      if (dir) srcBlizzards.push([[x, mapH], dir])
+      if (dir) srcBlizzards.push([vec(x, mapH), dir])
     }
     mapH++
   }
 }
-const mapSize: vec2 = [mapW, mapH]
+const mapSize = vec(mapW, mapH)
 const blizzardsCycle = mapW * mapH
 
 // Get memoized blizzard locations at given time.
 const getBlizzardsLocs = memoize((time: number) => {
-  const locs = new Vec2Set()
+  const locs = new VecSet()
   for (const [startPos, dir] of srcBlizzards)
-    locs.add(modVec2(addVec2(startPos, scaleVec2(dir, time)), mapSize))
+    locs.add(startPos.add(dir.scale(time)).mod(mapSize))
   return locs
 })
 
 // Find shortest time.
-const moves: readonly vec2[] = [
-  [0, 1],
-  [1, 0],
-  [0, 0],
-  [-1, 0],
-  [0, -1],
+const moves: readonly Vec2[] = [
+  vec(0, 1),
+  vec(1, 0),
+  vec(0, 0),
+  vec(-1, 0),
+  vec(0, -1),
 ]
-function findShortestTime(start: vec2, end: vec2, startTime: number) {
-  const queue = new PriorityQueue<vec3>().enqueue(startTime, [
+function findShortestTime(start: Vec2, end: Vec2, startTime: number) {
+  const queue = new PriorityQueue<readonly [time: number, pos: Vec2]>().enqueue(
     startTime,
-    ...start,
-  ])
-  let visited = new Vec3Set()
+    [startTime, start],
+  )
+  let visited = new VecSet()
   for (const {item} of queue) {
-    const [time, ...pos] = item
+    const [time, pos] = item
     const nextTime = time + 1
     const blizzardLocs = getBlizzardsLocs(nextTime % blizzardsCycle)
     for (const move of moves) {
-      const to = addVec2(pos, move)
-      const to3: vec3 = [nextTime, ...to]
+      const to = pos.add(move)
 
       // Ensure we have not been here before at the same time.
+      const to3 = vec(nextTime, to[0], to[1])
       if (visited.has(to3)) continue
       visited.add(to3)
 
@@ -77,22 +66,22 @@ function findShortestTime(start: vec2, end: vec2, startTime: number) {
       if (blizzardLocs.has(to)) continue
 
       // Exit loop if exit path found.
-      if (equalsVec(to, end)) return nextTime
+      if (to.equals(end)) return nextTime
 
       // Ensure position is still within playable area (or starting position)
-      if (!inAreaVec2(zeroVec2, mapSize, to) && !equalsVec(to, start)) continue
+      if (!to.inArea(mapSize) && !to.equals(start)) continue
 
-      const dVec = subtractVec2(end, to)
+      const dVec = end.subtract(to)
       const dist = dVec[0] + dVec[1]
-      queue.enqueue(nextTime + dist, to3)
+      queue.enqueue(nextTime + dist, [nextTime, to])
     }
   }
   return -1
 }
 
 const startTime = performance.now()
-const start: vec2 = [0, -1]
-const end: vec2 = [mapW - 1, mapH]
+const start = vec(0, -1)
+const end = vec(mapW - 1, mapH)
 const trip1 = findShortestTime(start, end, 0)
 const trip2 = findShortestTime(end, start, trip1)
 const trip3 = findShortestTime(start, end, trip2)

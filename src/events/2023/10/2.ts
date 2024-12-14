@@ -1,42 +1,35 @@
 import io from '#lib/io.js'
 import {filo} from '#lib/iterable.js'
 import {Uint8Matrix, neighbors} from '#lib/matrix.js'
-import {
-  type vec2,
-  addVec2,
-  equalsVec,
-  zeroVec2,
-  scaleVec2,
-} from '#lib/vec2.v1.js'
+import vec, {type Vec2} from '#lib/vec.js'
 
 const DIR = {
-  UP: [0, -1],
-  DOWN: [0, 1],
-  LEFT: [-1, 0],
-  RIGHT: [1, 0],
-} satisfies Record<string, vec2>
-
+  UP: vec(0, -1),
+  DOWN: vec(0, 1),
+  LEFT: vec(-1, 0),
+  RIGHT: vec(1, 0),
+}
 const pieces = [
-  {char: '.', links: [] as vec2[]},
+  {char: '.', links: [] as Vec2[]},
   {char: 'F', links: [DIR.DOWN, DIR.RIGHT]},
   {char: '|', links: [DIR.UP, DIR.DOWN]},
   {char: 'L', links: [DIR.UP, DIR.RIGHT]},
   {char: '-', links: [DIR.LEFT, DIR.RIGHT]},
   {char: '7', links: [DIR.DOWN, DIR.LEFT]},
   {char: 'J', links: [DIR.UP, DIR.LEFT]},
-  {char: 'O', links: [] as vec2[]},
-] as const satisfies {char: string; links: vec2[]}[]
+  {char: 'O', links: [] as Vec2[]},
+] as const satisfies {char: string; links: Vec2[]}[]
 type PieceChar = (typeof pieces)[number]['char']
 const pieceIds = Object.fromEntries(
   pieces.map((piece, i) => [piece.char, i]),
 ) as Record<PieceChar, number>
 
 // Parse maze.
-let startPos = zeroVec2
+let startPos = vec()
 let maze = new Uint8Matrix()
 for await (const line of io.readLines()) {
   const pieces = (line.split('') as PieceChar[]).map(
-    (char, i) => pieceIds[char] ?? ((startPos = [i, maze.height]), 0),
+    (char, i) => pieceIds[char] ?? ((startPos = vec(i, maze.height)), 0),
   )
   maze.pushRow(pieces)
 }
@@ -44,11 +37,11 @@ const startI = maze.vecToI(...startPos)
 
 // Solve for start.
 {
-  function checkNeighborConnects(pos: vec2, dir: vec2): boolean {
-    const nPos = addVec2(pos, dir)
+  function checkNeighborConnects(pos: Vec2, dir: Vec2): boolean {
+    const nPos = pos.add(dir)
     const nI = maze.cell(...nPos) ?? 0
-    const oppDir = scaleVec2(dir, -1)
-    return !!pieces[nI]?.links.some((link) => equalsVec(link, oppDir))
+    const oppDir = dir.scale(-1)
+    return !!pieces[nI]?.links.some((link) => link.equals(oppDir))
   }
   const linksLeft = checkNeighborConnects(startPos, DIR.LEFT)
   const linksUp = checkNeighborConnects(startPos, DIR.UP)
@@ -75,7 +68,7 @@ const startI = maze.vecToI(...startPos)
     const pos = maze.iToVec(posI)
     const piece = pieces[maze.$[posI]!]!
     posI = piece.links
-      .map((link) => maze.vecToI(...addVec2(pos, link)))
+      .map((link) => maze.vecToI(...pos.add(link)))
       .find((i) => !maze.$[i])
   }
 }
