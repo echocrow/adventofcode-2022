@@ -1,61 +1,76 @@
 import io from '#lib/io.js'
+import {posMod} from '#lib/math.js'
 import vec, {type Vec2} from '#lib/vec.js'
 
 const header = await io.readLineIfMatch(/^(\d+),(\d+)$/)
-const SIZE = vec(Number(header?.[1] ?? 101), Number(header?.[2] ?? 103))
-
-const MAX_STEPS = SIZE[0] * SIZE[1]
-
-const MID_X = Math.ceil(SIZE[0] / 2)
-const MID_Y = Math.ceil(SIZE[1] / 2)
-const quadrants: [Vec2, Vec2][] = [
-  [vec(), vec(MID_X, MID_Y)],
-  [vec(MID_X, 0), vec(SIZE[0], MID_Y)],
-  [vec(0, MID_Y), vec(MID_X, SIZE[1])],
-  [vec(MID_X, MID_Y), vec(SIZE[0], SIZE[1])],
-]
-function findQuadrant(p: Vec2) {
-  return quadrants.findIndex(([min, max]) => p.inArea(min, max))
-}
-
-const numsRe = /-?\d+/g
+const SIZE = header ? vec.parse2(header[0]) : vec(101, 103)
 
 const guards: {p: Vec2; v: Vec2}[] = []
-for await (const line of io.readLines()) {
-  const [pX, pY, vX, vY] = line.matchAll(numsRe).map(([m]) => Number(m))
-  const p = vec(pX, pY)
-  const v = vec(vX, vY)
-  guards.push({p, v})
+{
+  const numsRe = /-?\d+/g
+  for await (const line of io.readLines()) {
+    const [pX, pY, vX, vY] = line.matchAll(numsRe).map(([m]) => Number(m))
+    const p = vec(pX, pY)
+    const v = vec(vX, vY)
+    guards.push({p, v})
+  }
 }
 
-const quadCounts = new Uint32Array(4)
-const guardsQuad = new Int8Array(guards.length)
-for (const [g, {p}] of guards.entries()) {
-  const quad = findQuadrant(p)
-  guardsQuad[g] = quad
-  quadCounts[quad]!++
-}
-
-let result = 0
-const threshold = guards.length / 2
-for (let s = 1; s < MAX_STEPS; s++) {
-  for (const [g, guard] of guards.entries()) {
-    let {p} = guard
-    p = guard.p.add(guard.v).mod(SIZE)
-    const oldQuad = guardsQuad[g]!
-    const newQuad = findQuadrant(p)
-    if (oldQuad !== newQuad) {
-      guardsQuad[g] = newQuad
-      quadCounts[oldQuad]!--
-      quadCounts[newQuad]!++
+// Find time when the most guards are in the same column.
+const xLen = SIZE[0]
+let xMaxT = 0
+{
+  let allTimeMax = 0
+  const counts = new Uint32Array(SIZE[0])
+  for (const {p} of guards) counts[p[0]]!++
+  for (let t = 0; t < SIZE[0]; t++) {
+    const max = Math.max(...counts)
+    if (max > allTimeMax) {
+      allTimeMax = max
+      xMaxT = t
     }
-    guard.p = p
-  }
-  const maxQuad = Math.max(...quadCounts)
-  if (maxQuad >= threshold) {
-    result = s
-    break
+    for (const {p, v} of guards) {
+      counts[p[0]]!--
+      p[0] = posMod(p[0] + v[0], SIZE[0])
+      counts[p[0]]!++
+    }
   }
 }
+
+// Find time when the most guards are in the same row.
+const yLen = SIZE[1]
+let yMaxT = 0
+{
+  let allTimeMax = 0
+  const counts = new Uint32Array(SIZE[1])
+  for (const {p} of guards) counts[p[1]]!++
+  for (let t = 0; t < SIZE[1]; t++) {
+    const max = Math.max(...counts)
+    if (max > allTimeMax) {
+      allTimeMax = max
+      yMaxT = t
+    }
+    for (const {p, v} of guards) {
+      counts[p[1]]!--
+      p[1] = posMod(p[1] + v[1], SIZE[1])
+      counts[p[1]]!++
+    }
+  }
+}
+
+// Figure out when these two cycles overlap.
+// xMaxT + (xLen * xCycles) = yMaxT + (yLen * yCycles)
+let result = xMaxT
+while ((result - yMaxT) % yLen) result += xLen
+
+// // Print the map.
+// {
+//   const map = new Uint8Matrix(SIZE)
+//   for (const guard of guards) {
+//     const p = guard.p.add(guard.v.scale(result)).mod(SIZE)
+//     map.setCell(p[0], p[1], 1)
+//   }
+//   console.log(map.fmt((c) => (c ? '#' : ' ')))
+// }
 
 io.write(result)
