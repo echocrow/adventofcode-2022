@@ -123,34 +123,3 @@ function vec2(x?: number, y?: number): Vec2 {
 }
 vec2.parse = Vec2Class.parse
 export {vec2}
-
-export class Vec2Set {
-  #set = new Set<string>()
-
-  constructor(vecs?: Iterable<Vec2>) {
-    for (const v of vecs ?? []) this.add(v)
-  }
-
-  add(v: Vec2) {
-    this.#set.add(this.#encode(v))
-  }
-  delete(v: Vec2) {
-    this.#set.delete(this.#encode(v))
-  }
-  has(v: Vec2) {
-    return this.#set.has(this.#encode(v))
-  }
-  get size() {
-    return this.#set.size
-  }
-  *[Symbol.iterator]() {
-    for (const s of this.#set) yield this.#decode(s)
-  }
-
-  #encode(v: Vec2) {
-    return v.fmt()
-  }
-  #decode(s: string) {
-    return vec2.parse(s)
-  }
-}

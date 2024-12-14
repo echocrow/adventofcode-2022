@@ -148,12 +148,3 @@ describe('vec2', () => {
     })
   })
 })
-
-// Vec2Set
-// - add
-// - delete
-// - has
-// - size
-// - iterator
-// - encode
-// - decode

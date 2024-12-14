@@ -106,6 +106,15 @@ export class Vec3 extends Float64Array {
     return this.dot(unitDirection)
   }
 
+  fmt() {
+    return `${this[0]},${this[1]},${this[2]}`
+  }
+
+  static parse(s: string): Vec3 {
+    const [x = '', y = '', z = ''] = s.split(',', 3)
+    return new Vec3(Number(x), Number(y), Number(z))
+  }
+
   static intersectPlane(
     plane: readonly [Vec3, Vec3, Vec3],
     line: readonly [Vec3, Vec3],
