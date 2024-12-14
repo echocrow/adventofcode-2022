@@ -1,13 +1,13 @@
 import io from '#lib/io.js'
-import {Vec2Class} from '#lib/vec2.js'
-import type {Vec2} from '#lib/vec.js'
+import {Vec2} from '#lib/vec2.js'
 import vec from '#lib/vec.js'
 
 const GET_TARGET_Y = (sensorsLen: number) => (sensorsLen < 15 ? 10 : 2000000)
 
 type Beacon = Vec2
 
-class Sensor extends Vec2Class {
+// todo: use Vec3 instead
+class Sensor extends Vec2 {
   [2]: number
   constructor(x: number, y: number, r: number) {
     super(x, y, 3)

@@ -20,6 +20,8 @@ describe('Vec2', () => {
   it('[ts] forbids invalid indexes', () => {
     const v = vec2(1, 2)
     // @ts-expect-error
+    v[2] = 4
+    // @ts-expect-error
     v[3] = 4
   })
 

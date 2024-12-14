@@ -1,34 +1,16 @@
 import {posMod} from './math.js'
 
 export interface Vec2 {
+  [index: number]: never
+  // @ts-expect-error
   [0]: number
+  // @ts-expect-error
   [1]: number
-  [Symbol.iterator](): Iterator<number>
 
-  add(v: Vec2): Vec2
-  subtract(v: Vec2): Vec2
-  scale(f: number): Vec2
-  invert(): Vec2
-  mod(v: Vec2): Vec2
-  lerp(to: Vec2, f: number): Vec2
-  min(v: Vec2): Vec2
-  max(v: Vec2): Vec2
-
-  /** Calculate pythagorean length. */
-  get len(): number
-  /** Calculate taxicab/manhattan length. */
-  get taxiLen(): number
-
-  equals(v: Vec2): boolean
-  inArea(min: Vec2, max: Vec2): boolean
-  inArea(max: Vec2): boolean
-
-  range(to: Vec2, inclusive?: boolean): IterableIterator<Vec2>
-
-  fmt(): string
+  [Symbol.iterator](): ArrayIterator<number>
 }
 
-export class Vec2Class extends Float64Array implements Vec2 {
+export class Vec2 extends Float64Array {
   [0]: number;
   [1]: number
   constructor(x = 0, y = 0, len = 2) {
@@ -119,7 +101,7 @@ export class Vec2Class extends Float64Array implements Vec2 {
 }
 
 function vec2(x?: number, y?: number): Vec2 {
-  return new Vec2Class(x, y) as unknown as Vec2
+  return new Vec2(x, y)
 }
-vec2.parse = Vec2Class.parse
+vec2.parse = Vec2.parse
 export {vec2}

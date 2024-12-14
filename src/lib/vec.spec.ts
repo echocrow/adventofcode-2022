@@ -1,10 +1,10 @@
 import {describe, expect, it} from 'vitest'
-import {vec2, Vec2Class} from './vec2.js'
+import {vec2, Vec2} from './vec2.js'
 import {parseVec3, Vec3} from './vec3.js'
 import vec, {VecSet} from './vec.js'
 
 function expectVec2Instance(v: unknown) {
-  expect(v).toBeInstanceOf(Vec2Class)
+  expect(v).toBeInstanceOf(Vec2)
 }
 
 function expectVec3Instance(v: unknown) {
