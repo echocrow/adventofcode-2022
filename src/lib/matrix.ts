@@ -2,8 +2,8 @@ import {copyArr, copyEmptyArr, type AnyArray, setArr} from './array.js'
 import {range} from './iterable.js'
 import {posMod} from './math.js'
 import type {Lengthened, Sliceable} from './types.js'
-import type {ReadonlyVec2} from './vec2.js'
-import {addVec2, type vec2} from './vec2.v1.js'
+import type {ReadonlyVec2, Vec2} from './vec2.js'
+import vec from './vec.js'
 
 interface MatrixLike extends Lengthened {
   width: number
@@ -53,8 +53,8 @@ export class Matrix<T extends AnyArray = AnyArray>
   get height(): number {
     return this.#height
   }
-  get dims(): vec2 {
-    return [this.#width, this.#height]
+  get dims(): Vec2 {
+    return vec(this.#width, this.#height)
   }
 
   pushRow(row: ArrayLike<T[number]> & Lengthened) {
@@ -148,18 +148,18 @@ export class Matrix<T extends AnyArray = AnyArray>
     )
   }
 
-  iToVec(i: number): vec2 {
+  iToVec(i: number): Vec2 {
     const x = i % this.width
     const y = (i - x) / this.width
-    return [x, y]
+    return vec(x, y)
   }
   vecToI(x: number, y: number): number {
     return y * this.width + x
   }
 
-  moveBy(i: number, v: vec2): number | undefined {
+  moveBy(i: number, v: Vec2): number | undefined {
     const from = this.iToVec(i)
-    const [toX, toY] = addVec2(from, v)
+    const [toX, toY] = from.add(v)
     if (toX < 0 || toX >= this.width) return undefined
     if (toY < 0 || toY >= this.height) return undefined
     return this.vecToI(toX, toY)

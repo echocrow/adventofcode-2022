@@ -1,22 +1,30 @@
 import {describe, expect, it} from 'vitest'
 import {vec2, Vec2} from './vec2.js'
 import {parseVec3, Vec3} from './vec3.js'
-import vec, {VecSet} from './vec.js'
+import vec, {VecSet, type Vec} from './vec.js'
 
-function expectVec2Instance(v: unknown) {
+function expectVec2Instance(v: Vec) {
   expect(v).toBeInstanceOf(Vec2)
+}
+function expectVec2(v: Vec, x: number, y: number) {
+  expectVec2Instance(v)
+  expect(v[0]).toBe(x)
+  expect(v[1]).toBe(y)
 }
 
 function expectVec3Instance(v: unknown) {
   expect(v).toBeInstanceOf(Vec3)
 }
+function expectVec3(v: Vec, x: number, y: number, z: number) {
+  expectVec3Instance(v)
+  expect(v[0]).toBe(x)
+  expect(v[1]).toBe(y)
+  expect(v[2]).toBe(z)
+}
 
 describe('vec', () => {
   it('creates an empty vec2 by default', () => {
-    const got = vec()
-    expectVec2Instance(got)
-    expect(got[0]).toBe(0)
-    expect(got[1]).toBe(0)
+    expectVec2(vec(), 0, 0)
   })
   it('creates a vec2', () => {
     expectVec2Instance(vec(123, 456))
@@ -31,15 +39,24 @@ describe('vec', () => {
     expectVec3Instance(vec(undefined, undefined, undefined))
   })
 
-  describe('vec2.parse2', () => {
+  describe('vec.parse2', () => {
     it('parses vec2', () => {
       expect(vec.parse2).toBe(vec2.parse)
     })
   })
 
-  describe('vec2.parse3', () => {
+  describe('vec.parse3', () => {
     it('parses vec3', () => {
       expect(vec.parse3).toBe(parseVec3)
+    })
+  })
+
+  describe('vec.min', () => {
+    it('vec2: returns the minimum of two vectors', () => {
+      expectVec2(vec.min(vec(2, 3), vec(4, -5)), 2, -5)
+    })
+    it.todo('vec3: returns the minimum of two vectors', () => {
+      expectVec3(vec.min(vec(2, 3, -4), vec(4, -5, 6)), 2, -5, -4)
     })
   })
 })
