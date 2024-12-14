@@ -65,6 +65,10 @@ export class Vec2 extends Float64Array {
     return vec2(Math.max(this[0], v[0]), Math.max(this[1], v[1]))
   }
 
+  get isZero(): boolean {
+    return !this[0] && !this[1]
+  }
+
   get len(): number {
     return Math.sqrt(this[0] ** 2 + this[1] ** 2)
   }

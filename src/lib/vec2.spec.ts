@@ -83,6 +83,13 @@ describe('Vec2', () => {
       expectVec2(a.max(b), 10, 3)
     })
 
+    test('isZero', () => {
+      expect(vec2().isZero).toBe(true)
+      expect(vec2(0, 0).isZero).toBe(true)
+      expect(vec2(0, 1).isZero).toBe(false)
+      expect(vec2(1, 0).isZero).toBe(false)
+    })
+
     test('len', () => {
       const v = vec2(3, 4)
       expect(v.len).toBe(5)
