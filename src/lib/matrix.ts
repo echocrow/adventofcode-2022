@@ -157,7 +157,7 @@ export class Matrix<T extends AnyArray = AnyArray>
     return y * this.width + x
   }
 
-  moveBy(i: number, v: Vec2): number | undefined {
+  moveBy(i: number, v: ReadonlyVec2): number | undefined {
     const from = this.iToVec(i)
     const [toX, toY] = from.add(v)
     if (toX < 0 || toX >= this.width) return undefined

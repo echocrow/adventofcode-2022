@@ -30,11 +30,11 @@ export class Vec2 extends Float64Array {
     return '' as any
   }
 
-  add(v: Vec2) {
+  add(v: ReadonlyVec2) {
     return vec2(this[0] + v[0], this[1] + v[1])
   }
 
-  subtract(v: Vec2) {
+  subtract(v: ReadonlyVec2) {
     return vec2(this[0] - v[0], this[1] - v[1])
   }
 
@@ -46,22 +46,22 @@ export class Vec2 extends Float64Array {
     return vec2(-this[0], -this[1])
   }
 
-  mod(mod: Vec2) {
+  mod(mod: ReadonlyVec2) {
     return vec2(posMod(this[0], mod[0]), posMod(this[1], mod[1]))
   }
 
-  lerp(to: Vec2, f: number) {
+  lerp(to: ReadonlyVec2, f: number) {
     return vec2(
       this[0] + f * (to[0] - this[0]),
       this[1] + f * (to[1] - this[1]),
     )
   }
 
-  min(v: Vec2): Vec2 {
+  min(v: ReadonlyVec2): Vec2 {
     return vec2(Math.min(this[0], v[0]), Math.min(this[1], v[1]))
   }
 
-  max(v: Vec2): Vec2 {
+  max(v: ReadonlyVec2): Vec2 {
     return vec2(Math.max(this[0], v[0]), Math.max(this[1], v[1]))
   }
 
@@ -77,13 +77,13 @@ export class Vec2 extends Float64Array {
     return Math.abs(this[0]) + Math.abs(this[1])
   }
 
-  equals(v: Vec2): boolean {
+  equals(v: ReadonlyVec2): boolean {
     return this[0] === v[0] && this[1] === v[1]
   }
 
-  inArea(min: Vec2, max: Vec2): boolean
-  inArea(max: Vec2): boolean
-  inArea(min: Vec2, max?: Vec2): boolean {
+  inArea(min: ReadonlyVec2, max: ReadonlyVec2): boolean
+  inArea(max: ReadonlyVec2): boolean
+  inArea(min: ReadonlyVec2, max?: ReadonlyVec2): boolean {
     if (max === undefined) {
       max = min
       min = vec2(0, 0)
