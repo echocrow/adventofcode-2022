@@ -68,7 +68,7 @@ while ((result - yMaxT) % yLen) result += xLen
 //   const map = new Uint8Matrix(SIZE)
 //   for (const guard of guards) {
 //     const p = guard.p.add(guard.v.scale(result)).mod(SIZE)
-//     map.setCell(p[0], p[1], 1)
+//     map.setCell(p, 1)
 //   }
 //   console.log(map.fmt((c) => (c ? '#' : ' ')))
 // }

@@ -26,7 +26,7 @@ const garden = new Uint8Matrix(
   srcGarden.width * scale,
 )
 const startI = garden.vecToI(
-  ...srcGarden
+  srcGarden
     .iToVec(srcStartI)
     .add(vec(srcGarden.width, srcGarden.height).scale(SCALE_RADIUS)),
 )

@@ -33,13 +33,13 @@ for await (const line of io.readLines()) {
   )
   maze.pushRow(pieces)
 }
-const startI = maze.vecToI(...startPos)
+const startI = maze.vecToI(startPos)
 
 // Solve for start.
 {
   function checkNeighborConnects(pos: Vec2, dir: Vec2): boolean {
     const nPos = pos.add(dir)
-    const nI = maze.cell(...nPos) ?? 0
+    const nI = maze.cell(nPos) ?? 0
     const oppDir = dir.scale(-1)
     return !!pieces[nI]?.links.some((link) => link.equals(oppDir))
   }
@@ -68,7 +68,7 @@ const startI = maze.vecToI(...startPos)
     const pos = maze.iToVec(posI)
     const piece = pieces[maze.$[posI]!]!
     posI = piece.links
-      .map((link) => maze.vecToI(...pos.add(link)))
+      .map((link) => maze.vecToI(pos.add(link)))
       .find((i) => !maze.$[i])
   }
 }

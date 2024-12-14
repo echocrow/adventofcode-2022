@@ -145,7 +145,7 @@ const meshFaces = (() => {
       const toMeshPos = pos.add(goPos)
       const toMapPos = toMeshPos.scale(mapTileLen)
       if (!toMapPos.inArea(map.dims)) continue
-      if (map.cell(toMapPos[0], toMapPos[1]) === Cell.Void) continue
+      if (map.cell(toMapPos) === Cell.Void) continue
       const exitDir = capDir(goDir - dir)
       const [toFace, dDir] = faceConnections[face][exitDir]
       meshQueue.push([toMeshPos, [toFace, capDir(dir - dDir)]])

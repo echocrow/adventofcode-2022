@@ -32,7 +32,7 @@ for await (const line of io.readLines()) {
   )
   maze.pushRow(pieces)
 }
-const startI = maze.vecToI(...startPos)
+const startI = maze.vecToI(startPos)
 
 // Get neighbor connected to start.
 const startNeighborI = [...neighbors(maze, startI)].find((i) => {
@@ -52,7 +52,7 @@ while (posI !== undefined) {
   const pos = maze.iToVec(posI)
   const piece = pieces[maze.$[posI]!]!
   posI = piece.links
-    .map((link) => maze.vecToI(...pos.add(link)))
+    .map((link) => maze.vecToI(pos.add(link)))
     .find((i) => !mazeSteps[i])
 }
 

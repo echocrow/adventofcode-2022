@@ -54,7 +54,7 @@ const siteWidth = maxCorner[0] - minCorner[0] + 1
 const siteHeight = maxCorner[1] - minCorner[1] + 1
 const site = new Uint8Matrix(siteWidth * siteHeight, siteWidth)
 {
-  let posI = site.vecToI(...startPos)
+  let posI = site.vecToI(startPos)
   let angle = Dir.up
   let prevDir = moves[0]![0]
   for (const [dir, len] of moves) {

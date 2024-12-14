@@ -128,13 +128,19 @@ export class Matrix<T extends AnyArray = AnyArray>
     }
   }
 
-  cell(x: number, y: number): T[number] | undefined {
+  cell(v: ReadonlyVec2): T[number] | undefined
+  cell(x: number, y: number): T[number] | undefined
+  cell(x: ReadonlyVec2 | number, y = 0): T[number] | undefined {
+    if (typeof x !== 'number') (y = x[1]), (x = x[0])
     if (x < 0 || x >= this.width) return undefined
     if (y < 0 || y >= this.height) return undefined
     return this.data[y * this.width + x]
   }
-  setCell(x: number, y: number, v: number): this {
-    this.data[y * this.width + x] = v
+  setCell(v: ReadonlyVec2, val: number): this
+  setCell(x: number, y: number, val: number): this
+  setCell(x: ReadonlyVec2 | number, y: number, val = y): this {
+    if (typeof x !== 'number') (y = x[1]), (x = x[0])
+    this.data[y * this.width + x] = val
     return this
   }
 
@@ -153,7 +159,10 @@ export class Matrix<T extends AnyArray = AnyArray>
     const y = (i - x) / this.width
     return vec(x, y)
   }
-  vecToI(x: number, y: number): number {
+  vecToI(v: ReadonlyVec2): number
+  vecToI(x: number, y: number): number
+  vecToI(x: ReadonlyVec2 | number, y = 0): number {
+    if (typeof x !== 'number') (y = x[1]), (x = x[0])
     return y * this.width + x
   }
 

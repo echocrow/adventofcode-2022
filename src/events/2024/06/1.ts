@@ -17,13 +17,13 @@ for await (const line of io.readLines()) {
 }
 
 let visited = 1
-map.setCell(...pos, VISITED)
+map.setCell(pos, VISITED)
 
 // Walk map.
 let dirI: keyof typeof MOVE_DIRS = 0
 while (true) {
   const toPos = pos.add(MOVE_DIRS[dirI]!)
-  const toCell = map.cell(...toPos)
+  const toCell = map.cell(toPos)
 
   // End of map.
   if (toCell === undefined) break
@@ -38,7 +38,7 @@ while (true) {
   pos = toPos
   if (!toCell) {
     visited++
-    map.setCell(...pos, VISITED)
+    map.setCell(pos, VISITED)
   }
 }
 

@@ -61,13 +61,13 @@ function walkAndBlock(
   remainWalls: number,
 ): number {
   let result = 0
-  let cell = map.cell(...pos)!
+  let cell = map.cell(pos)!
 
-  map.setCell(...pos, cell | move.bit)
+  map.setCell(pos, cell | move.bit)
 
   while (true) {
     const toPos = pos.add(move.dir)
-    const toCell = map.cell(...toPos)
+    const toCell = map.cell(toPos)
 
     // End of map.
     if (toCell === undefined) break
@@ -91,14 +91,14 @@ function walkAndBlock(
     // Check potential wall insert.
     if (remainWalls && !toCell) {
       const altMap = new Uint8Matrix(map)
-      altMap.setCell(...toPos, WALL)
+      altMap.setCell(toPos, WALL)
       result += walkAndBlock(altMap, pos, move.next, remainWalls - 1)
     }
 
     // Move forward.
     pos = toPos
     cell = toCell
-    map.setCell(...pos, cell | move.bit)
+    map.setCell(pos, cell | move.bit)
   }
 
   return result
