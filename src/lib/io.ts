@@ -1,6 +1,9 @@
 import {Console} from 'node:console'
 import {createReadStream, createWriteStream, writeFileSync} from 'node:fs'
-import {createInterface} from 'node:readline'
+import {
+  createInterface,
+  type Interface as ReadlineInterface,
+} from 'node:readline/promises'
 import {Readable, Writable} from 'node:stream'
 import {parseArgs} from 'node:util'
 
@@ -223,6 +226,16 @@ class IO {
   #logPerf(start: number) {
     const end = performance.now()
     this.log(`[io] ⌛️ Time: ${Math.round(end - start)}ms`)
+  }
+
+  #promptRl: ReadlineInterface | undefined
+  async prompt(query = ''): Promise<string | void> {
+    if (this.logSilent) return
+    this.#promptRl ??= createInterface({
+      input: process.stdin,
+      output: process.stdout,
+    })
+    return this.#promptRl.question(query)
   }
 }
 
