@@ -95,6 +95,9 @@ class IO {
       this.#readBuffer() ?? (await this.#readNextLine()) ?? this.#readAppendix()
     )
   }
+  async *readChar(): AsyncGenerator<string, void, undefined> {
+    for await (const line of this.readLines()) yield* line
+  }
 
   async readFile() {
     let file = this.#readBuffer()
