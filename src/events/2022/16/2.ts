@@ -26,7 +26,7 @@ const workingValves = [...valves.values()].filter((v) => v.rate)
 // Collect shortest paths between unjammed valves.
 function calcNextValves(start: string) {
   const costs = new Uint8Array(workingValves.length)
-  const queue = new MemoQueue<string>().enqueue(1, start)
+  const queue = new MemoQueue(1, start)
   const remaining = new Set(valves.keys())
   remaining.delete(start)
   for (const {cost, item} of queue) {

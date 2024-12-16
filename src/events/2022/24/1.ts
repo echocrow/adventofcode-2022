@@ -49,10 +49,7 @@ const moves: readonly Vec2[] = [
 ]
 const start = vec(0, -1)
 const end = vec(mapW - 1, mapH)
-const queue = new PriorityQueue<readonly [time: number, pos: Vec2]>().enqueue(
-  0,
-  [0, start],
-)
+const queue = new PriorityQueue(0, [0, start] as [time: number, pos: Vec2])
 let visited = new VecSet()
 search: for (const {item} of queue) {
   const [time, pos] = item

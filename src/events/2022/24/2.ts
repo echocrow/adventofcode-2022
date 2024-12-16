@@ -46,10 +46,7 @@ const moves: readonly Vec2[] = [
   vec(0, -1),
 ]
 function findShortestTime(start: Vec2, end: Vec2, startTime: number) {
-  const queue = new PriorityQueue<readonly [time: number, pos: Vec2]>().enqueue(
-    startTime,
-    [startTime, start],
-  )
+  const queue = new PriorityQueue(startTime, [startTime, start] as const)
   let visited = new VecSet()
   for (const {item} of queue) {
     const [time, pos] = item

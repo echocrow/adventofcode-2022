@@ -20,7 +20,7 @@ for await (let line of io.readLines()) {
 }
 
 // Dijkstra search.
-const queue = new MemoQueue<number>().enqueue(0, ...starts)
+const queue = new MemoQueue(0, ...starts)
 search: for (const {cost, item: i} of queue) {
   const h = map.$[i]!
   for (const n of neighbors(map, i)) {

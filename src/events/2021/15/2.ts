@@ -22,7 +22,7 @@ let start = 0
 let end = map.length - 1
 
 // Dijkstra search.
-const queue = new MemoQueue<number>().enqueue(0, start)
+const queue = new MemoQueue(0, start)
 for (const {cost, item: i} of queue) {
   for (const n of neighbors(map, i)) {
     queue.enqueue(cost + map.$[n]!, n)
