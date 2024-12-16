@@ -1,7 +1,6 @@
 import io from '#lib/io.js'
-import {map, sum} from '#lib/iterable.js'
+import {filo, map, sum} from '#lib/iterable.js'
 import {Matrix, Uint8Matrix} from '#lib/matrix.js'
-import {FILOQueue} from '#lib/queue.js'
 import vec, {type Vec2} from '#lib/vec.js'
 
 enum Dir {
@@ -39,9 +38,9 @@ for await (const line of io.readLines())
   grid.pushRow(line.split('').map((c) => pieces[c]!))
 
 // Shoot beam.
-const queue = new FILOQueue([0, Dir.right] as readonly [number, Dir])
+const queue = [[0, Dir.right] as readonly [number, Dir]]
 const visited = new Uint8Matrix(grid.length, grid.width)
-for (const beam of queue) {
+for (const beam of filo(queue)) {
   const [i, dir] = beam
   const piece = grid.$[i]!
   const nextBeams = piece[dir]

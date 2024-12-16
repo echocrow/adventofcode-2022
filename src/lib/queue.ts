@@ -1,23 +1,5 @@
 import type {ReadGenerator} from './iterable.js'
 
-/**
- * A basic first-in-last-out queue.
- */
-export class FILOQueue<T> {
-  #queue: T[]
-  constructor(...initial: T[]) {
-    this.#queue = initial
-  }
-
-  *[Symbol.iterator](): ReadGenerator<T> {
-    while (this.#queue.length) yield this.#queue.pop()!
-  }
-
-  push(...items: T[]) {
-    this.#queue.push(...items)
-  }
-}
-
 class PriorityQueueItem<V, C extends number | bigint = number> {
   constructor(
     public cost: C,

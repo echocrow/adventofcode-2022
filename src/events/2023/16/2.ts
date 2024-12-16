@@ -1,7 +1,6 @@
 import io from '#lib/io.js'
-import {combine, map, sum} from '#lib/iterable.js'
+import {combine, filo, map, sum} from '#lib/iterable.js'
 import {Matrix, Uint8Matrix} from '#lib/matrix.js'
-import {FILOQueue} from '#lib/queue.js'
 import vec, {type Vec2} from '#lib/vec.js'
 
 enum Dir {
@@ -48,8 +47,8 @@ for (const start of combine(
   map(grid.colI(grid.width - 1), (i) => [i, Dir.left] as const),
 )) {
   visited.$.fill(0)
-  const queue = new FILOQueue(start)
-  for (const beam of queue) {
+  const queue = [start]
+  for (const beam of filo(queue)) {
     const [i, dir] = beam
     const piece = grid.$[i]!
     const newDirs = piece[dir]
