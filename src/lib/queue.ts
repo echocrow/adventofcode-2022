@@ -41,6 +41,14 @@ export class PriorityQueue<T> {
 
 export class MemoQueue<T> extends PriorityQueue<T> {
   #memo = new Map<T, number>()
+
+  constructor()
+  constructor(cost: number, ...items: T[])
+  constructor(cost?: number, ...items: T[]) {
+    super()
+    if (cost !== undefined) this.enqueue(cost, ...items)
+  }
+
   enqueue(cost: number, ...items: T[]) {
     items = items.filter((item) => !this.#memo.has(item))
     for (const item of items) this.#memo.set(item, cost)
