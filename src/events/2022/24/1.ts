@@ -1,6 +1,7 @@
 import io from '#lib/io.js'
 import memoize from '#lib/memo.js'
 import {PriorityQueue} from '#lib/queue.js'
+import {strRec} from '#lib/types.js'
 import type {Vec2} from '#lib/vec.js'
 import vec, {VecSet} from '#lib/vec.js'
 
@@ -8,12 +9,12 @@ import vec, {VecSet} from '#lib/vec.js'
 let mapW = 0
 let mapH = 0
 const srcBlizzards: Array<[pos: Vec2, dir: Vec2]> = []
-const inputDirs: Record<string, Vec2> = {
+const inputDirs = strRec({
   '^': vec(0, -1),
   '>': vec(1, 0),
   v: vec(0, 1),
   '<': vec(-1, 0),
-}
+})
 for await (const line of io.readLines()) {
   if (!mapW) {
     mapW = line.length - 2

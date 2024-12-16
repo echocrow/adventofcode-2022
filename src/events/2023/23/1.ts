@@ -1,18 +1,19 @@
 import io from '#lib/io.js'
 import {filo} from '#lib/iterable.js'
 import {Uint8Matrix, neighbors} from '#lib/matrix.js'
+import {strRec} from '#lib/types.js'
 
 enum Cell {
   Floor,
   Wall,
   Slope,
 }
-const cellChars: Record<string, Cell> = {
+const cellChars = strRec({
   '.': Cell.Floor,
   '#': Cell.Wall,
   '>': Cell.Slope,
   v: Cell.Slope,
-}
+})
 
 // Parse maze.
 const maze = new Uint8Matrix()

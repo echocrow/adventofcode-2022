@@ -1,18 +1,19 @@
 import {sortNums} from '#lib/array.js'
 import io from '#lib/io.js'
+import {strRec} from '#lib/types.js'
 
-const PAIRS: Record<string, string> = {
+const PAIRS = strRec({
   '(': ')',
   '[': ']',
   '{': '}',
   '<': '>',
-}
-const SCORES: Record<string, number> = {
+})
+const SCORES = strRec({
   ')': 1,
   ']': 2,
   '}': 3,
   '>': 4,
-}
+})
 
 function validate(str: string): string[] {
   const closers: string[] = []

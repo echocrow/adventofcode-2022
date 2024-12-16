@@ -1,17 +1,18 @@
 import io from '#lib/io.js'
+import {strRec} from '#lib/types.js'
 
-const PAIRS: Record<string, string> = {
+const PAIRS = strRec({
   '(': ')',
   '[': ']',
   '{': '}',
   '<': '>',
-}
-const SCORES: Record<string, number> = {
+})
+const SCORES = strRec({
   ')': 3,
   ']': 57,
   '}': 1197,
   '>': 25137,
-}
+})
 
 function validate(str: string): string {
   const closers: string[] = []

@@ -1,6 +1,7 @@
 import io from '#lib/io.js'
 import {posMod} from '#lib/math.js'
 import {Uint8Matrix} from '#lib/matrix.js'
+import {strRec} from '#lib/types.js'
 import vec, {type Vec2} from '#lib/vec.js'
 
 enum Dir {
@@ -21,12 +22,12 @@ const DIR_VEC: Record<Dir, Vec2> = [
 function dirIsHor(dir: Dir): boolean {
   return dir === Dir.left || dir === Dir.right
 }
-const dirByChar: Record<string, Dir> = {
+const dirByChar = strRec({
   L: Dir.left,
   D: Dir.down,
   R: Dir.right,
   U: Dir.up,
-}
+})
 
 // Parse plan.
 let pos = vec()
