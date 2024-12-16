@@ -28,6 +28,12 @@ class PriorityQueueItem<V, C extends number | bigint = number> {
 export class PriorityQueue<T> {
   #queue: PriorityQueueItem<T>[] = []
 
+  constructor()
+  constructor(cost: number, ...items: T[])
+  constructor(cost?: number, ...items: T[]) {
+    if (cost !== undefined) this.enqueue(cost, ...items)
+  }
+
   enqueue(cost: number, ...items: T[]) {
     for (const item of items)
       enqueue(
