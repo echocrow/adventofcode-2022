@@ -1,4 +1,4 @@
-import type {ReadGenerator} from './iterable.js'
+import {fifo, type ReadGenerator} from './iterable.js'
 
 class PriorityQueueItem<V, C extends number | bigint = number> {
   constructor(
@@ -31,7 +31,7 @@ export class PriorityQueue<T> {
   }
 
   *[Symbol.iterator](): ReadGenerator<PriorityQueueItem<T>> {
-    while (this.#queue.length) yield this.#queue.shift()!
+    yield* fifo(this.#queue)
   }
 
   static #findNext<T>(q: PriorityQueueItem<T>, qi: PriorityQueueItem<T>) {
