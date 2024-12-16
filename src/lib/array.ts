@@ -117,3 +117,8 @@ export function* pairs<T>(arr: readonly T[]): Iterable<readonly [T, T]> {
     }
   }
 }
+
+export function pushIfNew<T>(arr: T[], val: T) {
+  if (arr.includes(val)) return
+  arr.push(val)
+}

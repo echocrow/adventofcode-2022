@@ -1,6 +1,7 @@
 import io from '#lib/io.js'
 import {sum} from '#lib/iterable.js'
 import {Uint8Matrix} from '#lib/matrix.js'
+import {strRec} from '#lib/types.js'
 
 const FREE = 0
 const WALL = 1
@@ -24,17 +25,16 @@ let robot = 0
   }
 }
 
-const MOVES: Record<string, number> = {
+const MOVES = strRec({
   '<': -1,
   '>': 1,
   '^': -map.width,
   v: map.width,
-}
+})
 
 let blockedMove = 0
 for await (const char of io.readChar()) {
   const move = MOVES[char]!
-
   if (move === blockedMove) continue
 
   const target = robot + move

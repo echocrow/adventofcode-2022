@@ -24,3 +24,15 @@ export interface Sliceable<A> extends Lengthened {
 export interface Subarrayable extends Lengthened {
   subarray(start?: number, end?: number): this
 }
+
+/**
+ * Type an object as `Record<string, TValues>`.
+ *
+ * This function is a noop, and only alters the declared type.
+ * Explicit keys are retained, and `[string]` lookups are supported.
+ */
+export function strRec<T extends Record<string | number, any>>(
+  obj: T,
+): T & {[key: string]: T[keyof T]} {
+  return obj
+}
