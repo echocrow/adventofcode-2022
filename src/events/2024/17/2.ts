@@ -6,59 +6,49 @@ const program = [
     .drop(3)
     .map(([val]) => Number(val)),
 ]
-let opCodes: number[] = []
-let operands: bigint[] = []
-for (let i = 0; i < program.length; i += 2) {
-  opCodes.push(program[i]!)
-  operands.push(BigInt(program[i + 1]!))
-}
 
-let regA = 0n
-let regB = 0n
-let regC = 0n
+let regA = 0
+let regB = 0
+let regC = 0
 let pointer = 0
 
 const comboOperands = [
-  () => 0n,
-  () => 1n,
-  () => 2n,
-  () => 3n,
+  () => 0,
+  () => 1,
+  () => 2,
+  () => 3,
   () => regA,
   () => regB,
   () => regC,
-  () => BigInt((pointer = opCodes.length)),
+  () => (pointer = program.length),
 ]
 function operand() {
-  return operands[pointer]!
+  return program[pointer + 1]!
 }
 function comboOperand() {
-  return comboOperands[operands[pointer]! as unknown as number]!()
+  return comboOperands[program[pointer + 1]!]!()
 }
 
 const ops = [
-  /* adv */ () => void (regA = regA >> comboOperand()),
+  /* adv */ () => void (regA = regA >>> comboOperand()),
   /* bxl */ () => void (regB = regB ^ operand()),
-  /* bst */ () => void (regB = comboOperand() & 7n),
-  /* jnz */ () => void (regA && (pointer = Number(operand()) >> 1)),
+  /* bst */ () => void (regB = comboOperand() & 7),
+  /* jnz */ () => void (regA && (pointer = operand())),
   /* bxc */ () => void (regB = regB ^ regC),
-  /* out */ () => Number(comboOperand() & 7n),
-  /* bdv */ () => void (regB = (regA / (1n << comboOperand())) | 0n),
-  /* cdv */ () => void (regC = (regA / (1n << comboOperand())) | 0n),
+  /* out */ () => comboOperand() & 7,
+  /* bdv */ () => void (regB = (regA / 2 ** comboOperand()) | 0),
+  /* cdv */ () => void (regC = (regA / 2 ** comboOperand()) | 0),
 ]
 
-function run(a: bigint) {
+function run(a: number) {
   regA = a
-  regB = 0n
-  regC = 0n
-  pointer = 0
-  let out: number | void = undefined
-  let prevPointer = pointer
-  while (pointer < opCodes.length && out === undefined) {
-    out = ops[opCodes[pointer]!]!()
-    if (pointer === prevPointer) pointer += 1
-    prevPointer = pointer
+  regB = regC = pointer = 0
+  while (pointer < program.length) {
+    let oldPointer = pointer
+    const out = ops[program[pointer]!]!()
+    if (out !== undefined) return out
+    pointer += 2 * +!(pointer - oldPointer)
   }
-  return out
 }
 
 // Given the nature of the program, the three most-significant bits of `A`
@@ -66,21 +56,20 @@ function run(a: bigint) {
 // determine the second-last output octal, and so on.
 // To find the minimum `A` value that produces the the program itself, we run
 // the program for `A` from 0 to 7, checking which input produces the last
-// program octal. Given a match, we repeat the process for `A << 3 + i` for `i`
+// program octal. Given a match, we repeat the process for `A * 8 + i` for `i`
 // from 0 to 7, checking which input produces the second-last program octal.
 // This process continues until we reproduced the original program, backtracking
 // whenever necessary, in case multiple inputs produce the same output octal.
-function findMinA(p = program.length - 1, acc = 0n): bigint | null {
+function findMinA(p = program.length - 1, acc = 0): number | undefined {
   if (p < 0) return acc
   const target = program[p]!
-  acc <<= 3n
-  const max = acc + 8n
+  const max = (acc *= 8) + 8
   for (let a = acc; a < max; a++) {
     if (run(a) !== target) continue
     const res = findMinA(p - 1, a)
-    if (res !== null) return res
+    if (res !== undefined) return res
   }
-  return null
+  return undefined
 }
 
 const result = findMinA()

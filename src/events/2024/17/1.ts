@@ -25,23 +25,22 @@ function comboOperand() {
   return comboOps[program[pointer + 1]!]!()
 }
 
-const ops: (() => void)[] = [
-  /* adv */ () => (regA = regA >> comboOperand()),
+const ops = [
+  /* adv */ () => (regA = regA >>> comboOperand()),
   /* bxl */ () => (regB = regB ^ operand()),
   /* bst */ () => (regB = comboOperand() & 7),
   /* jnz */ () => regA && (pointer = operand()),
   /* bxc */ () => (regB = regB ^ regC),
   /* out */ () => (result += ',' + (comboOperand() & 7)),
-  /* bdv */ () => (regB = (regA / (1 << comboOperand())) | 0),
-  /* cdv */ () => (regC = (regA / (1 << comboOperand())) | 0),
+  /* bdv */ () => (regB = (regA / 2 ** comboOperand()) | 0),
+  /* cdv */ () => (regC = (regA / 2 ** comboOperand()) | 0),
 ]
 
 // Run program.
-let prevPointer = pointer
 while (pointer < program.length) {
+  let oldPointer = pointer
   ops[program[pointer]!]!()
-  if (pointer === prevPointer) pointer += 2
-  prevPointer = pointer
+  pointer += 2 * +!(pointer - oldPointer)
 }
 
 io.write(result.slice(1))
