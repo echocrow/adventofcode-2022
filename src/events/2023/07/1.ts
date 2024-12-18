@@ -1,4 +1,3 @@
-import {arrFromAsync} from '#lib/array.js'
 import io from '#lib/io.js'
 
 const faceVals = new Map(
@@ -17,7 +16,7 @@ function getType(repeats: Uint8Array) {
 
 const faceCounts = new Uint8Array(faceVals.size)
 const repeats = new Uint8Array(5)
-const hands = (await arrFromAsync(io.readLines())).map((line) => {
+const hands = (await Array.fromAsync(io.readLines())).map((line) => {
   const [hand = '', bidStr = ''] = line.split(' ')
 
   // Count faces + hand value.
@@ -31,7 +30,7 @@ const hands = (await arrFromAsync(io.readLines())).map((line) => {
 
   // Count repeats.
   repeats.fill(0)
-  for (const count of faceCounts) if (count) repeats[count - 1]++
+  for (const count of faceCounts) if (count) repeats[count - 1]!++
 
   const type = getType(repeats)
   return {hand, bid: Number(bidStr), type, value}

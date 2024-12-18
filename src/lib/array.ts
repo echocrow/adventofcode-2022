@@ -17,14 +17,6 @@ export function* subarrays<A extends Subarrayable>(array: A, length: number) {
   }
 }
 
-export async function arrFromAsync<T>(
-  iterator: AsyncIterable<T>,
-): Promise<T[]> {
-  const vals: T[] = []
-  for await (const val of iterator) vals.push(val)
-  return vals
-}
-
 export type TypedArray =
   | Int8Array
   | Uint8Array
