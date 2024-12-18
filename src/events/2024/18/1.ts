@@ -1,4 +1,5 @@
 import io from '#lib/io.js'
+import {fifo} from '#lib/iterable.js'
 import {neighbors, Uint8Matrix} from '#lib/matrix.js'
 
 const mapSize = Number((await io.readLineIfMatch(/^size=(\d+)$/))?.[1] ?? 70)
@@ -18,21 +19,19 @@ for await (const line of io.readLines()) {
   bytesPassed++
 }
 
-map.$[start] = 2
-let steps = 0
-let queue = [start]
-search: while (queue.length) {
-  const newQueue: typeof queue = []
-  for (const pos of queue) {
-    if (pos === end) break search
-    for (const next of neighbors(map, pos)) {
-      if (map.$[next]) continue
-      map.$[next] = 2
-      newQueue.push(next)
-    }
+const queue = [start]
+const minDist = new Uint32Array(map.length)
+minDist[start] = 1
+for (const pos of fifo(queue)) {
+  if (pos === end) break
+  const steps = minDist[pos]! + 1
+  for (const next of neighbors(map, pos)) {
+    if (map.$[next]) continue
+    if (minDist[next]! && minDist[next]! <= steps) continue
+    minDist[next] = steps
+    queue.push(next)
   }
-  steps++
-  queue = newQueue
 }
 
-io.write(steps)
+const result = minDist[end]! - 1
+io.write(result)

@@ -1,4 +1,5 @@
 import io from '#lib/io.js'
+import {filo} from '#lib/iterable.js'
 import {neighbors, Uint8Matrix} from '#lib/matrix.js'
 
 const mapSize = Number((await io.readLineIfMatch(/^size=(\d+)$/))?.[1] ?? 70)
@@ -15,20 +16,15 @@ for await (const line of io.readLines()) {
 }
 
 function checkIsReachable(map: Uint8Matrix) {
-  let queue = [start]
   const visited = new Uint8Array(map.length)
-  while (queue.length) {
-    const newQueue: typeof queue = []
-    for (const pos of queue) {
-      for (const next of neighbors(map, pos)) {
-        if (pos === end) return true
-        if (map.$[next]) continue
-        if (visited[next]) continue
-        visited[next] = 1
-        newQueue.push(next)
-      }
+  const queue = [start]
+  for (const pos of filo(queue)) {
+    for (const next of neighbors(map, pos)) {
+      if (pos === end) return true
+      if (map.$[next] || visited[next]!) continue
+      visited[next] = 1
+      queue.push(next)
     }
-    queue = newQueue
   }
   return false
 }
@@ -38,16 +34,14 @@ function binSearch(
   max: number,
   checkHigh: (i: number) => number,
 ): number {
-  let l = min
-  let r = max
-  while (l <= r) {
-    const q = Math.floor((l + r) / 2)
+  while (min <= max) {
+    const q = Math.floor((min + max) / 2)
     const res = checkHigh(q)
     if (res === 0) return q
-    else if (res > 0) r = q - 1
-    else l = q + 1
+    else if (res > 0) max = q - 1
+    else min = q + 1
   }
-  return l
+  return min
 }
 
 let [minMapBytes, minMap] = [0, map]
