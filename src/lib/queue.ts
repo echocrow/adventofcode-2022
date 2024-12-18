@@ -1,3 +1,4 @@
+import {binSearch} from './array.js'
 import {fifo, type ReadGenerator} from './iterable.js'
 
 class PriorityQueueItem<V, C extends number | bigint = number> {
@@ -20,7 +21,7 @@ export class PriorityQueue<T> {
     for (const item of items)
       enqueue(
         this.#queue,
-        PriorityQueue.#findNext,
+        PriorityQueue.#sortCompare,
         new PriorityQueueItem(cost, item),
       )
     return this
@@ -34,8 +35,8 @@ export class PriorityQueue<T> {
     yield* fifo(this.#queue)
   }
 
-  static #findNext<T>(q: PriorityQueueItem<T>, qi: PriorityQueueItem<T>) {
-    return q.cost > qi.cost
+  static #sortCompare<T>(a: PriorityQueueItem<T>, b: PriorityQueueItem<T>) {
+    return a.cost - b.cost
   }
 }
 
@@ -64,23 +65,19 @@ export class MemoQueue<T> extends PriorityQueue<T> {
 
 export function enqueue<V>(
   queue: V[],
-  findNext: (queueItem: V, newItem: V) => boolean,
+  sortCompare: (a: V, b: V) => number,
   item: V,
 ): V[] {
   // Check for first item or new max.
-  if (!queue.length || !findNext(queue.at(-1)!, item)) queue.push(item)
+  if (!queue.length || sortCompare(queue.at(-1)!, item) <= 0) queue.push(item)
   // Check for new min.
-  else if (findNext(queue[0]!, item)) queue.unshift(item)
+  else if (sortCompare(item, queue[0]!) <= 0) queue.unshift(item)
   // Binary-search insert point.
   else {
-    let l = 1
-    let r = queue.length - 2
-    while (l <= r) {
-      const q = Math.floor((l + r) / 2)
-      if (findNext(queue[q]!, item)) r = q - 1
-      else l = q + 1
-    }
-    queue.splice(l, 0, item)
+    const i = binSearch(1, queue.length - 2, (i) =>
+      sortCompare(queue[i]!, item),
+    )
+    queue.splice(i, 0, item)
   }
   return queue
 }

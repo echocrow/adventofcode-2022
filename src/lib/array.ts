@@ -122,3 +122,18 @@ export function pushIfNew<T>(arr: T[], val: T) {
   if (arr.includes(val)) return
   arr.push(val)
 }
+
+export function binSearch(
+  min: number,
+  max: number,
+  checkHigh: (i: number) => number,
+): number {
+  while (min <= max) {
+    const q = Math.floor((min + max) / 2)
+    const res = checkHigh(q)
+    if (res === 0) return q
+    else if (res > 0) max = q - 1
+    else min = q + 1
+  }
+  return min
+}
