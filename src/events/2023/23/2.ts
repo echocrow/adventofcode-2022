@@ -21,7 +21,7 @@ class Node {
 // Parse maze.
 const maze = new Uint8Matrix()
 for await (const line of io.readLines())
-  maze.pushRow(line.split('').map((c) => +(c === '#')))
+  maze.pushRow([...line].map((c) => +(c === '#')))
 
 // Gather nodes.
 const nodesMap = new MemoMap((i: number) => new Node(i))

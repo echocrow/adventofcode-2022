@@ -20,7 +20,7 @@ let robot = 0
   } as const)
   for await (const line of io.readLines()) {
     if (!line) break
-    const row = line.split('')
+    const row = [...line]
     const robotY = row.findIndex((c) => c === '@')
     if (robotY >= 0) robot = robotY * 2 + map.length
     map.pushRow(row.flatMap((c) => TILES[c] ?? TILES.FREE))

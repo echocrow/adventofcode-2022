@@ -18,7 +18,7 @@ const cellChars = strRec({
 // Parse maze.
 const maze = new Uint8Matrix()
 for await (const line of io.readLines())
-  maze.pushRow(line.split('').map((c) => cellChars[c] ?? 0))
+  maze.pushRow([...line].map((c) => cellChars[c] ?? 0))
 
 // Find all possible paths and keep track of the longest.
 const startI: number = 1

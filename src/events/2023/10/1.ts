@@ -27,7 +27,7 @@ const pieceIds = Object.fromEntries(
 let startPos = vec()
 let maze = new Uint8Matrix()
 for await (const line of io.readLines()) {
-  const pieces = (line.split('') as PieceChar[]).map(
+  const pieces = ([...line] as PieceChar[]).map(
     (char, i) => pieceIds[char] ?? ((startPos = vec(i, maze.height)), 0),
   )
   maze.pushRow(pieces)

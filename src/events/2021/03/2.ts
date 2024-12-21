@@ -22,7 +22,7 @@ function parseBinary(bits: boolean[]): number {
 
 const rows: boolean[][] = []
 for await (const line of io.readLines()) {
-  rows.push(line.split('').map((d) => d !== '0'))
+  rows.push([...line].map((d) => d !== '0'))
 }
 
 const oRating = parseBinary(findRatingRow(rows, true))

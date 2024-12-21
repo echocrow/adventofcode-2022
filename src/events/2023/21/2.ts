@@ -6,7 +6,7 @@ const STEPS = Number((await io.readCfgLine('__steps')) ?? 26501365)
 
 const garden = new Uint8Matrix()
 for await (const line of io.readLines())
-  garden.pushRow(line.split('').map((c) => +(c === '#')))
+  garden.pushRow([...line].map((c) => +(c === '#')))
 
 function countStepsFrom(x: number, y: number) {
   const counts: number[] = []

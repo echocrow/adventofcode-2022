@@ -8,7 +8,7 @@ let startI = 0
 for await (const line of io.readLines()) {
   const startCol = line.indexOf('S')
   if (startCol >= 0) startI = garden.length + startCol
-  garden.pushRow(line.split('').map((c) => +(c === '#')))
+  garden.pushRow([...line].map((c) => +(c === '#')))
 }
 
 let queue = [startI]

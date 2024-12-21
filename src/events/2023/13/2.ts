@@ -22,7 +22,7 @@ let result = 0
 let map = new Uint8Matrix()
 for await (const line of io.readLines({flush: true})) {
   if (line) {
-    map.pushRow(line.split('').map((c) => +(c === '#')))
+    map.pushRow([...line].map((c) => +(c === '#')))
     continue
   }
 

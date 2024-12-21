@@ -12,7 +12,7 @@ for await (const line of io.readLines()) {
   if (s >= 0) start = map.length + s
   const e = line.indexOf('E')
   if (e >= 0) end = map.length + e
-  map.pushRow(line.split('').map((c) => +(c === '#')))
+  map.pushRow([...line].map((c) => +(c === '#')))
 }
 const dirs = [1, map.width, -1, -map.width]
 

@@ -13,7 +13,7 @@ enum Tile {
 let map = new Uint8Matrix()
 for await (const line of io.readLines())
   map.pushRow(
-    line.split('').map((c) =>
+    [...line].map((c) =>
       c === '#' ? Tile.Fixed
       : c === 'O' ? Tile.Roll
       : Tile.Empty,

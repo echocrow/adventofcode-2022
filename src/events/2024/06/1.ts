@@ -13,7 +13,7 @@ const map = new Uint8Matrix()
 for await (const line of io.readLines()) {
   const x = line.indexOf('^')
   if (x >= 0) pos = vec(x, map.height)
-  map.pushRow(line.split('').map((c) => +(c === '#')))
+  map.pushRow([...line].map((c) => +(c === '#')))
 }
 
 let visited = 1

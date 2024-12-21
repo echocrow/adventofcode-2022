@@ -21,7 +21,7 @@ let result = 0
 const map = new Uint8Matrix()
 for await (const line of io.readLines({flush: true})) {
   if (line) {
-    map.pushRow(line.split('').map((c) => +(c === '#')))
+    map.pushRow([...line].map((c) => +(c === '#')))
     continue
   }
   result += findV(map.rows()) * 100 || findV(map.cols())

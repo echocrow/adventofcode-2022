@@ -3,7 +3,7 @@ import io from '#lib/io.js'
 let rows = 0
 const ones: number[] = []
 for await (const line of io.readLines()) {
-  for (const [i, d] of line.split('').entries()) {
+  for (const [i, d] of [...line].entries()) {
     if (d === '0') ones[i] = (ones[i] ?? 0) + 1
   }
   rows++

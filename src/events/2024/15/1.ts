@@ -13,7 +13,7 @@ let robot = 0
   for await (const line of io.readLines()) {
     if (!line) break
     map.pushRow(
-      line.split('').map((c, i) => {
+      [...line].map((c, i) => {
         if (c === '@') robot = i + map.length
         return (
           c === '#' ? WALL

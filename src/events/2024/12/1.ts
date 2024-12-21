@@ -4,7 +4,7 @@ import {neighbors, Uint8Matrix} from '#lib/matrix.js'
 
 const garden = new Uint8Matrix()
 for await (const line of io.readLines())
-  garden.pushRow(line.split('').map((c) => c.charCodeAt(0)))
+  garden.pushRow([...line].map((c) => c.charCodeAt(0)))
 
 let result = 0
 const seen = new Uint8Array(garden.length)

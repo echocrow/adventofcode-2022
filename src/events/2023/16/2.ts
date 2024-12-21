@@ -35,7 +35,7 @@ type Piece = (typeof pieces)[string]
 // Parse grid.
 const grid = new Matrix([] as Piece[])
 for await (const line of io.readLines())
-  grid.pushRow(line.split('').map((c) => pieces[c]!))
+  grid.pushRow([...line].map((c) => pieces[c]!))
 
 // Shoot beams.
 let max = 0

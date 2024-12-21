@@ -4,7 +4,7 @@ import {neighbors, Uint16Matrix, Uint8Matrix} from '#lib/matrix.js'
 
 const srcGarden = new Uint8Matrix()
 for await (const line of io.readLines())
-  srcGarden.pushRow(line.split('').map((c) => c.charCodeAt(0)))
+  srcGarden.pushRow([...line].map((c) => c.charCodeAt(0)))
 
 // Flood-scan regions & count sizes.
 const garden = new Uint16Matrix(srcGarden.length, srcGarden.width)

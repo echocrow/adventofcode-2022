@@ -16,7 +16,7 @@ let srcStartI = 0
 for await (const line of io.readLines()) {
   const startCol = line.indexOf('S')
   if (startCol >= 0) srcStartI = srcGarden.length + startCol
-  srcGarden.pushRow(line.split('').map((c) => +(c === '#')))
+  srcGarden.pushRow([...line].map((c) => +(c === '#')))
 }
 
 // Scale garden.

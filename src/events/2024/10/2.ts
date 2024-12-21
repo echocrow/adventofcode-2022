@@ -8,7 +8,7 @@ const TOP_HEIGHT = 9
 const map = new Uint8Matrix()
 const tops: number[] = []
 for await (const line of io.readLines()) {
-  const row = line.split('').map((c) => +c)
+  const row = [...line].map((c) => +c)
   for (const [i, h] of row.entries()) {
     if (h === TOP_HEIGHT) tops.push(i + map.length)
   }

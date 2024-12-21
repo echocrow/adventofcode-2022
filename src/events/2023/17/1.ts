@@ -21,7 +21,7 @@ const DIR_VEC: Record<Dir, Vec2> = [
 ]
 
 const city = new Uint8Matrix()
-for await (const row of io.readLines()) city.pushRow(row.split('').map(Number))
+for await (const row of io.readLines()) city.pushRow([...row].map(Number))
 
 function* nextTurns(dir: Dir, speed: number) {
   yield rotateDir(dir, -1)

@@ -20,7 +20,7 @@ let start = 0
 let end = 0
 const maze = new Uint8Matrix()
 for await (const line of io.readLines()) {
-  const row = line.split('')
+  const row = [...line]
   const s = row.indexOf('S')
   if (s >= 0) start = maze.length + s
   const e = row.indexOf('E')

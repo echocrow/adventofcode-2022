@@ -10,7 +10,7 @@ const snafuVals = Object.fromEntries(
 
 function snafuToDec(snafu: string): number {
   let num = 0
-  for (const [p, s] of snafu.split('').reverse().entries()) {
+  for (const [p, s] of [...snafu].reverse().entries()) {
     const n = snafuVals[s]!
     num += n * snafuPower ** p
   }
