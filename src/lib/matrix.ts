@@ -180,11 +180,37 @@ export class Matrix<T extends AnyArray = AnyArray>
   }
 
   fmt(
-    fmtVal: (val: number, i: number) => string | number = (val) => val,
+    fmtVal: (
+      val: number,
+      i: number,
+    ) => string | number | boolean | undefined = (val) => val,
+    minPadLen = 0,
   ): string {
+    // Simplify cell formats and determine pad length.
+    let outs: (string | number)[] = []
+    let padLen = minPadLen
+    for (let y = 0; y < this.#height; y++) {
+      for (const i of this.rowI(y)) {
+        let val = fmtVal(this.data[i], i) ?? false
+        if (typeof val === 'boolean') val = val ? '█' : ' '
+        else if (val === '') val = ' '
+        const strLen = String(val).length
+        if (strLen > padLen) padLen = strLen
+        outs.push(val)
+      }
+    }
+    // Output cell formats.
     let out = ''
     for (let y = 0; y < this.#height; y++) {
-      for (const i of this.rowI(y)) out += fmtVal(this.data[i], i)
+      for (const i of this.rowI(y)) {
+        let val = outs[i]!
+        if (padLen > 1)
+          val =
+            typeof val === 'string' && val.length === 1 ?
+              val.repeat(padLen)
+            : String(val).padStart(padLen)
+        out += val
+      }
       out += '\n'
     }
     return out.slice(0, -1)
