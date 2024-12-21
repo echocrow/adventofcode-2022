@@ -20,16 +20,15 @@ const dirs = [1, map.width, -1, -map.width]
 const eToSDist = new Uint32Array(map.length)
 {
   eToSDist[end] = 1
-  const queue = [end]
-  for (const pos of queue) {
-    if (pos === start) break
-    const step = eToSDist[pos]! + 1
+  let pos = end
+  while (pos !== start) {
+    const dist = eToSDist[pos]! + 1
     for (const dir of dirs) {
       const next = pos + dir
       if (map.$[next]) continue
-      if (eToSDist[next] && eToSDist[next]! <= step) continue
-      eToSDist[next] = step
-      queue.push(next)
+      if (eToSDist[next]) continue
+      eToSDist[next] = dist
+      pos = next
       break
     }
   }

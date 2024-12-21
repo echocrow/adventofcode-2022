@@ -22,16 +22,15 @@ const dirs = [1, map.width, -1, -map.width]
 const eToSDist = new Uint32Array(map.length)
 {
   eToSDist[end] = 1
-  const queue = [end]
-  for (const pos of queue) {
-    if (pos === start) break
-    const step = eToSDist[pos]! + 1
+  let pos = end
+  while (pos !== start) {
+    const dist = eToSDist[pos]! + 1
     for (const dir of dirs) {
       const next = pos + dir
       if (map.$[next]) continue
-      if (eToSDist[next] && eToSDist[next]! <= step) continue
-      eToSDist[next] = step
-      queue.push(next)
+      if (eToSDist[next]) continue
+      eToSDist[next] = dist
+      pos = next
       break
     }
   }
@@ -43,17 +42,17 @@ for (let pos = 0; pos < eToSDist.length; pos++) {
   const dist = eToSDist[pos]!
   if (!dist) continue
   const [posX, posY] = map.iToVec(pos)
-  const dxMin = Math.max(-MAX_CHEAT_LEN, -posX)
-  const dxMax = Math.min(MAX_CHEAT_LEN, map.width - posX - 1)
-  for (let dx = dxMin; dx <= dxMax; dx++) {
-    const dxAbsMax = MAX_CHEAT_LEN - Math.abs(dx)
-    const dyMin = Math.max(-dxAbsMax, -posY)
-    const dyMax = Math.min(dxAbsMax, map.height - posY - 1)
-    for (let dy = dyMin; dy <= dyMax; dy++) {
-      const alt = map.vecToI(posX + dx, posY + dy)
+  for (let dx = 0; dx <= MAX_CHEAT_LEN; dx++) {
+    const dyAbsMax = MAX_CHEAT_LEN - dx
+    for (let dy = -dyAbsMax; dy <= dyAbsMax; dy++) {
+      if (!dx && dy < 0) continue
+      const altX = posX + dx
+      const altY = posY + dy
+      if (!map.has(altX, altY)) continue
+      const alt = map.vecToI(altX, altY)
       const altDist = eToSDist[alt]!
       if (!altDist) continue
-      const cut = dist - altDist - Math.abs(dx) - Math.abs(dy)
+      const cut = Math.abs(dist - altDist) - dx - Math.abs(dy)
       if (cut < minSave) continue
       shortcuts++
     }

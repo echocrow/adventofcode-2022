@@ -128,12 +128,18 @@ export class Matrix<T extends AnyArray = AnyArray>
     }
   }
 
+  has(v: ReadonlyVec2): boolean
+  has(x: number, y: number): boolean
+  has(x: ReadonlyVec2 | number, y = 0): boolean {
+    if (typeof x !== 'number') (y = x[1]), (x = x[0])
+    return x >= 0 && x < this.width && y >= 0 && y < this.height
+  }
+
   cell(v: ReadonlyVec2): T[number] | undefined
   cell(x: number, y: number): T[number] | undefined
   cell(x: ReadonlyVec2 | number, y = 0): T[number] | undefined {
     if (typeof x !== 'number') (y = x[1]), (x = x[0])
-    if (x < 0 || x >= this.width) return undefined
-    if (y < 0 || y >= this.height) return undefined
+    if (!this.has(x, y)) return undefined
     return this.data[y * this.width + x]
   }
   setCell(v: ReadonlyVec2, val: number): this
@@ -169,8 +175,7 @@ export class Matrix<T extends AnyArray = AnyArray>
   moveBy(i: number, v: ReadonlyVec2): number | undefined {
     const from = this.iToVec(i)
     const [toX, toY] = from.add(v)
-    if (toX < 0 || toX >= this.width) return undefined
-    if (toY < 0 || toY >= this.height) return undefined
+    if (!this.has(toX, toY)) return undefined
     return this.vecToI(toX, toY)
   }
 
