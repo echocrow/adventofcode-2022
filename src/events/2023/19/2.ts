@@ -78,7 +78,7 @@ for await (const [_, name, rulesStr, fallback] of io.readRegExp(
 
 // Process workflows with ranged parts.
 let result = 0
-const queue = [['in', new Array(4).fill([1, 4000])] as FlowPart]
+const queue = [['in', Array(4).fill([1, 4000])] as FlowPart]
 for (const flowPart of filo(queue)) {
   const [wf, part] = flowPart
   if (wf in Result) {
