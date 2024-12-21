@@ -3,7 +3,7 @@ import {sum} from '#lib/iterable.js'
 
 const symbolsRe = /[^\d.]/g
 const numsRe = /\d+/g
-export function parseRow(str: string) {
+function parseRow(str: string) {
   return {
     symbolsAt: [...str.matchAll(symbolsRe)].map((match) => match.index ?? 0),
     nums: [...str.matchAll(numsRe)].map((match) => ({
