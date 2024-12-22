@@ -101,7 +101,7 @@ for (let r = 0; r < ROCKS; r++) {
 io.write(map.top)
 
 // async function draw(rock?: Rock) {
-//   console.clear()
+//   io.clearLog()
 //   let drawMap = new Map(map.data.width, map.data.height)
 //   drawMap.data.set(map.data)
 //   if (rock) drawMap.addRock(rock)
@@ -110,6 +110,6 @@ io.write(map.top)
 //     const txt = row.join('').replaceAll('0', ' ').replaceAll('1', '#')
 //     lines.push(`|${txt}|`)
 //   }
-//   console.log(lines.reverse().join('\n'))
+//   io.log(lines.reverse().join('\n'))
 //   await io.sleep(0.2)
 // }

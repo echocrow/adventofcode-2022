@@ -185,6 +185,11 @@ class IO {
       message = '\n' + message
     this.#console.info(new Date(), ':', message, ...moreMessage)
   }
+  clearLog() {
+    if (this.logSilent) return
+    this.#console.clear()
+    this.#logged = false
+  }
 
   async sleep(seconds: number) {
     return new Promise((resolve) => setTimeout(resolve, seconds * 1000))

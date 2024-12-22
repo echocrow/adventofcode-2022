@@ -70,7 +70,7 @@ while ((result - yMaxT) % yLen) result += xLen
 //     const p = guard.p.add(guard.v.scale(result)).mod(SIZE)
 //     map.setCell(p, 1)
 //   }
-//   console.log(map.fmt((c) => (c ? '#' : ' ')))
+//   io.log(map.fmt((c) => c === '#'))
 // }
 
 io.write(result)
