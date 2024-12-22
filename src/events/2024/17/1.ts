@@ -32,8 +32,8 @@ const ops = [
   /* jnz */ () => regA && (pointer = operand()),
   /* bxc */ () => (regB = regB ^ regC),
   /* out */ () => (result += ',' + (comboOperand() & 7)),
-  /* bdv */ () => (regB = (regA / 2 ** comboOperand()) | 0),
-  /* cdv */ () => (regC = (regA / 2 ** comboOperand()) | 0),
+  /* bdv */ () => (regB = (regA >>> comboOperand()) | 0),
+  /* cdv */ () => (regC = (regA >>> comboOperand()) | 0),
 ]
 
 // Run program.
