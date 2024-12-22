@@ -51,7 +51,7 @@ function fmtGarden(garden: Uint8Matrix) {
     if (SEPARATE && !x && y && !(y % srcGarden.height)) sep += ySeparator + '\n'
     if (SEPARATE && x && !(x % srcGarden.width)) sep += '|'
     return sep + visChars[v]!
-  })
+  }, 0)
 }
 
 const rl =
