@@ -110,3 +110,7 @@ export function binSearch(
   }
   return min
 }
+
+export function filledArr<T>(item: T, length: number): T[] {
+  return Array(length).fill(item)
+}

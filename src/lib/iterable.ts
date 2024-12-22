@@ -158,3 +158,10 @@ export function find<T>(
 export function* reversed<T>(arr: readonly T[]): Iterable<T> {
   for (let i = arr.length - 1; i >= 0; i--) yield arr[i]!
 }
+
+export function* repeat<T>(
+  item: T,
+  times: number,
+): Generator<T, void, undefined> {
+  for (let i = 0; i < times; i++) yield item
+}

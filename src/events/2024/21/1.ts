@@ -1,4 +1,5 @@
 import io from '#lib/io.js'
+import {repeat} from '#lib/iterable.js'
 import {strRec} from '#lib/types.js'
 
 const ROBOTS = 2
@@ -60,21 +61,22 @@ const BTNS = strRec({
   A: BTN.A,
 })
 
-function* getMoveOpts(layout: [number, number][], from: number, to: number) {
+function* getMoves(layout: [number, number][], from: number, to: number) {
   const [fromX, fromY] = layout[from]!
   const [toX, toY] = layout[to]!
   const xSteps = toX - fromX
   const ySteps = toY - fromY
 
-  const xBtns = Array(Math.abs(xSteps)).fill(xSteps > 0 ? BTN.R : BTN.L)
-  const yBtns = Array(Math.abs(ySteps)).fill(ySteps > 0 ? BTN.D : BTN.U)
+  const xBtns = repeat(xSteps > 0 ? BTN.R : BTN.L, Math.abs(xSteps))
+  const yBtns = repeat(ySteps > 0 ? BTN.D : BTN.U, Math.abs(ySteps))
 
   const [nilX, nilY] = layout[0]!
   const hFirstOk = fromY !== nilY || toX !== nilX
   const vFirstOk = fromX !== nilX || toY !== nilY
-
-  if (hFirstOk) yield [...xBtns, ...yBtns, BTN.A]
-  if (vFirstOk) yield [...yBtns, ...xBtns, BTN.A]
+  const hFirst = hFirstOk && (!vFirstOk || xSteps < 0)
+  if (hFirst) yield* xBtns, yield* yBtns
+  else yield* yBtns, yield* xBtns
+  yield BTN.A
 }
 
 const maxDepth = ROBOTS + 1
@@ -83,19 +85,15 @@ function evalMoveLen(from: number, to: number, depth = 0): number {
   if (depth >= maxDepth) return 1
 
   const cacheId = (from * BTN.MAX + to) * maxDepth + depth
-  const cached = cache[cacheId]
-  if (cached !== undefined) return cached
-
-  const layout = depth ? DPAD : NUMPAD
-  depth++
-  let min = Infinity
-  for (const steps of getMoveOpts(layout, from, to)) {
-    min = Math.min(min, evalMovesLen(steps, depth))
+  let len = cache[cacheId]
+  if (!len) {
+    const layout = depth ? DPAD : NUMPAD
+    len = evalMovesLen(getMoves(layout, from, to), depth + 1)
+    cache[cacheId] = len
   }
-  cache[cacheId] = min
-  return min
+  return len
 }
-function evalMovesLen(btns: number[], depth = 0): number {
+function evalMovesLen(btns: Iterable<number>, depth = 0): number {
   let len = 0
   let curr = BTN.A
   for (const btn of btns) {
