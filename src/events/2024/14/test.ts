@@ -1,7 +1,8 @@
 import {dedent, testPart} from '#lib/testing.js'
 
 const input = dedent`
-  11,7
+  __width=11
+  __height=7
   p=0,4 v=3,-3
   p=6,3 v=-1,-3
   p=10,3 v=-1,2

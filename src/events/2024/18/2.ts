@@ -3,8 +3,8 @@ import io from '#lib/io.js'
 import {neighbors, Uint8Matrix} from '#lib/matrix.js'
 import {PriorityQueue} from '#lib/queue.js'
 
-const mapSize = Number((await io.readLineIfMatch(/^size=(\d+)$/))?.[1] ?? 70)
-void (await io.readLineIfMatch(/^bytes=(\d+)$/))
+const mapSize = Number((await io.readCfgLine('__size')) ?? 70)
+void (await io.readCfgLine('__bytes'))
 
 const map = new Uint8Matrix((mapSize + 1) ** 2, mapSize + 1)
 const start = 0

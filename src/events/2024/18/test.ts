@@ -1,8 +1,8 @@
 import {dedent, testPart} from '#lib/testing.js'
 
 const input = dedent`
-  size=6
-  bytes=12
+  __size=6
+  __bytes=12
   5,4
   4,2
   4,5

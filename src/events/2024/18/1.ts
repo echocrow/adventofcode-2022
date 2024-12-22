@@ -2,10 +2,8 @@ import io from '#lib/io.js'
 import {fifo} from '#lib/iterable.js'
 import {neighbors, Uint8Matrix} from '#lib/matrix.js'
 
-const mapSize = Number((await io.readLineIfMatch(/^size=(\d+)$/))?.[1] ?? 70)
-const maxBytes = Number(
-  (await io.readLineIfMatch(/^bytes=(\d+)$/))?.[1] ?? 1024,
-)
+const mapSize = Number((await io.readCfgLine('__size')) ?? 70)
+const maxBytes = Number((await io.readCfgLine('__bytes')) ?? 1024)
 
 const map = new Uint8Matrix((mapSize + 1) ** 2, mapSize + 1)
 const start = 0

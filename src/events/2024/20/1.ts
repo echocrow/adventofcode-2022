@@ -1,7 +1,7 @@
 import io from '#lib/io.js'
 import {Uint8Matrix} from '#lib/matrix.js'
 
-const minSave = Number((await io.readLineIfMatch(/^min=(\d+)$/))?.[1] ?? 100)
+const minSave = Number((await io.readCfgLine('__min')) ?? 100)
 
 // Parse map.
 let start = 0
