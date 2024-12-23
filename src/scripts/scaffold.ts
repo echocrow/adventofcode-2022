@@ -24,14 +24,19 @@ if (!dayDir) {
 const dir = path.join(yearPath, dayDir)
 await mkdir(dir, {recursive: true})
 
-const fileCopies = [
-  ['1.ts', path.join(tplDir, 'part.ts.tpl')],
-  ['2.ts', path.join(tplDir, 'part.ts.tpl')],
-  ['test.ts', path.join(tplDir, 'partTest.ts.tpl')],
-] as const
+const fileCopies: [string, string][] = Object.entries({
+  '1.ts': 'part.ts.tpl',
+  '2.ts': 'part.ts.tpl',
+  'test.ts': 'partTest.ts.tpl',
+}).map(([outName, tplName]) => [
+  path.join(dir, outName),
+  path.join(tplDir, tplName),
+])
 
 await Promise.all(
-  fileCopies.map(([name, tplPath]) => copyFile(tplPath, path.join(dir, name))),
+  fileCopies.map(([outPath, tplPath]) => copyFile(tplPath, outPath)),
 )
 
-console.log(`Scaffolded [${path.relative(srcDir, dir)}/].`)
+console.log(`Scaffolded files:`)
+for (const [outPath] of fileCopies)
+  console.log(`  ${path.relative(srcDir, outPath)}`)
