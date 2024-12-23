@@ -1,6 +1,6 @@
 import Counter from '#lib/counter.js'
 import io from '#lib/io.js'
-import vec from '#lib/vec.js'
+import vec from '#lib/vec.legacy.js'
 
 const re = /^(\d+),(\d+) -> (\d+),(\d+)$/
 

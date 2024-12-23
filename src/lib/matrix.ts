@@ -2,8 +2,8 @@ import {copyArr, copyEmptyArr, type AnyArray, setArr} from './array.js'
 import {range} from './iterable.js'
 import {posMod} from './math.js'
 import type {Lengthened, Sliceable} from './types.js'
-import type {ReadonlyVec2, Vec2} from './vec2.js'
-import vec from './vec.js'
+import type {ReadonlyVec2, Vec2} from './vec2.legacy.js'
+import vec from './vec.legacy.js'
 
 interface MatrixLike extends Lengthened {
   width: number

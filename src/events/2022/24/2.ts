@@ -2,7 +2,7 @@ import io from '#lib/io.js'
 import memoize from '#lib/memo.js'
 import {PriorityQueue} from '#lib/queue.js'
 import {strRec} from '#lib/types.js'
-import vec, {VecSet, type Vec2} from '#lib/vec.js'
+import vec, {VecSet, type Vec2} from '#lib/vec.legacy.js'
 
 // Parse.
 let mapW = 0

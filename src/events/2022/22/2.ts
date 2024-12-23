@@ -2,7 +2,7 @@ import io from '#lib/io.js'
 import {filo} from '#lib/iterable.js'
 import {posMod} from '#lib/math.js'
 import {Uint8Matrix} from '#lib/matrix.js'
-import vec, {type Vec2} from '#lib/vec.js'
+import vec, {type Vec2} from '#lib/vec.legacy.js'
 
 // Directions, going clockwise.
 enum Dir {

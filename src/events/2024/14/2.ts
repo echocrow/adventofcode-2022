@@ -1,6 +1,6 @@
 import io from '#lib/io.js'
 import {posMod} from '#lib/math.js'
-import vec, {type Vec2} from '#lib/vec.js'
+import vec, {type Vec2} from '#lib/vec.legacy.js'
 
 const WIDTH = Number((await io.readCfgLine('__width')) ?? 101)
 const HEIGHT = Number((await io.readCfgLine('__height')) ?? 103)

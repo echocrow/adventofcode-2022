@@ -1,6 +1,6 @@
 import io from '#lib/io.js'
-import {Vec2} from '#lib/vec2.js'
-import vec from '#lib/vec.js'
+import {Vec2} from '#lib/vec2.legacy.js'
+import vec from '#lib/vec.legacy.js'
 
 const GET_TARGET_Y = (sensorsLen: number) => (sensorsLen < 15 ? 10 : 2000000)
 

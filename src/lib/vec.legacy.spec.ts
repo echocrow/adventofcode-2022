@@ -1,7 +1,7 @@
 import {describe, expect, it} from 'vitest'
-import {vec2, Vec2} from './vec2.js'
+import {vec2, Vec2} from './vec2.legacy.js'
 import {parseVec3, Vec3} from './vec3.js'
-import vec, {VecSet, type Vec} from './vec.js'
+import vec, {VecSet, type Vec} from './vec.legacy.js'
 
 function expectVec2Instance(v: Vec) {
   expect(v).toBeInstanceOf(Vec2)

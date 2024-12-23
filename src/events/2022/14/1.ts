@@ -1,5 +1,5 @@
 import io from '#lib/io.js'
-import vec from '#lib/vec.js'
+import vec from '#lib/vec.legacy.js'
 
 const SAND_SRC = vec(500, 0)
 const SAND_MOVES = [vec(0, 1), vec(-1, 1), vec(1, 1)]

@@ -11,7 +11,7 @@ import {
   yColsMatrix3,
   zColsMatrix3,
   zeroVec3,
-} from '#lib/vec3.js'
+} from '#lib/vec3.legacy.js'
 
 // Helper to bucket-fill
 function bucketFill(at: vec3, to: number) {

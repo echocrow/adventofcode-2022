@@ -2,7 +2,7 @@ import io from '#lib/io.js'
 import {posMod} from '#lib/math.js'
 import {Uint8Matrix} from '#lib/matrix.js'
 import {PriorityQueue} from '#lib/queue.js'
-import vec, {type Vec2} from '#lib/vec.js'
+import vec, {type Vec2} from '#lib/vec.legacy.js'
 
 enum Dir {
   left,

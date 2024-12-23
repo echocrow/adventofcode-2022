@@ -1,5 +1,5 @@
 import io from '#lib/io.js'
-import vec, {VecSet} from '#lib/vec.js'
+import vec, {VecSet} from '#lib/vec.legacy.js'
 
 const DIRS = {
   U: vec(0, 1),

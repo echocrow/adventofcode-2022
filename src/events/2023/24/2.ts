@@ -1,5 +1,5 @@
 import io from '#lib/io.js'
-import {StateVec3, Vec3, type mutVec3} from '#lib/vec3.js'
+import {StateVec3, Vec3, type mutVec3} from '#lib/vec3.legacy.js'
 
 class Stone extends StateVec3 {}
 

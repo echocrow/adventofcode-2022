@@ -1,7 +1,7 @@
 import io from '#lib/io.js'
 import {combine, filo, map, sum} from '#lib/iterable.js'
 import {Matrix, Uint8Matrix} from '#lib/matrix.js'
-import vec, {type Vec2} from '#lib/vec.js'
+import vec, {type Vec2} from '#lib/vec.legacy.js'
 
 enum Dir {
   left,

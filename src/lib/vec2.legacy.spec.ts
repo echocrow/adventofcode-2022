@@ -1,5 +1,5 @@
 import {describe, expect, expectTypeOf, it, test} from 'vitest'
-import {vec2, type Vec2} from './vec2.js'
+import {vec2, type Vec2} from './vec2.legacy.js'
 
 function expectVec2(v: Vec2, x: number, y: number) {
   expect(v[0]).toBe(x)

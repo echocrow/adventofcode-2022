@@ -1,6 +1,6 @@
 import io from '#lib/io.js'
 import {entries} from '#lib/iterable.js'
-import {fmtVec3, neighborsVec3, type vec3} from '#lib/vec3.js'
+import {fmtVec3, neighborsVec3, type vec3} from '#lib/vec3.legacy.js'
 
 type Cube = {
   p: vec3

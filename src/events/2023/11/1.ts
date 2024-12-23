@@ -1,8 +1,8 @@
 import {pairs} from '#lib/array.js'
 import io from '#lib/io.js'
 import {map, sum} from '#lib/iterable.js'
-import type {Vec2} from '#lib/vec.js'
-import vec from '#lib/vec.js'
+import type {Vec2} from '#lib/vec.legacy.js'
+import vec from '#lib/vec.legacy.js'
 
 const cols = await io.peekLineLen()
 

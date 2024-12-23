@@ -1,5 +1,5 @@
 import io from '#lib/io.js'
-import vec, {type Vec2, VecSet} from '#lib/vec.js'
+import vec, {type Vec2, VecSet} from '#lib/vec.legacy.js'
 
 // Set up rules.
 const dirs = {

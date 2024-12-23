@@ -1,4 +1,4 @@
-import {vec2, type Vec2} from './vec2.js'
+import {vec2, type Vec2} from './vec2.legacy.js'
 import {parseVec3, Vec3} from './vec3.js'
 
 export type {Vec2, Vec3}

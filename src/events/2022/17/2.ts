@@ -1,7 +1,7 @@
 import io from '#lib/io.js'
 import {lcm} from '#lib/math.js'
 import {Uint8Matrix} from '#lib/matrix.js'
-import vec from '#lib/vec.js'
+import vec from '#lib/vec.legacy.js'
 
 const rockShapes = (() => {
   const shapes = [

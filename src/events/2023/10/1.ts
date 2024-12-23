@@ -1,6 +1,6 @@
 import io from '#lib/io.js'
 import {Uint8Matrix, neighbors} from '#lib/matrix.js'
-import vec, {type Vec2} from '#lib/vec.js'
+import vec, {type Vec2} from '#lib/vec.legacy.js'
 
 const DIR = {
   UP: vec(0, -1),
