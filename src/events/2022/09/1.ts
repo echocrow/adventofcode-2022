@@ -1,17 +1,17 @@
 import io from '#lib/io.js'
-import vec, {VecSet} from '#lib/vec.legacy.js'
+import vec2, {Vec2Set} from '#lib/vec2.js'
 
 const DIRS = {
-  U: vec(0, 1),
-  D: vec(0, -1),
-  L: vec(-1, 0),
-  R: vec(1, 0),
+  U: vec2(0, 1),
+  D: vec2(0, -1),
+  L: vec2(-1, 0),
+  R: vec2(1, 0),
 } as const
 type Dir = keyof typeof DIRS
 
-let h = vec()
-let t = vec()
-const tPos = new VecSet([t])
+let h = vec2()
+let t = vec2()
+const tPos = new Vec2Set([t])
 for await (const line of io.readLines()) {
   const [dirStr = '', stepStr] = line.split(' ')
   const dir = DIRS[dirStr as Dir]

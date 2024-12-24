@@ -2,7 +2,7 @@ import io from '#lib/io.js'
 import {filo} from '#lib/iterable.js'
 import {posMod} from '#lib/math.js'
 import {Uint8Matrix} from '#lib/matrix.js'
-import vec, {type Vec2} from '#lib/vec.legacy.js'
+import vec2, {type Vec2} from '#lib/vec2.js'
 
 // Directions, going clockwise.
 enum Dir {
@@ -11,7 +11,7 @@ enum Dir {
   D,
   L,
 }
-const dirVec2s = [vec(0, -1), vec(1, 0), vec(0, 1), vec(-1, 0)] as const
+const dirVec2s = [vec2(0, -1), vec2(1, 0), vec2(0, 1), vec2(-1, 0)] as const
 function capDir(dir: Dir): Dir {
   return posMod(dir, dirVec2s.length)
 }
@@ -133,7 +133,10 @@ const meshFaces = (() => {
   type MeshFaces = [IAS, IAS, IAS, IAS, IAS, IAS, IAS, IAS, IAS, IAS, IAS, IAS]
   const meshFaces = Array(12).fill(undefined) as MeshFaces
 
-  const upFacePos = vec(map.$.findIndex((c) => c !== Cell.Void) / mapTileLen, 0)
+  const upFacePos = vec2(
+    map.$.findIndex((c) => c !== Cell.Void) / mapTileLen,
+    0,
+  )
 
   const meshQueue: [Vec2, AngledSide][] = [[upFacePos, [Face.U, Dir.U]]]
   for (const meshQueueItem of filo(meshQueue)) {
@@ -181,12 +184,12 @@ function meshToMap(i: number): number {
 function flipTileVec(v: Vec2, dir: Dir): Vec2 {
   const [x, y] = v
   const horizontal = dir === Dir.L || dir === Dir.R
-  return horizontal ? vec(mapTileLen - 1 - x, y) : vec(x, mapTileLen - 1 - y)
+  return horizontal ? vec2(mapTileLen - 1 - x, y) : vec2(x, mapTileLen - 1 - y)
 }
 function rotateTileVec(v: Vec2, angle: Dir): Vec2 {
   let [x, y] = v
   for (let r = 0; r < angle; r++) [x, y] = [mapTileLen - 1 - y, x]
-  return vec(x, y)
+  return vec2(x, y)
 }
 function crossEdge(from: number, angle: Dir): readonly [number, Dir] {
   let [x, y] = map.iToVec(from)
@@ -201,7 +204,7 @@ function crossEdge(from: number, angle: Dir): readonly [number, Dir] {
   const toMeshAngle = meshFaces[toMeshI]![1]
   const dAngle = capDir(-fromFaceAngle + toMeshAngle + toFaceAngle)
   // Map next mesh to map.
-  const exitTileVec = vec(x % mapTileLen, y % mapTileLen)
+  const exitTileVec = vec2(x % mapTileLen, y % mapTileLen)
   const [enterTileX, enterTileY] = rotateTileVec(
     flipTileVec(exitTileVec, angle),
     dAngle,

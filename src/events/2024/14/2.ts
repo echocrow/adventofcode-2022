@@ -1,6 +1,6 @@
 import io from '#lib/io.js'
 import {posMod} from '#lib/math.js'
-import vec, {type Vec2} from '#lib/vec.legacy.js'
+import vec, {type Vec2} from '#lib/vec.js'
 
 const WIDTH = Number((await io.readCfgLine('__width')) ?? 101)
 const HEIGHT = Number((await io.readCfgLine('__height')) ?? 103)
@@ -10,8 +10,8 @@ const guards: {p: Vec2; v: Vec2}[] = []
   const numsRe = /-?\d+/g
   for await (const line of io.readLines()) {
     const [pX, pY, vX, vY] = line.matchAll(numsRe).map(([m]) => Number(m))
-    const p = vec(pX, pY)
-    const v = vec(vX, vY)
+    const p = vec([pX!, pY!])
+    const v = vec([vX!, vY!])
     guards.push({p, v})
   }
 }

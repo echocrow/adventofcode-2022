@@ -1,7 +1,7 @@
 import io from '#lib/io.js'
 import {filo, map, sum} from '#lib/iterable.js'
 import {Matrix, Uint8Matrix} from '#lib/matrix.js'
-import vec, {type Vec2} from '#lib/vec.legacy.js'
+import vec, {type Vec2} from '#lib/vec.js'
 
 enum Dir {
   left,
@@ -16,10 +16,10 @@ function idDir(dir: Dir): Dir {
   return 1 << dir
 }
 const DIR_VEC: Record<Dir, Vec2> = [
-  /* left: */ vec(-1, 0),
-  /* down: */ vec(0, 1),
-  /* right: */ vec(1, 0),
-  /* up: */ vec(0, -1),
+  /* left: */ vec([-1, 0]),
+  /* down: */ vec([0, 1]),
+  /* right: */ vec([1, 0]),
+  /* up: */ vec([0, -1]),
 ]
 
 // Reflectors & mirrors, and definitions how beams react per direction.

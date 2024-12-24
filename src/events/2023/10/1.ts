@@ -1,12 +1,12 @@
 import io from '#lib/io.js'
 import {Uint8Matrix, neighbors} from '#lib/matrix.js'
-import vec, {type Vec2} from '#lib/vec.legacy.js'
+import vec2, {type Vec2} from '#lib/vec2.js'
 
 const DIR = {
-  UP: vec(0, -1),
-  DOWN: vec(0, 1),
-  LEFT: vec(-1, 0),
-  RIGHT: vec(1, 0),
+  UP: vec2(0, -1),
+  DOWN: vec2(0, 1),
+  LEFT: vec2(-1, 0),
+  RIGHT: vec2(1, 0),
 }
 
 const pieces = [
@@ -24,11 +24,11 @@ const pieceIds = Object.fromEntries(
 ) as Record<PieceChar, number>
 
 // Parse maze.
-let startPos = vec()
+let startPos = vec2()
 let maze = new Uint8Matrix()
 for await (const line of io.readLines()) {
   const pieces = ([...line] as PieceChar[]).map(
-    (char, i) => pieceIds[char] ?? ((startPos = vec(i, maze.height)), 0),
+    (char, i) => pieceIds[char] ?? ((startPos = vec2(i, maze.height)), 0),
   )
   maze.pushRow(pieces)
 }
@@ -49,7 +49,7 @@ const mazeSteps = new Uint32Array(maze.length)
 mazeSteps[startI] = ++mazeLen
 while (posI !== undefined) {
   mazeSteps[posI] = ++mazeLen
-  const pos = maze.iToVec(posI)
+  const pos = maze.iToVec2(posI)
   const piece = pieces[maze.$[posI]!]!
   posI = piece.links
     .map((link) => maze.vecToI(pos.add(link)))

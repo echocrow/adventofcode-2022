@@ -2,7 +2,7 @@ import io from '#lib/io.js'
 import {posMod} from '#lib/math.js'
 import {Uint8Matrix} from '#lib/matrix.js'
 import {strRec} from '#lib/types.js'
-import vec, {type Vec2} from '#lib/vec.legacy.js'
+import vec2, {type Vec2} from '#lib/vec2.js'
 
 enum Dir {
   left,
@@ -14,10 +14,10 @@ function idDir(dir: Dir): Dir {
   return 1 << dir
 }
 const DIR_VEC: Record<Dir, Vec2> = [
-  /* left: */ vec(-1, 0),
-  /* down: */ vec(0, 1),
-  /* right: */ vec(1, 0),
-  /* up: */ vec(0, -1),
+  /* left: */ vec2(-1, 0),
+  /* down: */ vec2(0, 1),
+  /* right: */ vec2(1, 0),
+  /* up: */ vec2(0, -1),
 ]
 function dirIsHor(dir: Dir): boolean {
   return dir === Dir.left || dir === Dir.right
@@ -30,7 +30,7 @@ const dirByChar = strRec({
 })
 
 // Parse plan.
-let pos = vec()
+let pos = vec2()
 const moves: (readonly [Dir, len: number])[] = []
 const corners: Vec2[] = []
 for await (const match of io.readRegExp(/^(\w) (\d+)/m)) {
@@ -41,8 +41,8 @@ for await (const match of io.readRegExp(/^(\w) (\d+)/m)) {
   corners.push(pos)
 }
 // Determine bounds and top horizontal move.
-const minCorner = corners.reduce(vec.min)
-const maxCorner = corners.reduce(vec.max)
+const minCorner = vec2.via(corners.reduce(vec2.min, vec2()))
+const maxCorner = vec2.via(corners.reduce(vec2.max, vec2()))
 const topXMoveIdx = moves.findIndex(
   ([dir], i) => dirIsHor(dir) && corners[i]![1] === minCorner[1],
 )

@@ -1,8 +1,7 @@
 import {pairs} from '#lib/array.js'
 import io from '#lib/io.js'
 import {map, sum} from '#lib/iterable.js'
-import type {Vec2} from '#lib/vec.legacy.js'
-import vec from '#lib/vec.legacy.js'
+import vec2, {type Vec2} from '#lib/vec2.js'
 
 const growth = Number((await io.readCfgLine('__growth')) ?? 1000000)
 const cols = await io.peekLineLen()
@@ -19,7 +18,7 @@ for await (const line of io.readLines()) {
     if (char !== '#') continue
     rowHasGalaxy = true
     filledCols[x] = 1
-    galaxies.push(vec(x, y))
+    galaxies.push(vec2(x, y))
   }
   y += !rowHasGalaxy ? growth : 1
 }

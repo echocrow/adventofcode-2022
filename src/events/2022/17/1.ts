@@ -1,6 +1,6 @@
 import io from '#lib/io.js'
 import {Uint8Matrix} from '#lib/matrix.js'
-import vec from '#lib/vec.legacy.js'
+import vec from '#lib/vec.js'
 
 const nextRockShape = (() => {
   const shapes = [
@@ -29,7 +29,7 @@ class Rock {
       if (this.shape.$[r]) {
         const rx = r % this.shape.width
         const ry = (r - rx) / this.shape.width
-        yield vec(this.x + rx, this.y + ry)
+        yield vec([this.x + rx, this.y + ry])
       }
     }
   }

@@ -1,6 +1,6 @@
 import {pairs} from '#lib/array.js'
 import io from '#lib/io.js'
-import vec, {VecSet, type Vec2} from '#lib/vec.legacy.js'
+import vec, {Vec2Set, type Vec2} from '#lib/vec2.js'
 
 // Parse map.
 const mapWidth = await io.peekLineLen()
@@ -17,7 +17,7 @@ for await (const line of io.readLines()) {
 const mapEnd = vec(mapWidth, y)
 
 // Find anti-nodes.
-const antiNodes = new VecSet()
+const antiNodes = new Vec2Set()
 for (const locations of Object.values(antennas)) {
   // Iterate over all pairs of antennas.
   for (const [a, b] of pairs(locations)) {

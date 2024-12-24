@@ -2,18 +2,18 @@ import io from '#lib/io.js'
 import memoize from '#lib/memo.js'
 import {PriorityQueue} from '#lib/queue.js'
 import {strRec} from '#lib/types.js'
-import type {Vec2} from '#lib/vec.legacy.js'
-import vec, {VecSet} from '#lib/vec.legacy.js'
+import vec2, {type Vec2} from '#lib/vec2.js'
+import vec, {VecSet} from '#lib/vec.js'
 
 // Parse.
 let mapW = 0
 let mapH = 0
 const srcBlizzards: Array<[pos: Vec2, dir: Vec2]> = []
 const inputDirs = strRec({
-  '^': vec(0, -1),
-  '>': vec(1, 0),
-  v: vec(0, 1),
-  '<': vec(-1, 0),
+  '^': vec2(0, -1),
+  '>': vec2(1, 0),
+  v: vec2(0, 1),
+  '<': vec2(-1, 0),
 })
 for await (const line of io.readLines()) {
   if (!mapW) {
@@ -22,12 +22,12 @@ for await (const line of io.readLines()) {
     const row = line.slice(1, -1)
     for (let x = 0; x < row.length; x++) {
       const dir = inputDirs[row[x]!]
-      if (dir) srcBlizzards.push([vec(x, mapH), dir])
+      if (dir) srcBlizzards.push([vec2(x, mapH), dir])
     }
     mapH++
   }
 }
-const mapSize = vec(mapW, mapH)
+const mapSize = vec2(mapW, mapH)
 const blizzardsCycle = mapW * mapH
 
 // Get memoized blizzard locations at given time.
@@ -41,14 +41,14 @@ const getBlizzardsLocs = memoize((time: number) => {
 // Find shortest time.
 let resultTime: number = 0
 const moves: readonly Vec2[] = [
-  vec(0, 1),
-  vec(1, 0),
-  vec(0, 0),
-  vec(-1, 0),
-  vec(0, -1),
+  vec2(0, 1),
+  vec2(1, 0),
+  vec2(0, 0),
+  vec2(-1, 0),
+  vec2(0, -1),
 ]
-const start = vec(0, -1)
-const end = vec(mapW - 1, mapH)
+const start = vec2(0, -1)
+const end = vec2(mapW - 1, mapH)
 const queue = new PriorityQueue(0, [0, start] as [time: number, pos: Vec2])
 let visited = new VecSet()
 search: for (const {item} of queue) {
@@ -59,7 +59,7 @@ search: for (const {item} of queue) {
     const to = pos.add(move)
 
     // Ensure we have not been here before at the same time.
-    const to3 = vec(nextTime, to[0], to[1])
+    const to3 = vec([nextTime, to[0], to[1]])
     if (visited.has(to3)) continue
     visited.add(to3)
 
